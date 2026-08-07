@@ -17,13 +17,12 @@ Downloading media from authenticated web services involves more than a simple HT
 ```text
 User input (URL)
   → URL normalization & query-parameter stripping
-  → Authentication state check (Keychain)
-  → Primary resolver (yt-dlp)
-     → Fallback resolver (GraphQL)
+  → Authenticated session state (macOS Keychain)
+  → yt-dlp media resolution
   → Quality selection
-  → HLS / direct MP4 routing
+  → Direct MP4 / HLS-fMP4 routing
   → FFmpeg encapsulation & verification
-  → Atomic file move → destination
+  → Atomic file move → destination (Security-Scoped Bookmark)
 ```
 
 ---
@@ -31,13 +30,13 @@ User input (URL)
 ## Key Engineering Decisions
 
 **Session persistence via macOS Keychain**
-Authenticated sessions are stored in macOS Keychain using Security-Scoped Bookmarks rather than plain files. A session is only persisted after real-request validation — cookie-file presence alone is not treated as proof of successful authentication.
+Authenticated session state is securely persisted in macOS Keychain and restored across application restarts. A session is only stored after real-request validation — cookie-file presence alone is not treated as proof of successful authentication.
+
+**Destination access via Security-Scoped Bookmarks**
+User-selected destination folders retain sandbox-compatible access through macOS Security-Scoped Bookmarks. When a Bookmark becomes stale, the system marks the destination as invalid and prompts for re-selection rather than failing silently.
 
 **Fail-safe file delivery**
 Downloads write to a cache path first. FFmpeg encapsulation and file integrity checks run before the atomic move to the destination. An incomplete file never appears at the final path.
-
-**Fallback resolver design**
-The primary extractor (yt-dlp) handles the common path. A secondary resolver provides continuity when the primary is unavailable, without exposing implementation details or requiring user intervention.
 
 **HLS/fMP4 troubleshooting**
 Segmented stream handling required diagnosing resolution, segment ordering, and FFmpeg routing issues specific to HLS playlists. These were resolved through incremental testing against real content structures.
@@ -48,8 +47,9 @@ Segmented stream handling required diagnosing resolution, segment ordering, and 
 
 - **Desktop runtime**: Tauri 2 (Rust backend + WebView frontend)
 - **Language**: Rust (backend), TypeScript + React (frontend)
-- **Session storage**: macOS Keychain via Security-Scoped Bookmarks
-- **Extraction**: yt-dlp (primary), custom GraphQL resolver (fallback)
+- **Session storage**: macOS Keychain (authenticated session state)
+- **Destination access**: macOS Security-Scoped Bookmarks (folder permission persistence)
+- **Extraction**: yt-dlp
 - **Media processing**: FFmpeg (encapsulation, format conversion, integrity check)
 - **State management**: Zustand
 - **Build**: Vite, Cargo
