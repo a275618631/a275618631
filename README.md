@@ -1,3 +1,5 @@
+# Che-Yu Wu
+
 I turn ambiguous real-world problems into structured, testable, and safe AI-assisted systems.
 
 My work focuses on system integration, AI-assisted workflows, agent engineering, automation, and translating operational requirements into reliable, validated systems.
@@ -28,7 +30,7 @@ Addresses the problem of copying an entire AI agent environment between machines
 ### [Constraint-Based Workforce Scheduling System](https://github.com/a275618631/workforce-scheduling-system)
 `System Analysis · Rule Engine · Scheduling · Validation`
 
-Translates complex rotating-shift operational constraints into a structured scheduling workflow. Covers personnel management, team assignment, locked and manual duty handling, violation and warning states, calendar-based overview, and rule validation. Developed through iterative system evolution with 56 passing test cases.
+Translates complex rotating-shift operational constraints into a structured scheduling workflow. Covers personnel management, team assignment, locked and manual duty handling, violation and warning states, calendar-based overview, and iterative rule validation. Developed through multiple evolutionary phases. The underlying private implementation reached 56 validated automated test cases.
 
 Originally developed around a rotating-shift public-sector scheduling use case using anonymized synthetic data.
 
@@ -36,25 +38,27 @@ Originally developed around a rotating-shift public-sector scheduling use case u
 
 ---
 
-### Authenticated Desktop Media Workflow
+### Authenticated Desktop Media Workflow *(private implementation)*
 `Tauri · Rust · TypeScript · FFmpeg · Integration`
 
-A macOS desktop application (Tauri 2 + Rust + React) exploring secure session persistence, resilient media extraction, and verified download pipelines. Implemented authenticated session handling with macOS Keychain storage, yt-dlp integration, HLS/fMP4 resolution, FFmpeg-based processing with atomic file moves, and real end-to-end validation.
+A macOS desktop workflow (Tauri 2 + Rust + React) exploring secure session persistence, resilient media extraction, and verified download pipelines. Implemented authenticated session handling with macOS Keychain storage, yt-dlp integration, HLS/fMP4 resolution, FFmpeg-based processing with atomic file moves, and real end-to-end validation across the full authentication → extraction → download pipeline.
 
-Designed for user-authorized media workflows. No credential storage, no DRM bypass, no cookie upload.
+Designed for user-authorized media workflows.
 
-*Repository is private due to session architecture details.*
+→ [Case Study](projects/authenticated-desktop-media-workflow.md)
 
 ---
 
-### Privacy-Aware Meeting Intelligence Workflow *(Prototype)*
+## Prototype / Exploration
+
+### Privacy-Aware Meeting Intelligence Workflow *(Prototype / Partially Validated MVP)*
 `AI Workflow · Privacy · Human-in-the-loop · Evidence`
 
-A prototype architecture for a privacy-oriented meeting intelligence pipeline: FFmpeg → STT → speaker diarization → PII masking → LLM summarization → action items with evidence traceability → human review. Built with Streamlit, FastAPI, Docker Compose, and SQLite WAL.
+A prototype for a privacy-oriented meeting intelligence pipeline: transcript input → PII masking → LLM summarization → decision and action-item extraction → evidence traceability → human review. Built with Streamlit, FastAPI, Docker Compose, and SQLite WAL.
 
-Real-world external STT and LLM integration is designed but not end-to-end validated. Architecture demonstrates privacy-first thinking, evidence traceability, and human review boundaries.
+Transcript processing, PII masking, structured output, and evidence validation have been implemented and locally verified. Real-world MP4 → STT → speaker diarization → external LLM full E2E is designed but not end-to-end validated at this stage.
 
-*Architecture / Prototype stage.*
+*Architecture and partial implementation stage.*
 
 ---
 
