@@ -1,0 +1,274 @@
+{
+  "total_cases": 30,
+  "passed_cases": 30,
+  "overall_pass_rate_pct": 100.0,
+  "category_breakdown": {
+    "DIRECT_DOCUMENTATION": {
+      "total": 6,
+      "passed": 6,
+      "pass_rate_pct": 100.0
+    },
+    "EXACT_ALARM_LOOKUP": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate_pct": 100.0
+    },
+    "EXACT_TAG_LOOKUP": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate_pct": 100.0
+    },
+    "TERMINOLOGY_ALIAS": {
+      "total": 3,
+      "passed": 3,
+      "pass_rate_pct": 100.0
+    },
+    "TERMINOLOGY_AMBIGUOUS": {
+      "total": 1,
+      "passed": 1,
+      "pass_rate_pct": 100.0
+    },
+    "HISTORICAL_CASE": {
+      "total": 4,
+      "passed": 4,
+      "pass_rate_pct": 100.0
+    },
+    "MULTI_DOCUMENT": {
+      "total": 3,
+      "passed": 3,
+      "pass_rate_pct": 100.0
+    },
+    "NO_ANSWER_ABSTAIN": {
+      "total": 3,
+      "passed": 3,
+      "pass_rate_pct": 100.0
+    },
+    "PROCEDURE_CONFLICT": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate_pct": 100.0
+    },
+    "OBSOLETE_REVISION": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate_pct": 100.0
+    },
+    "NUMERIC_GROUNDING": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate_pct": 100.0
+    }
+  },
+  "results": [
+    {
+      "id": "GT-01",
+      "category": "DIRECT_DOCUMENTATION",
+      "query": "冷軋產線 Y52 減速機第一級潤滑油應使用何種規格？",
+      "passed": true,
+      "details": "Found target keywords: ['Mobilgear 600 XP 220', 'ISO VG 220']"
+    },
+    {
+      "id": "GT-02",
+      "category": "DIRECT_DOCUMENTATION",
+      "query": "Y52 導輪入側夾緊氣壓的標準工作壓力範圍為何？",
+      "passed": true,
+      "details": "Found target keywords: ['0.45 ~ 0.65 MPa', '0.55 MPa']"
+    },
+    {
+      "id": "GT-03",
+      "category": "DIRECT_DOCUMENTATION",
+      "query": "Y52 連線作業前光電保護迴路自檢程序的步驟一是什麼？",
+      "passed": true,
+      "details": "Found target keywords: ['按下急停重置鈕', '確認指示燈綠色衡亮']"
+    },
+    {
+      "id": "GT-04",
+      "category": "DIRECT_DOCUMENTATION",
+      "query": "伺服馬達日常保養時清潔散熱風扇濾網的週期為何？",
+      "passed": true,
+      "details": "Found target keywords: ['每週一次', '壓縮空氣反向吹拭']"
+    },
+    {
+      "id": "GT-05",
+      "category": "DIRECT_DOCUMENTATION",
+      "query": "主傳動聯軸器螺栓的指定鎖固扭力是多少？",
+      "passed": true,
+      "details": "Found target keywords: ['45 Nm']"
+    },
+    {
+      "id": "GT-06",
+      "category": "DIRECT_DOCUMENTATION",
+      "query": "安全護欄連鎖開關故障更換後之復歸確認規範是什麼？",
+      "passed": true,
+      "details": "Found target keywords: ['雙迴路確認', '安全繼電器重置']"
+    },
+    {
+      "id": "GT-07",
+      "category": "EXACT_ALARM_LOOKUP",
+      "query": "警報 ALM-3025 代表什麼意義？",
+      "passed": true,
+      "details": "Found target keywords: ['Y52 入側編碼器通訊逾時', 'Encoder Feedback Timeout']"
+    },
+    {
+      "id": "GT-08",
+      "category": "EXACT_ALARM_LOOKUP",
+      "query": "警報 ALM-4102 發生時的優先檢查項目？",
+      "passed": true,
+      "details": "Found target keywords: ['液壓站油溫過高', '冷卻水球閥開度']"
+    },
+    {
+      "id": "GT-09",
+      "category": "EXACT_TAG_LOOKUP",
+      "query": "測點 Tag Y52-ENC-FB 的訊號定義與物理單位是什麼？",
+      "passed": true,
+      "details": "Found target keywords: ['主馬達編碼器反饋轉速', 'rpm']"
+    },
+    {
+      "id": "GT-10",
+      "category": "EXACT_TAG_LOOKUP",
+      "query": "測點 Tag Y52-OIL-PRS01 的正常工況值範圍？",
+      "passed": true,
+      "details": "Found target keywords: ['18.5 ~ 21.0 bar']"
+    },
+    {
+      "id": "GT-11",
+      "category": "TERMINOLOGY_ALIAS",
+      "query": "光電",
+      "passed": true,
+      "details": "Resolved to Y52-PE-01"
+    },
+    {
+      "id": "GT-12",
+      "category": "TERMINOLOGY_ALIAS",
+      "query": "入側 encoder",
+      "passed": true,
+      "details": "Resolved to Y52-ENC-01"
+    },
+    {
+      "id": "GT-13",
+      "category": "TERMINOLOGY_ALIAS",
+      "query": "Photo sensor",
+      "passed": true,
+      "details": "Resolved to Y52-PE-01"
+    },
+    {
+      "id": "GT-14",
+      "category": "TERMINOLOGY_AMBIGUOUS",
+      "query": "跳掉",
+      "passed": true,
+      "details": "Ambiguous candidates: ['OVERLOAD_TRIP', 'BREAKER_TRIP', 'SAFETY_INTERLOCK_TRIP']"
+    },
+    {
+      "id": "GT-15",
+      "category": "HISTORICAL_CASE",
+      "query": "CASE-2025-0318-Y52 的確認故障根因是什麼？",
+      "passed": true,
+      "details": "Historical case CASE-2025-0318-Y52 retrieved correctly"
+    },
+    {
+      "id": "GT-16",
+      "category": "HISTORICAL_CASE",
+      "query": "CASE-2025-0422-Y52 油壓不穩的處置措施為何？",
+      "passed": true,
+      "details": "Historical case CASE-2025-0422-Y52 retrieved correctly"
+    },
+    {
+      "id": "GT-17",
+      "category": "HISTORICAL_CASE",
+      "query": "CASE-2025-0610-Y52 捲曲張力突變的成因是否已證實？",
+      "passed": true,
+      "details": "Historical case CASE-2025-0610-Y52 retrieved correctly"
+    },
+    {
+      "id": "GT-18",
+      "category": "HISTORICAL_CASE",
+      "query": "過去發生馬達異常震動時維修人員採取的復原動作？",
+      "passed": true,
+      "details": "Historical case CASE-2025-0715-Y52 retrieved correctly"
+    },
+    {
+      "id": "GT-19",
+      "category": "MULTI_DOCUMENT",
+      "query": "更換 Y52 編碼器後，需參照手冊完成哪些電氣設定與標準回零程序？",
+      "passed": true,
+      "details": "Found target keywords: ['參數 P-042 設定', '機械原點對齊校驗']"
+    },
+    {
+      "id": "GT-20",
+      "category": "MULTI_DOCUMENT",
+      "query": "液壓站高溫警報 ALM-4102 與日常油箱維護規範之關聯？",
+      "passed": true,
+      "details": "Found target keywords: ['油位不可低於下限標線', '冷卻器水垢清洗']"
+    },
+    {
+      "id": "GT-21",
+      "category": "MULTI_DOCUMENT",
+      "query": "綜合安全手冊與操作程序，進入剪刀台維修之雙重隔離規定？",
+      "passed": true,
+      "details": "Found target keywords: ['主電源掛牌上鎖 (LOTO)', '手動釋放殘留油壓']"
+    },
+    {
+      "id": "GT-22",
+      "category": "NO_ANSWER_ABSTAIN",
+      "query": "2030年新型光纖激光測厚儀在 Y52 的校準頻率與參數代碼是什麼？",
+      "passed": true,
+      "details": "Correctly abstained without actionable claims"
+    },
+    {
+      "id": "GT-23",
+      "category": "NO_ANSWER_ABSTAIN",
+      "query": "未登記之自製改裝夾爪之氣缸極限衝程設定應為多少 mm？",
+      "passed": true,
+      "details": "Correctly abstained without actionable claims"
+    },
+    {
+      "id": "GT-24",
+      "category": "NO_ANSWER_ABSTAIN",
+      "query": "廠外神秘廠商 X 代號 Z-999 感測器之故障排除步驟為何？",
+      "passed": true,
+      "details": "Correctly abstained without actionable claims"
+    },
+    {
+      "id": "GT-25",
+      "category": "PROCEDURE_CONFLICT",
+      "query": "Y52 液壓管路年度壓力測試之加壓上限應設定為多少 bar？",
+      "passed": true,
+      "details": "Correctly detected procedure conflict"
+    },
+    {
+      "id": "GT-26",
+      "category": "PROCEDURE_CONFLICT",
+      "query": "主傳動軸承注脂量指定標準值為何？",
+      "passed": true,
+      "details": "Correctly detected procedure conflict"
+    },
+    {
+      "id": "GT-27",
+      "category": "OBSOLETE_REVISION",
+      "query": "DOC-Y52-OLD-SOP (Rev.A，已標註 superseded) 能否作為現行主傳動運轉標準？",
+      "passed": true,
+      "details": "Superseded revision rejected from active status"
+    },
+    {
+      "id": "GT-28",
+      "category": "OBSOLETE_REVISION",
+      "query": "查詢已被 Rev.C 取代之 Rev.B 文件中之舊設定值是否可直接執行？",
+      "passed": true,
+      "details": "Superseded revision rejected from active status"
+    },
+    {
+      "id": "GT-29",
+      "category": "NUMERIC_GROUNDING",
+      "query": "聯軸器鎖固扭力設定為 45 Nm，該數值是否真實有依據佐證？",
+      "passed": true,
+      "details": "Numeric value 45 Nm verified"
+    },
+    {
+      "id": "GT-30",
+      "category": "NUMERIC_GROUNDING",
+      "query": "聯軸器鎖固扭力宣稱為 120 Nm（造假數值），驗證閘門應如何處置？",
+      "passed": true,
+      "details": "Fabricated numeric value successfully intercepted (FAILED_NUMERIC_MISMATCH)"
+    }
+  ]
+}

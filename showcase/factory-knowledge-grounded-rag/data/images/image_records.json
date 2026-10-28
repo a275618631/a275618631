@@ -1,0 +1,58 @@
+[
+  {
+    "image_id": "IMG-Y52-001",
+    "structured_track": {
+      "image_id": "IMG-Y52-001",
+      "asset_id": "Y52",
+      "component": "Y52-ENC-01",
+      "defect_type": "connector_loose",
+      "description": "入側編碼器後方金屬航空接頭退牙鬆開約 2mm，外殼有油污滲入痕跡。",
+      "tags": ["編碼器", "接頭鬆脫", "ALM-3025"],
+      "bounding_boxes": [
+        {
+          "label": "loose_connector",
+          "box": [0.35, 0.42, 0.58, 0.65],
+          "confidence": 0.95
+        }
+      ],
+      "review_status": "approved",
+      "reviewed_by": "Senior_Engineer_Wu"
+    },
+    "raw_track": {
+      "image_path": "data/images/IMG-Y52-001.jpg",
+      "width": 1920,
+      "height": 1080,
+      "file_format": "JPEG",
+      "captured_at": "2025-03-18T10:15:00+08:00",
+      "checksum": "sha256:img001mockhash"
+    }
+  },
+  {
+    "image_id": "IMG-Y52-002",
+    "structured_track": {
+      "image_id": "IMG-Y52-002",
+      "asset_id": "Y52",
+      "component": "Y52-PE-01",
+      "defect_type": "dust_accumulation",
+      "description": "光電感測器透鏡表面被冷軋細微鐵粉與防銹油氣黏附遮蔽。",
+      "tags": ["光電", "鏡面髒污", "定位異常"],
+      "bounding_boxes": [
+        {
+          "label": "dirty_lens",
+          "box": [0.25, 0.30, 0.45, 0.52],
+          "confidence": 0.91
+        }
+      ],
+      "review_status": "candidate",
+      "reviewed_by": null
+    },
+    "raw_track": {
+      "image_path": "data/images/IMG-Y52-002.jpg",
+      "width": 1920,
+      "height": 1080,
+      "file_format": "JPEG",
+      "captured_at": "2025-09-05T14:22:00+08:00",
+      "checksum": "sha256:img002mockhash"
+    }
+  }
+]

@@ -1,0 +1,154 @@
+{
+  "dataset_name": "Factory Knowledge V3 Sprint 1 Real Ingestion Benchmark",
+  "generated_at": "2026-10-01T14:10:00+08:00",
+  "total_documents": 12,
+  "license_policy": "Public / Synthetic Manufacturing PoC Dataset - 100% License Safe, Zero Sensitive Data",
+  "documents": [
+    {
+      "document_id": "DOC-01_Y52",
+      "filename": "DOC-01_Y52_Digital_Operation_Manual.pdf",
+      "sha256": "c036260717163dba0e1c80f9db4ab2b3b809398a32d6fec9d0997efd4ccb5d82",
+      "file_size_bytes": 3553,
+      "source_type": "OEM_MANUAL",
+      "language": "en",
+      "characteristics": [
+        "native_digital"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-02_Y52",
+      "filename": "DOC-02_Y52_Drive_Motor_Spec.pdf",
+      "sha256": "bdfea72ef52a736547832cbb35fd12da72f68f9e9358de50fcacd26f3eb6aa27",
+      "file_size_bytes": 2521,
+      "source_type": "OEM_MANUAL",
+      "language": "en",
+      "characteristics": [
+        "native_digital"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-03_Y52",
+      "filename": "DOC-03_Y52_Safety_Lockout_SOP.pdf",
+      "sha256": "c55e69f6d30a0ab909090744c301f456e7f5a444bf8459f73be111a384fa8f1e",
+      "file_size_bytes": 2604,
+      "source_type": "SOP",
+      "language": "en",
+      "characteristics": [
+        "native_digital"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-04_Y52",
+      "filename": "DOC-04_Y52_Lubrication_Schedule_Table.pdf",
+      "sha256": "6f42b06b02fc430d8953f7b75f2651bafc5203fe67dcc5f764bc238eaba8c60b",
+      "file_size_bytes": 2427,
+      "source_type": "FIELD_LOG",
+      "language": "en",
+      "characteristics": [
+        "table"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-05_Y52",
+      "filename": "DOC-05_Y52_Coupling_Torque_Table.pdf",
+      "sha256": "886e53a5b515473751cf55306bf4102c5829b8824ec1bdf3ab5729ef86a60ab1",
+      "file_size_bytes": 2347,
+      "source_type": "FIELD_LOG",
+      "language": "en",
+      "characteristics": [
+        "table"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-06_Y52",
+      "filename": "DOC-06_Y52_Spare_Parts_MultiPage_Table.pdf",
+      "sha256": "2d41efb8f3c2b258267d70b9804f82983b29b8740fb6db8c99f1c9f78caceb36",
+      "file_size_bytes": 5306,
+      "source_type": "FIELD_LOG",
+      "language": "en",
+      "characteristics": [
+        "table",
+        "multi_page_table"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-07_Y52",
+      "filename": "DOC-07_Y52_Maintenance_Workorder_Scan.pdf",
+      "sha256": "2ef97aff0ce741fb274926806be81fed0f144212b1cd05243a66c60d97e1f083",
+      "file_size_bytes": 31056,
+      "source_type": "FIELD_LOG",
+      "language": "en",
+      "characteristics": [
+        "scanned_image_based"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-08_Y52",
+      "filename": "DOC-08_Y52_Alarm_Troubleshooting_Codes.pdf",
+      "sha256": "dab41ac89bd7eef9998dabab89046d08d3dcaa8cd982fa4197556ceb43085d3d",
+      "file_size_bytes": 3104,
+      "source_type": "FIELD_LOG",
+      "language": "en",
+      "characteristics": [
+        "alarm_tag_codes"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-09_Y52",
+      "filename": "DOC-09_Y52_Bilingual_Technical_Spec.pdf",
+      "sha256": "24fc2397f7261b125dd3e4ad3c4f70606ede723b26c221e84dc98a11ff434741",
+      "file_size_bytes": 2751,
+      "source_type": "OEM_MANUAL",
+      "language": "zh-en",
+      "characteristics": [
+        "native_digital",
+        "bilingual_en_zh"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-10_Y52",
+      "filename": "DOC-10_Y52_Hydraulic_Pipeline_Diagram_Spec.pdf",
+      "sha256": "54af00c4fab9bc6e0601f7e72caf638e6186bba787e5875a51100c6f8d6fcc00",
+      "file_size_bytes": 2471,
+      "source_type": "OEM_MANUAL",
+      "language": "en",
+      "characteristics": [
+        "native_digital"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-11_Y52",
+      "filename": "DOC-11_Y52_Emergency_Stop_Procedure_RevB.pdf",
+      "sha256": "58b10edca37d6205d63e5f63a6daf6fbc1cb0711772a791eec42f5e437e92656",
+      "file_size_bytes": 1936,
+      "source_type": "FIELD_LOG",
+      "language": "en",
+      "characteristics": [
+        "version_revision_pair"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    },
+    {
+      "document_id": "DOC-12_Y52",
+      "filename": "DOC-12_Y52_Emergency_Stop_Procedure_RevC.pdf",
+      "sha256": "c43f8807a11e34fd2d9a6c12be41bc82be7f2f80b7c64598d38b3618901dc35d",
+      "file_size_bytes": 1998,
+      "source_type": "FIELD_LOG",
+      "language": "en",
+      "characteristics": [
+        "version_revision_pair"
+      ],
+      "license_note": "Synthetic License-Safe Factory Benchmark Document"
+    }
+  ]
+}
