@@ -49,6 +49,58 @@ flowchart TD
 
 ---
 
+## 跨專案合成資料端到端演示 (Cross-Project Synthetic E2E Walkthrough)
+
+> [!NOTE]
+> 本演示為**架構與驗證流程串連展示**。本流程全數採用合成假想情境與非機密資料，不強制要求建立單一巨型資料庫，亦不隱含對真實產線 PLC 或企業 SharePoint 之直接寫入。
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor OP as 現場人員 / 工程師
+    participant WF as 製程文件工作流 (Skill)
+    participant RAG as 地端 RAG 診斷核心
+    participant PE as 工具策略引擎 (Policy)
+    participant EOP as 企業營運平台 (RBAC)
+    actor Lead as 審核負責人 / Supervisor
+
+    OP->>WF: 1. 提交新版冷軋維修處方 (DOC-Y52-MOD)
+    WF->>WF: 2. 來源身分與受控範圍預檢 (非授權即停止)
+    WF->>RAG: 3. 查詢歷史排除指引與原廠規格
+    alt 檢索證據充足且無衝突
+        RAG-->>WF: 回傳精確 Citation 來源與排除步驟
+    else 證據不足或發生衝突
+        RAG-->>WF: 觸發 ABSTAINED 拒答 (停止自動建議)
+    end
+    WF->>PE: 4. 嘗試調用工具建立維修工單
+    PE->>PE: 5. 決定論策略評估 (判定為 require_approval)
+    PE-->>EOP: 6. 轉發受保護請求至營運平台
+    EOP->>Lead: 7. 呈現遮蔽預覽與人工核准通知
+    Lead->>EOP: 8. 人工簽核批准發布
+    EOP->>EOP: 9. 執行冪等防護寫入工單與不可篡改 Audit
+    EOP-->>OP: 10. 完成可追溯之作業交付物
+```
+
+### 演示階段細節與驗證對照
+
+1. **文件事件與存取閘門**（參閱 [`manufacturing-document-workflow`](./manufacturing-document-workflow/)）：
+   - 觸發：收到合成機台變更報告，先依身分邊界檢查租戶與文件 Owner 範圍。
+   - 安全邊界：如發生跨客戶或未授權存取要求，模型立即停止推論（重現 T2 越權攔截機制）。
+2. **地端離線檢索與嚴格引用**（參閱 [`factory-knowledge-grounded-rag`](./factory-knowledge-grounded-rag/)）：
+   - 檢索：完全離線執行 Qdrant / BM25 檢索，比對假想手冊 `DOC-Y52-ALARM-001.md`。
+   - 邊界防護：嚴格遵循「No unsupported actionable claim reaches the user」；若語料庫中無對應手冊支持，直接輸出 `ABSTAINED`，嚴禁虛構操作步驟。
+3. **工具動作決定論風險分類**（參閱 [`agent-tool-policy-engine`](./agent-tool-policy-engine/)）：
+   - 評估：評估核心接收 Tool-call 請求，正規化路徑與動作類型。
+   - 決策：偵測到對工作區外的寫入或涉及系統狀態變更，自動將決策降級為 `require_approval`，杜絕 Prompt Injection 繞過。
+4. **營運平台工單狀態機與防護**（參閱 [`enterprise-operations-platform`](./enterprise-operations-platform/)）：
+   - RBAC 控制：檢查操作者是否具備主管權限，非授權存取即時返回 403 Forbidden。
+   - 冪等防護：工單建立流程具備重試去重機制，防範網路抖動造成重複開單。
+5. **多代理交接與回歸審查**（參閱 [`codex-antigravity-collaboration`](./codex-antigravity-collaboration/) 與 [`codex-agent-skills`](./codex-agent-skills/)）：
+   - 協作模式：Antigravity 負責總控分析，Codex 負責獨立實作，雙方透過 Bounded Task/Result 交換驗證結果。
+   - 規範收斂：所有交付物格式依據 `output-contract` 規範輸出，並通過 `validate.ps1` 自動檢驗。
+
+---
+
 ## 交付與審查合約 (Delivery Contract)
 
 - **無資料洩漏**：本倉庫絕不包含任何 API Token、真實連線字串、未授權原廠 PDF、本機絕對路徑或內部人員個資。
