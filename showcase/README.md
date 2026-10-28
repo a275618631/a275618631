@@ -11,9 +11,9 @@
 | 子專案 | 核心技術領域 | 來源類型 | 驗證等級 / 現況標籤 | 核心展示價值與邊界 |
 |---|---|---|---|---|
 | **[1. 製程文件版本審核與 AI 輔助工作流](./manufacturing-document-workflow/)** | 文件治理 · Claude Skill · 審核閘門 | Public 倉庫 | **Claude Free 實測**<br>(T1 PASS / T2 FAIL / T3 PASS) | 包含新版流程、跨客戶越權攔截、沙盒 PoC；保留 Skill 載入截圖證據；明確宣告 SharePoint API 未連線。 |
-| **2. 工廠設備知識庫與地端診斷 RAG** *(Batch 2 匯入)* | RAG 檢索 · Citation · 衝突識別 | Private 倉庫 | **Local Benchmark PASS**<br>(離線可跑 · 預設唯讀) | 離線 Qdrant / BM25 檢索、證據引用、ABSTAIN 拒答保護；僅含合成設備手冊，**不散布 8 份真實 OEM 原檔**。 |
-| **3. 企業營運平台垂直切片** *(Batch 2 匯入)* | 系統架構 · RBAC · 工單防護 | Private 倉庫 | **PR #2 MERGED (UX-02)**<br>(合成資料小型切片) | 角色權限狀態機、401/403 攔截、工單重試與冪等防護；零連線字串、零真實員工/設備資料。 |
-| **4. Agent 工具策略引擎** *(Batch 2 匯入)* | 安全架構 · 策略評估 · 決定論 | Private 倉庫 | **24 單元測試 PASS**<br>(0 外部相依 · Staging) | 結構化 side-effect 分類、TOML 策略比對、fail-closed 防護；明示為 staging preflight，非已部署 Gateway。 |
+| **[2. 工廠設備知識庫與地端診斷 RAG](./factory-knowledge-grounded-rag/)** | RAG 檢索 · Citation · 衝突識別 | Private 倉庫 | **Local Benchmark PASS**<br>(離線可跑 · 預設唯讀) | 離線 Qdrant / BM25 檢索、證據引用、ABSTAIN 拒答保護；僅含合成設備手冊，**不散布 8 份真實 OEM 原檔**。 |
+| **[3. 企業營運平台垂直切片](./enterprise-operations-platform/)** | 系統架構 · RBAC · 工單防護 | Private 倉庫 | **PR #2 MERGED (UX-02)**<br>(合成資料小型切片) | 角色權限狀態機、401/403 攔截、工單重試與冪等防護；零連線字串、零真實員工/設備資料。 |
+| **[4. Agent 工具策略引擎](./agent-tool-policy-engine/)** | 安全架構 · 策略評估 · 決定論 | Private 倉庫 | **24 單元測試 PASS**<br>(0 外部相依 · Staging) | 結構化 side-effect 分類、TOML 策略比對、fail-closed 防護；明示為 staging preflight，非已部署 Gateway。 |
 | **[5. Codex × Antigravity 協作架構](./codex-antigravity-collaboration/)** | Multi-Agent · Runtime 邊界 · 協議 | Public 倉庫 | **LIVE_BLOCKED**<br>(Mock 通訊 PASS · 人工閘門) | Bounded Task/Result 規範、Local Bridge 檔案鎖定；保留受限標籤，不宣稱全自動背景雙向即時交接。 |
 | **[6. Codex Agent Skills 技能庫](./codex-agent-skills/)** | Skill 規範 · 自動化驗證 · 流程 | Public 倉庫 | **驗證腳本 PASS**<br>(單一標準規範源) | 結構化 Skill 定義、自動格式檢驗腳本 (`validate.ps1`)；與文件工作流共享規範，杜絕雙頭漂移。 |
 

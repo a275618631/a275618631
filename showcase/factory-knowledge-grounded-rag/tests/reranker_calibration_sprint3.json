@@ -1,0 +1,243 @@
+{
+  "total_queries": 20,
+  "cases": [
+    {
+      "query_id": "RET-01",
+      "query": "ALM-3025",
+      "query_type": "EXACT_CODE",
+      "relevant_document_ids": [
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact alarm code for optical communication interrupt.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-02",
+      "query": "Y52-ENC-FB",
+      "query_type": "EXACT_CODE",
+      "relevant_document_ids": [
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact encoder feedback PLC tag ID.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-04",
+      "query": "ALM-4102",
+      "query_type": "EXACT_CODE",
+      "relevant_document_ids": [
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact alarm code for main lubrication pressure low.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-06",
+      "query": "馬達運轉溫度過高要如何處理？",
+      "query_type": "PARAPHRASE_ZH",
+      "relevant_document_ids": [
+        "DOC-08_Y52",
+        "DOC-02_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Chinese semantic paraphrase for motor overheating troubleshooting.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-07",
+      "query": "軸承多久需要添加一次潤滑油脂？",
+      "query_type": "PARAPHRASE_ZH",
+      "relevant_document_ids": [
+        "DOC-04_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Chinese paraphrase for bearing lubrication frequency schedule.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-09",
+      "query": "主軸設備在開機啟動前需要做哪些預熱與準備？",
+      "query_type": "PARAPHRASE_ZH",
+      "relevant_document_ids": [
+        "DOC-01_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Chinese paraphrase for spindle warmup and daily startup.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-11",
+      "query": "What is the maximum operating hydraulic pipeline pressure?",
+      "query_type": "CROSS_LINGUAL",
+      "relevant_document_ids": [
+        "DOC-09_Y52",
+        "DOC-10_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "English query targeting bilingual and hydraulic specifications.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-12",
+      "query": "Drive motor rated speed and operational voltage specification",
+      "query_type": "CROSS_LINGUAL",
+      "relevant_document_ids": [
+        "DOC-02_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "English query for motor specs (3000 RPM, 400V).",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-14",
+      "query": "Recommended industrial lubricant grade for spindle bearing",
+      "query_type": "CROSS_LINGUAL",
+      "relevant_document_ids": [
+        "DOC-04_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "English query matching lubrication schedule table (ISO VG 68).",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-16",
+      "query": "線性導軌滑塊之潤滑週期與給油規格",
+      "query_type": "SOP_TABLE",
+      "relevant_document_ids": [
+        "DOC-04_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Table lookup combining component keyword with maintenance interval.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-17",
+      "query": "M8 規格螺栓對應之標準緊固扭矩",
+      "query_type": "SOP_TABLE",
+      "relevant_document_ids": [
+        "DOC-05_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Table lookup matching bolt size M8 and torque value 45 Nm.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-18",
+      "query": "開機操作前氣壓源最低壓力閾值要求為多少 MPa？",
+      "query_type": "SOP_TABLE",
+      "relevant_document_ids": [
+        "DOC-01_Y52",
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Procedure requirement matching 0.6 MPa threshold.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-20",
+      "query": "Y52 機台最新有效版緊急停機操作標準程序",
+      "query_type": "REVISION_ACTIVE",
+      "relevant_document_ids": [
+        "DOC-12_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.C",
+      "notes": "Must retrieve active Rev.C and avoid superseded Rev.B.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-21",
+      "query": "緊急停機程序中手動排空液壓蓄壓器之具體規定",
+      "query_type": "REVISION_ACTIVE",
+      "relevant_document_ids": [
+        "DOC-12_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.C",
+      "notes": "Procedure introduced specifically in Rev.C.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-23",
+      "query": "半導體黃光微影製程之光阻塗佈均勻度標準規範",
+      "query_type": "OUT_OF_SCOPE",
+      "relevant_document_ids": [],
+      "expected_retrieval_winner": "NONE",
+      "target_revision": null,
+      "notes": "Completely irrelevant domain query; should yield no high-scoring chunk.",
+      "is_in_scope": false
+    },
+    {
+      "query_id": "RET-24",
+      "query": "民用無人機低空空域航道防碰撞通訊協定標準",
+      "query_type": "OUT_OF_SCOPE",
+      "relevant_document_ids": [],
+      "expected_retrieval_winner": "NONE",
+      "target_revision": null,
+      "notes": "Out-of-scope query; should result in abstention.",
+      "is_in_scope": false
+    },
+    {
+      "query_id": "RET-25",
+      "query": "車用三元鋰電池正極材料高溫燒結降溫曲線標準",
+      "query_type": "OUT_OF_SCOPE",
+      "relevant_document_ids": [],
+      "expected_retrieval_winner": "NONE",
+      "target_revision": null,
+      "notes": "Irrelevant chemistry query.",
+      "is_in_scope": false
+    },
+    {
+      "query_id": "RET-27",
+      "query": "Y52-TEMP-MTR01",
+      "query_type": "CONTRASTIVE",
+      "relevant_document_ids": [
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact motor temperature sensor tag.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-28",
+      "query": "動力驅動總成發熱過載之故障排除檢修指引",
+      "query_type": "CONTRASTIVE",
+      "relevant_document_ids": [
+        "DOC-08_Y52",
+        "DOC-02_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Dense win expected: Exact keywords differ from manual text but semantic alignment is strong.",
+      "is_in_scope": true
+    },
+    {
+      "query_id": "RET-29",
+      "query": "ISO VG 68 工業齒輪潤滑油應注入何種機件部位？",
+      "query_type": "CONTRASTIVE",
+      "relevant_document_ids": [
+        "DOC-04_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Hybrid win: FTS matches ISO VG 68 exactly while Dense bridges semantic question intent.",
+      "is_in_scope": true
+    }
+  ]
+}

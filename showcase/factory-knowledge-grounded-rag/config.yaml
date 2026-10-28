@@ -1,0 +1,30 @@
+version: "1.0.0"
+environment: "local-first-offline"
+
+core:
+  allow_unsupported_actionable_claim: false
+  default_language: "zh-TW"
+  claim_domains:
+    - CURRENT_STATE
+    - PROCEDURE
+    - SAFETY
+    - DESIGN_CONFIGURATION
+    - HISTORICAL_CASE
+    - FAILURE_MODE
+
+retrieval:
+  exact_lookup_enabled: true
+  fts5_db_path: ":memory:"
+  dense_vector_metric: "cosine"
+  reranker_calibrated_threshold: 0.30
+  fusion_strategy: "rrf"
+  rrf_k: 60
+
+llm:
+  adapter: "deterministic_mock"  # Options: deterministic_mock, ollama, vllm
+  ollama_endpoint: "http://127.0.0.1:11434"
+  model_name: "qwen2.5:7b"
+
+multimodal:
+  default_review_status: "candidate"
+  dual_track_enabled: true

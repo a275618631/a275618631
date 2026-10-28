@@ -1,0 +1,26 @@
+[defaults]
+readonly = "allow"
+local_write = "allow_scoped"
+external = "require_approval"
+destructive = "require_approval"
+critical = "deny"
+unknown = "require_approval"
+
+[resources]
+allowed_paths = ["${PROJECT_ROOT}"]
+allowed_repos = ["a275618631/*"]
+allowed_branches = ["feat/*", "fix/*", "chore/*"]
+allowed_domains = ["github.com", "openai.com"]
+protected_branches = ["main", "master", "production", "prod"]
+
+[[rules]]
+id = "readonly-git-inspection"
+operation = "git.status"
+decision = "allow"
+
+[[rules]]
+id = "feature-branch-push"
+operation = "git.push"
+repos = ["a275618631/*"]
+branches = ["feat/*", "fix/*", "chore/*"]
+decision = "allow_scoped"

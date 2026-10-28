@@ -1,0 +1,10 @@
+[project]
+name = "thin-agent-tool-policy-engine"
+version = "0.1.1"
+description = "Deterministic, standard-library-only policy decisions for agent tool calls."
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

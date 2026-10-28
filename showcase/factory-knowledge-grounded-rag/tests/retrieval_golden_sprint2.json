@@ -1,0 +1,336 @@
+{
+  "dataset_name": "Factory Knowledge V3 Sprint 2 Retrieval Benchmark Golden Set",
+  "total_queries": 30,
+  "version": "1.0.0",
+  "generated_at": "2026-10-02T09:30:00+08:00",
+  "cases": [
+    {
+      "query_id": "RET-01",
+      "query": "ALM-3025",
+      "query_type": "EXACT_CODE",
+      "relevant_document_ids": [
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact alarm code for optical communication interrupt."
+    },
+    {
+      "query_id": "RET-02",
+      "query": "Y52-ENC-FB",
+      "query_type": "EXACT_CODE",
+      "relevant_document_ids": [
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact encoder feedback PLC tag ID."
+    },
+    {
+      "query_id": "RET-03",
+      "query": "OEM-SKF-6208",
+      "query_type": "EXACT_CODE",
+      "relevant_document_ids": [
+        "DOC-06_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact OEM spare part number for bearing."
+    },
+    {
+      "query_id": "RET-04",
+      "query": "ALM-4102",
+      "query_type": "EXACT_CODE",
+      "relevant_document_ids": [
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact alarm code for main lubrication pressure low."
+    },
+    {
+      "query_id": "RET-05",
+      "query": "PRT-52-008",
+      "query_type": "EXACT_CODE",
+      "relevant_document_ids": [
+        "DOC-06_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact mechanical wear sleeve part code."
+    },
+    {
+      "query_id": "RET-06",
+      "query": "馬達運轉溫度過高要如何處理？",
+      "query_type": "PARAPHRASE_ZH",
+      "relevant_document_ids": [
+        "DOC-08_Y52",
+        "DOC-02_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Chinese semantic paraphrase for motor overheating troubleshooting."
+    },
+    {
+      "query_id": "RET-07",
+      "query": "軸承多久需要添加一次潤滑油脂？",
+      "query_type": "PARAPHRASE_ZH",
+      "relevant_document_ids": [
+        "DOC-04_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Chinese paraphrase for bearing lubrication frequency schedule."
+    },
+    {
+      "query_id": "RET-08",
+      "query": "機台進行維修保養前如何做好安全上鎖掛牌？",
+      "query_type": "PARAPHRASE_ZH",
+      "relevant_document_ids": [
+        "DOC-03_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Chinese paraphrase for Lockout/Tagout (LOTO) safety procedure."
+    },
+    {
+      "query_id": "RET-09",
+      "query": "主軸設備在開機啟動前需要做哪些預熱與準備？",
+      "query_type": "PARAPHRASE_ZH",
+      "relevant_document_ids": [
+        "DOC-01_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Chinese paraphrase for spindle warmup and daily startup."
+    },
+    {
+      "query_id": "RET-10",
+      "query": "聯軸器固定螺絲應該鎖到多大的扭矩數值？",
+      "query_type": "PARAPHRASE_ZH",
+      "relevant_document_ids": [
+        "DOC-05_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Chinese paraphrase for coupling tightening torque requirements."
+    },
+    {
+      "query_id": "RET-11",
+      "query": "What is the maximum operating hydraulic pipeline pressure?",
+      "query_type": "CROSS_LINGUAL",
+      "relevant_document_ids": [
+        "DOC-09_Y52",
+        "DOC-10_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "English query targeting bilingual and hydraulic specifications."
+    },
+    {
+      "query_id": "RET-12",
+      "query": "Drive motor rated speed and operational voltage specification",
+      "query_type": "CROSS_LINGUAL",
+      "relevant_document_ids": [
+        "DOC-02_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "English query for motor specs (3000 RPM, 400V)."
+    },
+    {
+      "query_id": "RET-13",
+      "query": "Safety lockout and tagout procedure execution steps",
+      "query_type": "CROSS_LINGUAL",
+      "relevant_document_ids": [
+        "DOC-03_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "English query matching LOTO safety manual."
+    },
+    {
+      "query_id": "RET-14",
+      "query": "Recommended industrial lubricant grade for spindle bearing",
+      "query_type": "CROSS_LINGUAL",
+      "relevant_document_ids": [
+        "DOC-04_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "English query matching lubrication schedule table (ISO VG 68)."
+    },
+    {
+      "query_id": "RET-15",
+      "query": "Coupling bolt fastening torque Nm tolerance",
+      "query_type": "CROSS_LINGUAL",
+      "relevant_document_ids": [
+        "DOC-05_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "English query matching coupling torque table."
+    },
+    {
+      "query_id": "RET-16",
+      "query": "線性導軌滑塊之潤滑週期與給油規格",
+      "query_type": "SOP_TABLE",
+      "relevant_document_ids": [
+        "DOC-04_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Table lookup combining component keyword with maintenance interval."
+    },
+    {
+      "query_id": "RET-17",
+      "query": "M8 規格螺栓對應之標準緊固扭矩",
+      "query_type": "SOP_TABLE",
+      "relevant_document_ids": [
+        "DOC-05_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Table lookup matching bolt size M8 and torque value 45 Nm."
+    },
+    {
+      "query_id": "RET-18",
+      "query": "開機操作前氣壓源最低壓力閾值要求為多少 MPa？",
+      "query_type": "SOP_TABLE",
+      "relevant_document_ids": [
+        "DOC-01_Y52",
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Procedure requirement matching 0.6 MPa threshold."
+    },
+    {
+      "query_id": "RET-19",
+      "query": "液壓系統回油濾網之過濾精度規格為多少 um？",
+      "query_type": "SOP_TABLE",
+      "relevant_document_ids": [
+        "DOC-10_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Specific hydraulic parameter matching 10 um mesh filter."
+    },
+    {
+      "query_id": "RET-20",
+      "query": "Y52 機台最新有效版緊急停機操作標準程序",
+      "query_type": "REVISION_ACTIVE",
+      "relevant_document_ids": [
+        "DOC-12_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.C",
+      "notes": "Must retrieve active Rev.C and avoid superseded Rev.B."
+    },
+    {
+      "query_id": "RET-21",
+      "query": "緊急停機程序中手動排空液壓蓄壓器之具體規定",
+      "query_type": "REVISION_ACTIVE",
+      "relevant_document_ids": [
+        "DOC-12_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.C",
+      "notes": "Procedure introduced specifically in Rev.C."
+    },
+    {
+      "query_id": "RET-22",
+      "query": "緊急停機 SOP Rev.B 與 Rev.C 版本變更差異",
+      "query_type": "REVISION_ACTIVE",
+      "relevant_document_ids": [
+        "DOC-11_Y52",
+        "DOC-12_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.C",
+      "notes": "Version comparison query matching both revisions."
+    },
+    {
+      "query_id": "RET-23",
+      "query": "半導體黃光微影製程之光阻塗佈均勻度標準規範",
+      "query_type": "OUT_OF_SCOPE",
+      "relevant_document_ids": [],
+      "expected_retrieval_winner": "NONE",
+      "target_revision": null,
+      "notes": "Completely irrelevant domain query; should yield no high-scoring chunk."
+    },
+    {
+      "query_id": "RET-24",
+      "query": "民用無人機低空空域航道防碰撞通訊協定標準",
+      "query_type": "OUT_OF_SCOPE",
+      "relevant_document_ids": [],
+      "expected_retrieval_winner": "NONE",
+      "target_revision": null,
+      "notes": "Out-of-scope query; should result in abstention."
+    },
+    {
+      "query_id": "RET-25",
+      "query": "車用三元鋰電池正極材料高溫燒結降溫曲線標準",
+      "query_type": "OUT_OF_SCOPE",
+      "relevant_document_ids": [],
+      "expected_retrieval_winner": "NONE",
+      "target_revision": null,
+      "notes": "Irrelevant chemistry query."
+    },
+    {
+      "query_id": "RET-26",
+      "query": "生鮮超市低溫冷鏈物流車輛溫濕度雲端即時回報協定",
+      "query_type": "OUT_OF_SCOPE",
+      "relevant_document_ids": [],
+      "expected_retrieval_winner": "NONE",
+      "target_revision": null,
+      "notes": "Irrelevant logistics query."
+    },
+    {
+      "query_id": "RET-27",
+      "query": "Y52-TEMP-MTR01",
+      "query_type": "CONTRASTIVE",
+      "relevant_document_ids": [
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "FTS",
+      "target_revision": "Rev.A",
+      "notes": "Exact motor temperature sensor tag."
+    },
+    {
+      "query_id": "RET-28",
+      "query": "動力驅動總成發熱過載之故障排除檢修指引",
+      "query_type": "CONTRASTIVE",
+      "relevant_document_ids": [
+        "DOC-08_Y52",
+        "DOC-02_Y52"
+      ],
+      "expected_retrieval_winner": "DENSE",
+      "target_revision": "Rev.A",
+      "notes": "Dense win expected: Exact keywords differ from manual text but semantic alignment is strong."
+    },
+    {
+      "query_id": "RET-29",
+      "query": "ISO VG 68 工業齒輪潤滑油應注入何種機件部位？",
+      "query_type": "CONTRASTIVE",
+      "relevant_document_ids": [
+        "DOC-04_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Hybrid win: FTS matches ISO VG 68 exactly while Dense bridges semantic question intent."
+    },
+    {
+      "query_id": "RET-30",
+      "query": "氣源主管路供氣壓力不足造成設備停機",
+      "query_type": "CONTRASTIVE",
+      "relevant_document_ids": [
+        "DOC-01_Y52",
+        "DOC-08_Y52"
+      ],
+      "expected_retrieval_winner": "HYBRID",
+      "target_revision": "Rev.A",
+      "notes": "Hybrid win: fuses pressure symptom semantics with low-pressure alarm code."
+    }
+  ]
+}
