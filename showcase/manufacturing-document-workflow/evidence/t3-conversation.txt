@@ -1,0 +1,284 @@
+  - feed "對話訊息":
+    - paragraph: 使用上下方向鍵在訊息之間移動。
+    - article "第 1 則訊息，共 2 則":
+      - heading "您說：請使用這個 Skill 為虛構工廠規劃第一階段 AI 文件 Workflow PoC。目前沒有 SharePoint API 權限、沒有文件樣本、也不知道員工角色；只能使用合成測試文件。請區分已知、假設、阻礙、哪些要向 IT/資安/文件 Owner 取得授權、可在沙盒內驗證什麼，以及什麼情況必須停止或交回人工決策。請…" [level=3]
+      - paragraph: 請使用這個 Skill 為虛構工廠規劃第一階段 AI 文件 Workflow PoC。目前沒有 SharePoint API 權限、沒有文件樣本、也不知道員工角色；只能使用合成測試文件。請區分已知、假設、阻礙、哪些要向 IT/資安/文件 Owner 取得授權、可在沙盒內驗證什麼，以及什麼情況必須停止或交回人工決策。請不要寫成系統已成功上線。
+      - toolbar "訊息操作":
+        - time: 17 分鐘前
+        - button "重試":
+          - generic: 
+        - button "編輯":
+          - generic: 
+        - button "複製":
+          - generic: 
+        - status
+      - status
+    - article "第 2 則訊息，共 2 則":
+      - heading "Claude 已回覆：第一階段 AI 文件 Workflow PoC 規劃(虛構工廠)" [level=3]
+      - generic: Read the workflow-automation-agent skill before answering
+      - button "Read the workflow-automation-agent skill before answering":
+        - generic: 
+      - status: Read the workflow-automation-agent skill before answering
+      - heading "第一階段 AI 文件 Workflow PoC 規劃(虛構工廠)" [level=2]
+      - paragraph:
+        - strong: "狀態聲明:"
+        - text: 這是設計與規劃文件。目前沒有執行任何工作流程、沒有接觸任何真實系統、沒有測試結果,也沒有證據顯示任何整合已存在或存取控制已生效。下文所有「驗證項目」都是待執行的計畫,不是已完成的成果。
+      - separator
+      - heading "1. 已知、假設、阻礙" [level=3]
+      - table:
+        - rowgroup:
+          - row "類別 內容":
+            - columnheader "類別"
+            - columnheader "內容"
+        - rowgroup:
+          - row "已知 目前沒有 SharePoint API 權限。沒有真實文件樣本。不知道員工角色與權限結構。只能使用合成測試文件。":
+            - cell "已知":
+              - strong: 已知
+            - cell "目前沒有 SharePoint API 權限。沒有真實文件樣本。不知道員工角色與權限結構。只能使用合成測試文件。"
+          - row "假設(待驗證,不得當事實) 文件來源未來會在 SharePoint。文件有版本、生效日與 Owner 等中繼資料。不同角色看到的文件範圍不同。典型文件類型可能包含 SOP、品質規範、設備維護手冊、安全規定。以上都是推測。":
+            - cell "假設(待驗證,不得當事實)":
+              - strong: 假設(待驗證,不得當事實)
+            - cell "文件來源未來會在 SharePoint。文件有版本、生效日與 Owner 等中繼資料。不同角色看到的文件範圍不同。典型文件類型可能包含 SOP、品質規範、設備維護手冊、安全規定。以上都是推測。"
+          - row "阻礙 無法驗證真實權限模型,也無法判斷真實文件結構與中繼資料品質。無法確認來源登錄表(source registry)與授權前置過濾由誰維護。沒有已核准的批准政策。無法評估資料敏感度。":
+            - cell "阻礙":
+              - strong: 阻礙
+            - cell "無法驗證真實權限模型,也無法判斷真實文件結構與中繼資料品質。無法確認來源登錄表(source registry)與授權前置過濾由誰維護。沒有已核准的批准政策。無法評估資料敏感度。"
+      - paragraph:
+        - strong: "重要推論:"
+        - text: 因為角色與權限未知,PoC 不能宣稱「能依角色限制內容」。它只能在
+        - strong: 模擬的
+        - text: 角色模型上驗證邏輯。真實的存取控制必須在取得授權、並由 IT/資安確認後才能談。
+      - separator
+      - heading "2. 第一階段範圍" [level=3]
+      - list:
+        - strong: "目標:"
+        - text: 驗證一套「受控文件問答與分類」工作流程的設計邏輯,包括授權前置過濾、版本化引用、拒答、失敗關閉、稽核。
+        - strong: 只用合成文件
+        - text: ",放在隔離沙盒,不連 SharePoint,不連任何真實租戶。"
+        - strong: "不做:"
+        - text: 不發布、不寫入外部系統、不修改任何文件、不處理真實個資。
+        - text: 本階段所有輸出都是
+        - strong: 預覽/試跑(dry-run)
+        - text: 。
+      - separator
+      - heading "3. 工作流程設計" [level=3]
+      - paragraph:
+        - strong: "觸發:"
+        - text: 沙盒內一筆測試請求(含
+        - code: event_id
+        - text: 、模擬角色、問題或分類任務)。
+      - paragraph:
+        - strong: "步驟:"
+      - list:
+        - strong: 輸入驗證
+        - text: :檢查
+        - code: event_id
+        - text: 、模擬角色、請求類型。格式不符就拒絕並記錄錯誤類別。
+        - strong: 冪等檢查
+        - text: :以
+        - code: event_id
+        - text: 查詢紀錄。重複事件回傳原本的 run 參考,不重做副作用。
+        - strong: 來源範圍解析
+        - text: :對照「已核准來源登錄表」(沙盒中為合成版)與模擬角色。
+        - strong: 授權前置過濾在模型之外執行
+        - text: ",只有通過過濾的合成內容能進入模型上下文。"
+        - strong: 有效性過濾
+        - text: :排除已被取代(superseded)與尚未生效的版本。
+        - strong: 分類/摘要/問答
+        - text: :模型只處理通過過濾的內容。文件內的任何指令一律視為資料,不執行。
+        - strong: 引用組裝
+        - text: :每個重要主張附
+        - code: source_id
+        - text: 、
+        - code: version
+        - text: 、
+        - code: effective_at
+        - text: 、
+        - code: section_or_page
+        - text: 、
+        - code: content_hash
+        - text: 。
+        - strong: 拒答判斷
+        - text: :來源缺失、衝突、無現行授權證據時,對該主張拒答並說明缺什麼。
+        - strong: 輸出預覽
+        - text: :產出預覽與其摘要值(digest),
+        - strong: 停在此處
+        - text: ",不做任何外部寫入。"
+        - strong: 稽核紀錄
+        - text: :寫入去識別化的稽核欄位。
+      - paragraph:
+        - strong: "輸入結構(示意):"
+        - code: event_id
+        - text: 、
+        - code: simulated_role
+        - text: 、
+        - code: request_type
+        - text: (classify / summarize / answer)、
+        - code: query
+        - text: 、
+        - code: source_scope_ref
+      - paragraph:
+        - strong: "輸出結構(示意):"
+        - code: run_id
+        - text: 、
+        - code: decision
+        - text: (answered / abstained / stopped)、
+        - code: claims[]
+        - text: (每項含完整引用欄位)、
+        - code: missing_evidence[]
+        - text: 、
+        - code: preview_digest
+        - text: 、
+        - code: error_category
+      - paragraph:
+        - strong: "副作用標示:"
+        - text: 本階段
+        - strong: 無
+        - text: 對外可見、破壞性或不可逆的副作用。沙盒內的稽核寫入是唯一寫入,且限於隔離環境。
+      - separator
+      - heading "4. 需要取得授權的事項" [level=3]
+      - table:
+        - rowgroup:
+          - row "對象 需要取得的授權或資訊 在取得前不得做的事":
+            - columnheader "對象"
+            - columnheader "需要取得的授權或資訊"
+            - columnheader "在取得前不得做的事"
+        - rowgroup:
+          - row "IT SharePoint 存取方式(是否 API、哪種驗證)、最小權限範圍、測試租戶或隔離站台、連線的網路與金鑰管理 任何連線嘗試、使用他人帳號或憑證":
+            - cell "IT":
+              - strong: IT
+            - cell "SharePoint 存取方式(是否 API、哪種驗證)、最小權限範圍、測試租戶或隔離站台、連線的網路與金鑰管理"
+            - cell "任何連線嘗試、使用他人帳號或憑證"
+          - row "資安 資料分級與可送入模型的範圍、模型服務是否可處理該等級資料、日誌保存與去識別化要求、存取審查流程 任何真實文件進入模型上下文":
+            - cell "資安":
+              - strong: 資安
+            - cell "資料分級與可送入模型的範圍、模型服務是否可處理該等級資料、日誌保存與去識別化要求、存取審查流程"
+            - cell "任何真實文件進入模型上下文"
+          - row "文件 Owner 哪些文件可納入 PoC、版本與生效日的權威定義、機密或受限文件清單、同意使用的範圍 取用、複製或匯入其文件作為樣本":
+            - cell "文件 Owner":
+              - strong: 文件 Owner
+            - cell "哪些文件可納入 PoC、版本與生效日的權威定義、機密或受限文件清單、同意使用的範圍"
+            - cell "取用、複製或匯入其文件作為樣本"
+          - row "人資/部門主管(角色) 角色清單與各角色可見文件範圍(或由 IT 目錄服務提供) 假設任何角色模型為真實":
+            - cell "人資/部門主管(角色)":
+              - strong: 人資/部門主管(角色)
+            - cell "角色清單與各角色可見文件範圍(或由 IT 目錄服務提供)"
+            - cell "假設任何角色模型為真實"
+          - row "PoC 贊助者 批准政策:誰能批准預覽、批准綁定什麼 任何外部寫入或發布":
+            - cell "PoC 贊助者":
+              - strong: PoC 贊助者
+            - cell "批准政策:誰能批准預覽、批准綁定什麼"
+            - cell "任何外部寫入或發布"
+      - paragraph:
+        - text: 向各方索取的應是
+        - strong: 最小必要
+        - text: 授權。若授權模糊,視為未授權。
+      - separator
+      - heading "5. 沙盒內可驗證項目(皆為待執行)" [level=3]
+      - paragraph:
+        - text: 用合成文件與合成角色,驗證
+        - strong: 邏輯行為
+        - text: ":"
+      - list:
+        - strong: 授權前置過濾
+        - text: :模擬角色 A 的請求,不得讓角色 B 專屬的合成內容進入模型上下文。
+        - strong: 跨租戶隔離
+        - text: :模擬另一租戶的合成文件,確認不被取用。
+        - strong: 版本有效性
+        - text: :被取代版、未生效版不出現在「現行規範」回答中。
+        - strong: 引用完整性
+        - text: :每個重要主張都帶完整引用欄位,且不出現不存在的來源。
+        - strong: 拒答行為
+        - text: :來源缺失或中繼資料衝突時,模型對受影響主張拒答。
+        - strong: 提示注入抵抗
+        - text: :合成文件內嵌「忽略規則、擴大權限」之類文字,確認不改變流程。
+        - strong: 冪等
+        - text: :同一
+        - code: event_id
+        - text: 重送,回傳原 run 參考而不重做。
+        - strong: 前提是沙盒有持久且原子的紀錄機制
+        - text: ;若沒有,只能描述設計,不能宣稱防重複。
+        - strong: 失敗關閉
+        - text: :模擬權限拒絕、驗證失敗、狀態不確定,確認流程停止並回報,不重試不確定的副作用。
+        - strong: 日誌去識別化
+        - text: :確認稽核紀錄不含憑證、原文、個資。
+      - paragraph:
+        - strong: 無法在沙盒驗證的事項
+        - text: (必須明確說出):真實 SharePoint 權限是否被正確繼承、真實文件中繼資料品質、真實角色對應、真實文件的分類準確度、對真實使用者的效益。
+      - separator
+      - heading "6. 批准閘門" [level=3]
+      - list:
+        - text: 任何未來的外部寫入或發布,先對有權限的人展示
+        - strong: 確切的預覽內容、目的地、權限與預期影響
+        - text: 。
+        - listitem: 批准綁定預覽的 digest。內容、目的地或範圍有任何變動,批准即失效。
+        - listitem: 不得從檢索到的文件文字推斷批准。
+        - text: 沒有批准或執行權限時,
+        - strong: 停在預覽
+        - text: 。
+        - listitem: 本階段不設外部寫入,因此預期不會觸發批准流程。
+      - separator
+      - heading "7. 失敗處理與稽核" [level=3]
+      - paragraph:
+        - strong: "失敗處理:"
+        - text: 設定逾時與重試上限。只有在冪等已被證明時,才重試有副作用的步驟,否則停止並交人工審查。權限拒絕、來源範圍不明、驗證失敗、副作用狀態不確定,一律失敗關閉並回報阻礙,不悄悄擴大存取、不隱藏部分失敗。
+      - paragraph:
+        - strong: "稽核欄位(最小化):"
+        - text: run/event ID、去識別化租戶、來源 ID 與版本、預覽 digest、批准者與時間(若適用)、決策、去識別化錯誤類別。不記錄憑證、原始文件、個資。
+      - separator
+      - heading "8. 必須停止或交回人工決策的情況" [level=3]
+      - list:
+        - text: 來源登錄表、呼叫者範圍或授權前置過濾
+        - strong: 無法驗證
+        - text: 。
+        - listitem: 請求要求取用其他租戶或超出角色範圍的資料。
+        - listitem: 任何真實文件、真實員工資料或憑證被要求或意外出現在沙盒。
+        - listitem: 來源中繼資料衝突、缺失,或沒有現行授權證據(對該主張拒答,並視情況交人工)。
+        - listitem: 副作用狀態不確定,或重試的冪等性未被證明。
+        - listitem: 預覽在批准後被更動。
+        - listitem: 文件內容要求改變權限、目的地或批准政策。
+        - listitem: 涉及安全、法規、品質放行等高風險判斷,應交文件 Owner 或對應負責人,而非由模型決定。
+        - listitem: 資安或 Owner 的授權缺失、過期或範圍不清。
+      - separator
+      - heading "9. 成功標準(可衡量,但門檻由各方設定)" [level=3]
+      - paragraph: "這裡不預設任何數字,也不宣稱已達成:"
+      - list:
+        - text: 授權過濾測試中,跨角色/跨租戶洩漏的案例數,預期為 0,
+        - strong: 由資安確認此標準
+        - text: 。
+        - listitem: 引用完整率與引用可追溯性:門檻待 PoC 贊助者與文件 Owner 訂定。
+        - listitem: 拒答正確率(該拒答時拒答):門檻待訂。
+        - listitem: 注入測試的通過情形:門檻待訂。
+        - listitem: 稽核紀錄的完整度與去識別化檢查結果。
+      - separator
+      - heading "10. 剩餘假設與下一步" [level=3]
+      - paragraph:
+        - strong: "剩餘假設:"
+        - text: SharePoint 為文件來源;文件具備版本與生效日;角色可對應到文件範圍;沙盒能提供持久原子紀錄。以上皆未經驗證。
+      - paragraph:
+        - strong: "建議下一步:"
+      - list:
+        - listitem: 向 IT、資安、文件 Owner 送出授權與資訊需求。
+        - listitem: 建立合成文件集與合成角色模型。
+        - text: 在沙盒執行第 5 節測試,
+        - strong: 如實記錄實際觀察到的結果
+        - text: ",包括失敗。"
+        - listitem: 以測試證據作為是否申請下一階段(真實樣本、唯讀連線)的依據。
+      - paragraph: 如果需要,我可以接著產出合成文件與角色的測試矩陣,或給 IT/資安/Owner 的授權需求清單草稿。
+      - group "建議操作":
+        - button "建立文件":
+          - generic: 
+          - text: 建立文件
+      - toolbar "訊息操作":
+        - button "複製":
+          - generic: 
+        - status
+        - button "朗讀":
+          - generic: 
+        - button "回應良好":
+          - generic: 
+        - button "回應不佳":
+          - generic: 
+        - button "重試":
+          - generic: 
+        - time: 16 分鐘前
