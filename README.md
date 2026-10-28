@@ -52,6 +52,23 @@
 
 # Featured Projects｜主要作品
 
+## ★ [公開技術能力作品集 (Engineering Capabilities Showcase)](showcase/)
+
+`Manufacturing AI · Grounded RAG · Agent Policy · Platform Architecture · Multi-Agent Runtime`
+
+將製造業流程治理、地端離線 RAG、決定論工具策略引擎、企業營運平台垂直切片、雙 Agent Runtime 協作架構與標準 Skill 庫，整合為經過資安審查、合成資料可重現驗證的技術能力作品集。
+
+- **[製造業文件版本審核與 AI 工作流](showcase/manufacturing-document-workflow/)**：具備 Claude Free 實測（T1 PASS / T2 FAIL / T3 PASS）與 Skill 載入證據。
+- **[工廠設備知識庫與地端診斷 RAG](showcase/factory-knowledge-grounded-rag/)**：完全離線可跑、來源引用 (Citation)、版本衝突識別與 ABSTAIN 拒答保護。
+- **[企業營運平台垂直切片](showcase/enterprise-operations-platform/)**：RBAC 權限狀態機、401/403 攔截、工單冪等防護（UX-02 PR #2 MERGED）。
+- **[Agent 工具策略引擎](showcase/agent-tool-policy-engine/)**：純 Python 零外部依賴、24 單元測試 PASS、決定論工具動作風險預檢。
+- **[Codex × Antigravity 協作架構](showcase/codex-antigravity-collaboration/)**：跨 Runtime 協議、Bounded Task/Result 與 LIVE_BLOCKED 安全聲明。
+- **[Codex Agent Skills 技能庫](showcase/codex-agent-skills/)**：標準技能目錄規範與自動化驗證器 (`validate.ps1`)。
+
+→ **[瀏覽作品集展示與驗證索引 (showcase/README.md)](showcase/)**
+
+---
+
 ## 1. [Codex × Antigravity Collaboration](https://github.com/a275618631/codex-antigravity-collaboration)
 
 `Agent Architecture · Multi-Agent · MCP · Skills · Privacy · Verification`
