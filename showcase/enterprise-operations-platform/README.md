@@ -1,128 +1,55 @@
-# A｜Enterprise Operations Platform
+# 企業營運平台｜設備與工單管理
 
-This is the development entry for project A. Work only inside:
+工廠的設備資料、維修工單與作業權限往往分散在不同流程裡。我用一個設備與工單管理情境，建立 ASP.NET Core API、角色權限和資料持久化機制，練習把營運需求拆成可以測試的功能。
 
-`<LOCAL_WORKSPACE_PATH>`
+這個作品的重點不只是能新增一筆工單，而是不同角色能做什麼、輸入錯誤如何回應，以及網路中斷後如何避免重複操作。
 
-The private GitHub repository [`a275618631/enterprise-operations-platform`](https://github.com/a275618631/enterprise-operations-platform) has been created. The approved development branch is `codex/docs-entry-20261019`; it is published separately and has not been merged into `main`.
+## 做了哪些功能
 
-## Purpose and MVP
+- **設備管理**：設備清單、新增與欄位驗證；重複設備識別碼會回傳衝突狀態。
+- **工單流程**：建立、查詢與完成工單，依登入角色限制操作。
+- **JWT 角色權限**：將權限檢查放在 API，不依賴前端隱藏按鈕來保護資料。
+- **錯誤處理**：區分未登入 `401`、權限不足 `403`、輸入錯誤 `400` 與重複資料 `409`。
+- **資料持久化與復原**：使用 PostgreSQL、EF Core Migration，並設計備份還原的驗收流程。
 
-Status as of 2026-10-27: the local MVP has a test-backed JWT authentication/RBAC slice, Development-only Demo login, one-click local startup, equipment creation, and work-order operations. It is still a local development MVP, not production acceptance.
+## 權限如何運作
 
-Build a local enterprise operations platform for equipment and work-order operations.
+| 角色 | 查看設備／工單 | 新增設備／工單 | 完成工單 |
+| --- | --- | --- | --- |
+| Viewer | 可以 | 不可以 | 不可以 |
+| Operator | 可以 | 可以 | 不可以 |
+| Supervisor | 可以 | 可以 | 可以 |
+| Administrator | 可以 | 可以 | 可以 |
 
-The current MVP is a small, independently runnable vertical slice:
+例如，操作員可以建立維修工單，但完成工單需要主管角色。即使跳過前端畫面直接呼叫 API，後端仍依 JWT 權限判斷。
 
-- ASP.NET Core 10 REST API on `127.0.0.1:5080`.
-- Vue 3 + TypeScript client on the Vite development port.
-- PostgreSQL 18.6 persistence owned only by A.
-- Equipment listing and creation, plus work-order listing, creation, and completion.
-- JWT Bearer validation with role-based read, write, and completion policies.
-- Development-only Demo login that issues short-lived JWTs for synthetic roles.
-- Vue token-connect flow with explicit `401` and `403` error states.
-- EF Core migration `20261019031222_InitialOperationsSchema`.
-- In-memory fallback for API development when no local connection secret is configured.
-- Loopback-only PostgreSQL backup, restore, and synthetic restore-database helpers.
+## 系統架構
 
-## Start here
+- **後端**：C#、ASP.NET Core 10、REST API、JWT Bearer
+- **前端**：Vue 3、TypeScript（完整開發版本）
+- **資料庫**：PostgreSQL 18、Entity Framework Core
+- **驗證**：.NET 測試、角色操作測試、瀏覽器流程與資料庫復原演練
 
-1. Read [AGENTS.md](AGENTS.md) for write scope, safety boundaries, and secrets rules.
-2. Read [PROJECT.yaml](PROJECT.yaml) for identity, ownership, and source-of-truth status.
-3. Read [docs/ARCHITECTURE_MVP_20261016.md](docs/ARCHITECTURE_MVP_20261016.md) for the current architecture contract.
-4. Read [frontend/README.md](frontend/README.md) and [frontend/UX_MVP_20261019.md](frontend/UX_MVP_20261019.md) for the user-visible UI flow.
+從 [API 入口程式](src/EnterpriseOperationsPlatform.Api/Program.cs)、[工單資料邏輯](src/EnterpriseOperationsPlatform.Api/Operations/OperationsStore.cs) 和 [架構設計](docs/ARCHITECTURE_MVP_20261016.md) 可以了解各部分如何配合。
 
-## Local development flow
+## 測試成果
 
-Configure the database password through the local User Secrets helper; never place it in Git:
+既有開發驗收記錄包含：
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\set-local-connection.ps1
-```
+- .NET 測試 **22 項通過、1 項 PostgreSQL 專用測試在一般測試流程略過**。
+- API 角色與資料驗證：未登入 `401`、Viewer 寫入 `403`、無效欄位 `400`、重複識別碼 `409`、Operator 新增 `201`。
+- QA-01 涵蓋角色操作、行動裝置畫面、資料庫重啟後持久化與備份還原。
 
-Configure the JWT validation settings through User Secrets; the signing key must be at least 32 UTF-8 bytes:
+詳細過程見 [QA-01 驗收紀錄](docs/A_QA-01_repeatable_demo_acceptance_2026-10-22.md)。上面是既有開發測試結果，不代表這份公開副本已重新完成整套環境驗收。
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\set-local-jwt.ps1
-```
+## 查看公開程式
 
-Start the API:
+目前公開副本收錄後端 API、資料模型、部分測試和架構文件；完整 Vue 介面、私有環境設定與本機啟動腳本沒有收錄。因此可先從程式及測試了解權限與工單邏輯，不必照著私人開發環境設定操作。
 
-```powershell
-dotnet run --project .\src\EnterpriseOperationsPlatform.Api\EnterpriseOperationsPlatform.Api.csproj --urls http://127.0.0.1:5080
-```
-
-Start the Vue client in a second terminal:
+已安裝 .NET SDK 並備妥測試相依套件時，可在此專案目錄執行：
 
 ```powershell
-cd .\frontend
-npm install
-npm run dev -- --host 127.0.0.1
+dotnet test EnterpriseOperationsPlatform.slnx
 ```
 
-For a local Demo, the recommended one-click path is:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\start-local-demo.ps1
-```
-
-The launcher starts the API and Vue dev server, waits for `/health` and port `5173`, then opens the browser. Stop it with:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\stop-local-demo.ps1
-```
-
-Use the UI to view equipment, add a synthetic equipment record, create a work order for it, and complete the order. The UI calls the local API only; an unavailable B, C, REST integration, or MCP integration must not prevent the core local workflow.
-
-The Development environment issues short-lived Demo JWTs. Synthetic Demo accounts are:
-
-| Account | Password | Role |
-|---|---|---|
-| `viewer` | `viewer-demo` | Read only |
-| `operator` | `operator-demo` | Read; create equipment and work orders |
-| `supervisor` | `supervisor-demo` | Read; create equipment and work orders; complete work orders |
-| `administrator` | `administrator-demo` | Full MVP operations |
-
-These credentials are synthetic local Demo data and must not be reused in production. The current MVP still does not provide a production login/user-management service; an approved local issuer can also be used by pasting a valid JWT into the Vue connection box. The token role policies are:
-
-| Operation | Allowed roles |
-|---|---|
-| Read equipment and work orders | `Viewer`, `Operator`, `Supervisor`, `Administrator` |
-| Create equipment and work orders | `Operator`, `Supervisor`, `Administrator` |
-| Complete work orders | `Supervisor`, `Administrator` |
-
-Without a valid token, operations endpoints return `401`; with an authenticated but insufficient role, they return `403`.
-
-For the local recovery drill, first run `scripts/bootstrap-recovery-postgresql.psql` as the PostgreSQL administrator against the loopback server, then use `scripts/backup-postgresql.ps1` and `scripts/restore-postgresql.ps1`. Restore requires `-ConfirmRestore` and a target database matching `enterprise_operations_restore_*`.
-
-For the repeatable QA-01 acceptance, run `pwsh -ExecutionPolicy Bypass -File .\scripts\qa-01.ps1`. It requires the existing local User Secrets DB/JWT settings, PostgreSQL 18 client tools, Node dependencies, and local Chrome. It creates a unique `qa01_<run>` schema inside `enterprise_operations_restore_smoke`; migrations, API traffic, schema-scoped backup, and restore are confined to that schema. The runner never uses `enterprise_operations` as a connection target, never clears the existing `public` schema, and leaves the QA schema and evidence under `artifacts/` for inspection. The password stays in User Secrets and is passed to backup/restore as a short-lived process environment value; it is never printed or written to test evidence. The latest reproducible acceptance and evidence index are in [the QA-01 report](docs/A_QA-01_repeatable_demo_acceptance_2026-10-22.md).
-
-## Evidence already completed
-
-- `dotnet test EnterpriseOperationsPlatform.slnx --no-restore --configuration Release`: 22 passed; 1 PostgreSQL-only test intentionally skipped outside the dedicated QA runner.
-- `dotnet build EnterpriseOperationsPlatform.slnx`: 0 warnings, 0 errors.
-- `npm run build` in `frontend`: passed.
-- Equipment create API: anonymous `401`, Viewer `403`, invalid fields `400`, duplicate ID `409`, Operator create `201`; created equipment can be used for a work order.
-- QA-01 post-commit run `7d7cc605a2964c13be325b51456778d1`: full browser role flow, Viewer and Operator 320px no-overflow checks, PostgreSQL restart persistence, schema-scoped backup/restore digest, and snapshot boundary passed. Evidence: [QA-01 report](docs/A_QA-01_repeatable_demo_acceptance_2026-10-22.md).
-- One-click local Demo start/stop: passed; API and Vue ports were cleaned up after verification.
-- PostgreSQL application role is non-superuser; password remains in User Secrets.
-
-## Next work: portfolio flow first
-
-Follow [the dated A portfolio roadmap](docs/PORTFOLIO_ROADMAP_20261021.md). UX-01/02 and QA-01 are complete. M1-REM is in progress: equipment creation is complete; next finish work-order assignment/lifecycle and API contract/OpenAPI evidence. Then continue the original M2 integration demo and portfolio evidence. Formal identity, governance, CI, and deployment remain later stages; the local MVP is not production acceptance.
-
-## Non-goals and forbidden actions
-
-- Do not change remotes, merge, or deploy without explicit approval. Use a scoped feature branch and PR for approved GitHub updates.
-- Do not modify B or C, their worktrees, Docker resources, or `factory-qdrant-data`.
-- Do not commit secrets or local `.env` values.
-- T7 OS-level Agent write isolation is not complete; unattended cross-project writes remain forbidden.
-
-## Document disposition
-
-| Class | A evidence / location | Status |
-|---|---|---|
-| Current | This README, `AGENTS.md`, `PROJECT.yaml`, `src/`, `frontend/`, `tests/`, `docs/ARCHITECTURE_MVP_20261016.md` | Local source of truth |
-| Reference | Drive folder `1xeINSPoAKovaFh3buicYS5aPB7PAlihQ` | User-provided reference; not independently read by this checkout |
-| Archive | No separate archived A copy identified in this Repo | UNKNOWN; do not infer from filenames |
-| Duplicate candidate | None classified | Requires provenance review before any consolidation |
+案例中的設備與人員皆使用合成資料。這是可驗證的本地開發作品，未將 Demo 登入方式當作正式企業身分驗證服務。
