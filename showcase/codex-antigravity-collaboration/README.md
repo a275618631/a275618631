@@ -41,6 +41,6 @@
 
 ## 程式與文件
 
-- [本地 MCP Bridge 使用說明](local_bridge/README.md)
-- [本地交接工具技術入口](github_handoff/README_GITHUB_HANDOFF_20260929.md)
+- [本地 MCP Bridge 使用說明](https://github.com/a275618631/codex-antigravity-collaboration/blob/main/local_bridge/README.md)
+- [本地交接工具技術入口](https://github.com/a275618631/codex-antigravity-collaboration/blob/main/github_handoff/README_GITHUB_HANDOFF_20260929.md)
 - [架構與協作設計](docs/ARCHITECTURE.md)
