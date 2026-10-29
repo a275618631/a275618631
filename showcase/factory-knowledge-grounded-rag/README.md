@@ -1,134 +1,63 @@
-# 工廠設備知識庫與地端診斷助手 (Factory Knowledge Grounded RAG)
+# 工廠設備知識庫與地端診斷助手
 
-> **核心安全性準則**：  
-> **No unsupported actionable claim reaches the user.**  
-> （沒有來源支持的可執行工程判斷／操作建議，不得輸出給使用者。）
+設備發生警報時，工程師通常得在數百頁手冊之間找型號、錯誤碼和排除方式。只靠關鍵字容易漏掉同義描述；只靠語言模型又可能混用不同版本的規格。
 
-本專案是一個 **工具無關 (Tool-Agnostic)、Local-First、完全可離線執行** 的工廠設備知識庫與診斷助手系統。系統預設唯讀，嚴禁自動控制 PLC/SCADA；AI 產出之新知識與影像辨識一律預設為 `candidate`，必須經由專家審查方可生效。
+我把全文搜尋、語意檢索、重排序及來源驗證串成一條本地查詢流程。它不只找出相關段落，也會檢查回答是否真的有文件支持。找不到足夠證據時，系統會明確表示資料不足，而不是補出一套看似合理的維修步驟。
 
-## 唯一開發入口
+## 核心功能
 
-正確 Repo Root：`.`
+- **混合檢索**：SQLite FTS5 搜尋警報碼、Tag 與設備代號；Qdrant Local 配合向量搜尋理解不同說法。
+- **結果重排序**：使用 BGE Reranker 把真正相關的手冊段落排到前面。
+- **來源追蹤**：對照來源、版本與引用，讓工程師可以回到文件核對。
+- **確定性查核**：檢查引用是否存在、數值是否有依據，以及不同版本資訊有沒有衝突。
+- **資料不足時停止推測**：遇到沒有來源支持的操作建議，回傳 `ABSTAIN` 或阻擋不可靠內容。
 
-先讀本 README，再讀 `docs/architecture_v3.md`、`docs/demo_flow.md`、`reports/CURRENT_STATUS.md`，最後依 `tests/` 與 `reports/sprint-*` 的證據工作。這個 checkout 的預設開發路徑是 Qdrant Local；Docker Server 與 Ollama 展示是選用／歷史路徑，不是 Local Mode 的啟動前提。
-
-使用者操作以 CLI／展示流程為主：執行本地測試或 Local Mode query，查看來源 citation；若證據不足，系統必須回傳 `ABSTAINED` 且不得產生可執行處方。系統不寫入 PLC／SCADA。
-
-## 版本、來源與證據對照
-
-| 版本／名稱 | 本機可驗證狀態 | 來源與證據 |
-|---|---|---|
-| `master` | `Current`；本 checkout 以 `master` 為基線，文件修正位於安全分支 | Git branch、`README.md`、`reports/CURRENT_STATUS.md` |
-| `public-real-document-pilot-v1` | `Reference`；唯讀 `git ls-remote` 已確認遠端 ref，Commit `775a81e2b6e7e0af3e7374bfa8ce8a02de158374`；本機未驗證內容 | 不在本機 checkout、未 Checkout／Merge；仍需人工核對遠端與 Drive provenance |
-| 2026-10-15 Pre-Pilot | `Reference`／`UNKNOWN`；未複製 Drive 文件至 Repo | Drive 專案資料夾 `1s34Z2_KDwzDOdkM5OJzwhRlkthbZM7CY`；本機只採既有報告證據 |
-| 2026-10-16 Public Pilot | `Reference`／`UNKNOWN`；未複製 Drive 文件至 Repo | Drive／外部交接文件需人工核對；本機不宣稱已取得 |
-| 2026-10-19 Local evidence | `Current evidence` | Qdrant Local synthetic query／reopen、引用與 `ABSTAINED` 測試；未啟動 Docker |
-
-不同名稱不代表重複版本；合併或歸檔前必須取得 provenance、commit／文件日期與內容差異證據。
-
----
-
-## 證據等級與系統邊界 (Evidence Level & System Boundaries)
-
-### 證據等級：`V3 — Technical PoC on Synthetic Benchmark Corpus`（歷史基線）
-
-> [!IMPORTANT]
-> **本節保留 2026-10 審計的 V3 技術 PoC 歷史基線**。
-> 其中 Docker Server／Ollama 的端到端描述與指標是歷史證據，不代表本輪 Local Mode 已重新執行；本輪可驗證證據以文件上方的 2026-10-19 Local evidence 與下方 14 項測試為準。
->
-> **強制系統邊界宣告 (Mandatory Boundary Disclaimers)**：
-> - **NOT real factory data validation**：測試語料為高保真合成／開源假想冷軋設備手冊，尚未取得或驗證廠內真實機密資料。
-> - **NOT production acceptance**：本階段為技術 PoC 驗證，不代表已通過廠區生產驗收。
-> - **NOT live OT validation**：系統未實體連線真實產線 PLC / SCADA / OPC UA 即時資料流（預留為架構擴展介面）。
-
----
-
-## 系統現況與誠實邊界揭露 (V3 Truth Matrix)
-
-| 組件／模組 | 實體實作機制 | 驗證狀態 | 備註說明 |
-|---|---|---|---|
-| **文件解析 (Docling)** | `adapters/parsers/docling_adapter.py` | **REAL EXECUTION** | 支援多格式轉結構化 Markdown，附輕量解析備援 |
-| **密集向量嵌入 (FastEmbed)** | `adapters/embedding/fastembed_embedder.py` | **REAL EXECUTION** | `paraphrase-multilingual-MiniLM-L12-v2` (ONNX CPU, 384 維度) |
-| **向量資料庫 (Local)** | `adapters/vector/qdrant_store.py` | **REAL EXECUTION** | Qdrant Local／本地儲存模式；目前開發預設 |
-| **向量資料庫 (Docker Server)** | Qdrant Docker (`factory-qdrant`, v1.19.1) | **HISTORICAL / OPTIONAL** | 舊版 Server／具名 Volume 證據保留；本輪不啟動、不接觸 Volume |
-| **全文檢索 (SQLite FTS5)** | `adapters/retrieval/sqlite_fts.py` | **REAL EXECUTION** | 支援代號、Alarm、Tag 精確比對，CJK n-gram 分詞 |
-| **混合檢索融合 (RRF)** | `adapters/retrieval/hybrid_retriever.py` | **REAL EXECUTION** | Reciprocal Rank Fusion (k=60)，整合全文與語意檢索 |
-| **神經重排序 (BGE Reranker)** | `adapters/rerank/bge_v2_m3_reranker.py` | **REAL EXECUTION** | `BAAI/bge-reranker-v2-m3` (560M 參數)，科學化校準最佳門檻值 `0.05` |
-| **本機 LLM 生成 (Ollama)** | `adapters/llm/ollama_adapter.py` | **HISTORICAL / OPTIONAL** | 舊版本機 `qwen3:8b` 證據保留；Local Mode 核心測試不以 Ollama 為前提 |
-| **確定性防幻覺閘門** | `core/verifier.py` (`DeterministicVerifier`) | **REAL EXECUTION** | 5 大安全閘門（數值精確比對、引用存在性、衝突阻擋、歷史隔離、無佐證棄權） |
-| **評測測試語料 (Corpus)** | `data/source/` (12 份合成標準手冊) | **SYNTHETIC / LICENSE-SAFE** | 高保真假想冷軋設備手冊，安全無機密洩漏風險 |
-| **現場 OT 網路連線 (Factory OT)** | N/A (未連線真實產線) | **NOT VALIDATED** | 嚴格隔離，預設唯讀 |
-
----
-
-## 系統架構：Thin Core + 可替換 Adapters
+## 一個查詢怎麼處理
 
 ```text
-使用者問題 / 故障現象
-       │
-       ▼
-Query / Terminology Resolver (三態解析: EXACT / CANDIDATE / AMBIGUOUS)
-       │
-       ▼
-Hybrid Retrieval Pipeline (多路融合檢索)
-  ├─ SQLite FTS5 全文索引 (代號、警報、規格)
-  └─ Qdrant Local 向量資料庫 (FastEmbed 384-dim；Docker Server 為選用路徑)
-       │
-       ▼
-Reciprocal Rank Fusion (RRF k=60)
-       │
-       ▼
-BGE Multilingual Cross-Encoder Reranker (校準門檻值 0.05 過濾)
-       │
-       ▼
-Evidence Package Builder (封裝合格佐證與完整 Provenance EV-xxx)
-       │
-       ▼
-Local LLM Generation (Ollama qwen3:8b, Pydantic JSON Schema, temp=0)
-       │
-       ▼
-Deterministic Verifier Gate (防幻覺確定性檢驗閘門)
-  ├─ [PASS]  輸出結構化診斷結果 + 完整引用佐證
-  ├─ [ABSTAIN] 查無足夠資料時主動棄權，列出現場手動確認項目
-  └─ [BLOCK] 攔截未經核可操作、攔截造假數值、標記跨版本衝突
+輸入設備警報、型號或故障描述
+       ↓
+SQLite FTS5 + Qdrant Local 混合檢索
+       ↓
+RRF 融合結果 + BGE Reranker
+       ↓
+整理來源、版本與引用
+       ↓
+驗證數值、引用、版本衝突
+       ↓
+回傳有出處的結果，或說明缺少什麼資料
 ```
 
----
+例如搜尋通訊警報時，代碼可由全文索引精確命中，口語故障描述則由語意檢索補強。若同一問題牽涉不同設備型號，系統需要先釐清適用範圍，避免把別台設備的處理方式當成答案。
 
-## 驗證指標與成果
+## 技術組成
 
-### 1. 單元與整合測試
-- **2026-10-19 Local Mode smoke**：**14 / 14 PASSED**（Qdrant Local、引用、ABSTAIN、結構化輸出與負向安全測試；本輪實測證據）
-- **歷史全量基線**：57 / 57 與 Legacy Golden 30 / 30 保留作為舊版審計證據，未在本輪重新執行。
+| 技術 | 用途 |
+| --- | --- |
+| Python、Docling | 文件解析與結構化 |
+| SQLite FTS5 | 設備代碼與全文查詢 |
+| FastEmbed、Qdrant Local | 本地向量索引與語意搜尋 |
+| Reciprocal Rank Fusion | 合併不同檢索來源 |
+| BGE Reranker | 重新排序相關段落 |
+| `core/verifier.py` | 以明確規則查核內容與引用 |
+| Ollama（選用） | 本地模型生成與格式化回答 |
 
-### 2. 端到端評測（2026-10 審計定錨）
-- **功能狀態吻合率 (Functional Status Match)**：**76.0% (19/25)**（包含因保守安全防護所採取的棄權）
-- **安全合規率 (Safety Compliance Rate)**：**100.0% (25/25)**（零未授權處方、零數值幻覺、零跨版本衝突流出）
-- **重排序超範圍拒答準確率 (No-Answer Accuracy)**：**100.0%**（誤接受率 0.0%）
+可從 [驗證核心](core/verifier.py)、[混合檢索測試](tests/test_mvp1_retrieval.py)、[本地 Qdrant 測試](tests/test_sprint2_qdrant.py) 和 [架構文件](docs/architecture_v3.md) 了解實作。
 
----
+## 已有的測試
 
-## 快速啟動 (Local Mode 預設)
+- 本地 Qdrant／檢索／引用／拒答相關測試紀錄：**14 / 14 通過**（2026-10-19）。
+- 歷史版本評測：功能狀態吻合 **19 / 25**；當次 25 題安全檢查全部符合預設規則。
+- 其他階段也累積了文件解析、檢索融合、結構化輸出與負向案例的測試。
 
-### 本機需求
+這些數字對應各自的測試版本與資料集，不能視為所有設備情境的通用準確率。原始研究另外使用過公開原廠手冊；這份展示副本只保留可公開的合成測試內容，不附原廠 PDF。
 
-- Python 3.12
-- C 專用 `.venv`（若尚未建立，依專案環境政策建立於 Repo 根目錄；`.gitignore` 已排除）
-- 不需要 Docker、Qdrant Server 或 Ollama 即可執行 Local Mode 核心測試
+## 閱讀與測試
+
+公開副本保留核心 Python 程式與選定測試。可先閱讀 [本地索引程式](adapters/vector/qdrant_store.py) 及 [負向安全測試](tests/test_sprint3_negative_safety.py)。若已備妥 Python 3.12、pytest 與所需 Python 套件，可從這些測試開始：
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider tests/test_sprint2_qdrant.py tests/test_mvp1_retrieval.py tests/test_mvp2_structured_llm.py tests/test_sprint3_negative_safety.py
+python -m pytest -q tests/test_sprint2_qdrant.py tests/test_mvp1_retrieval.py tests/test_sprint3_negative_safety.py
 ```
 
-### Docker／Ollama（歷史或選用）
-
-`docker-compose.yml`、`scripts/demo.ps1` 與 `app/demo.py --profile portfolio` 是舊版 Server／展示流程。它們需要 Docker Qdrant `:6333` 與／或 Ollama；除非另有核准，不得將其當成 Local Mode 預設啟動流程，也不得操作受保護的 `factory-qdrant-data`。
-
-## 文件去向
-
-| Class | C evidence / location | Status |
-|---|---|---|
-| Current | This README, `docs/`, `reports/CURRENT_STATUS.md`, `tests/`, `adapters/`, `core/`, `app/` | Local source of truth for current code/tests |
-| Reference | Drive folder `1s34Z2_KDwzDOdkM5OJzwhRlkthbZM7CY` | External planning/reference; not copied into Repo |
-| Archive | `reports/sprint-0` through `reports/sprint-4`, `reports/audit-2026-10` | Historical evidence; retain, do not delete or rename |
-| Duplicate candidate | Overlapping dated reports and Drive exports | Not classified by filename; requires provenance and content comparison |
+這份公開副本尚未附上完整的獨立環境安裝清單；執行前需自行備妥相依套件。系統以**本地唯讀診斷**為設計範圍，不會連線控制 PLC／SCADA；現場操作仍需依設備手冊與作業程序確認。
