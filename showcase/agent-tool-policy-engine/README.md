@@ -1,40 +1,43 @@
-# Thin Agent Tool Policy Engine
+# Agent 工具策略引擎｜讓工具呼叫先經過規則判斷
 
-本 staging PoC 是一個零 runtime dependency 的 deterministic policy core。它把 host 提供的結構化 tool-call 資訊收斂成四種結果：`allow`、`allow_scoped`、`require_approval`、`deny`。
+AI Agent 可以操作檔案、呼叫 API、修改程式碼，但不同動作的風險差很多。讀取文件和修改受保護分支，不應該套用同一套規則。
 
-## 已實作
+這個專案用 **Python 標準函式庫**實作工具呼叫的策略判斷核心。它接收已結構化的工具資訊，根據操作類型、目標路徑、Repository、分支及網域，回傳明確的處理方式。
 
-- 跨平台 path / repo / branch / domain 正規化。
-- 只看結構化訊號的 side-effect classifier；不把 prompt 或「模型說安全」當成安全邊界。
-- TOML policy loader 與 scope / protected branch 比對。
-- fail-safe unknown side effect、critical default deny、prompt override 不可放寬決策。
-- JSONL audit event；target 只留 fingerprint，secret-like 欄位與值會 redact。
-- `LocalToolAdapter`：只做 CLI/MCP handler preflight，不執行 command。
-- `codex_rules`：產生可人工檢視的 Codex rules preview，不自動安裝。
+## 四種決策
 
-## 邊界
+| 決策 | 代表什麼 |
+| --- | --- |
+| `allow` | 可以依原請求執行 |
+| `allow_scoped` | 只能在允許的範圍內執行 |
+| `require_approval` | 需要經過核准 |
+| `deny` | 不允許執行 |
 
-這不是 Gateway、daemon、sandbox、approval UI，也不能攔截沒有 hook 的 first-party tool。Codex 的 sandbox、approval、rules、network policy 與 host telemetry 仍是主要 enforcement；此 core 只補跨 adapter 的一致分類與驗證。
+例如，Agent 想改動某個檔案時，策略核心會先核對該路徑是否屬於允許的工作區。如果操作涉及未認可的外部目標或高風險副作用，就回傳較嚴格的結果。實際執行工具的程式可依結果決定是否放行。
 
-目前是 Private GitHub staging repository：`https://github.com/a275618631/agent-tool-policy-engine`，branch `codex/staging`。本輪 staging convergence 版本為 `0.1.1-staging`；既有 `v0.1.0-staging` 保留。未寫入 `~/.codex`、未修改 shared skills、未修改 AGENTS.md、未啟用 production enforce。
+## 實作重點
 
-## 執行測試
+- **一致的輸入整理**：處理不同作業系統的路徑、Git 倉庫與分支資訊。
+- **TOML 策略設定**：把允許範圍和保護規則從判斷程式分開。
+- **可預測的決策**：相同結構化輸入對應相同規則，不依靠模型自行判斷權限。
+- **例外處理**：未知或高風險操作採保守決策，避免因資訊不足而直接放行。
+- **稽核紀錄**：產生 JSONL 事件，保留決策資訊並遮蔽敏感欄位。
+- **工具接入**：提供 CLI／MCP handler 使用的執行前預檢 Adapter。
+
+## 測試
+
+專案的既有紀錄包含 **24 項本地測試通過**，以及 GitHub Actions 在 Ubuntu、macOS、Windows 與 Python 3.11／3.12 的六組組合通過。
+
+在這份公開程式的根目錄可執行：
 
 ```bash
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
 
-## 目前決策
+可從 [策略測試](tests/test_policy.py) 和 [專案相依設定](pyproject.toml) 開始閱讀。
 
-先保留 report-only / preflight adapter；尚未接入真實高風險工具，也未啟用 enforce。24 個本機 tests 與 synthetic MCP-style gate 已 PASS；Windows automated CI 已完成，但不等同 Windows Codex runtime verified；Antigravity hard enforcement 仍是 unsupported / not yet available。
+## 適用方式
 
-## Staging evidence
+目前完成的是**工具執行前的策略評估**，適合接在有提供 hook 或 adapter 的工具入口。它不會自動接管 Codex 或其他平台全部的內建工具，也沒有取代平台本身的 sandbox 與授權機制。
 
-- Implementation commit：`7093053ad17421d170d18c04bfad2b9452d92a22`
-- Staging convergence tag：`v0.1.1-staging`（既有 `v0.1.0-staging` 保留）
-- Local tests：24 PASS；compileall PASS。
-- GitHub Actions：Ubuntu/macOS/Windows × Python 3.11/3.12，6/6 PASS。
-- CI run：https://github.com/a275618631/agent-tool-policy-engine/actions/runs/32715119736
-- Remote branch dry-run：PASS；未建立 `chore/dry-run-policy` branch。
-- Synthetic MCP-style E2E：PASS；external／critical decision 在 disposable handler 前停止。
-- Disposable local bare-repo policy dry-run：PASS；未對真實 production 或重要 Repo 做 destructive test。
+這個作品展示的是如何把 Agent 工具操作轉換成明確、可測試的程式決策，而不是只依賴提示詞要求模型小心操作。
