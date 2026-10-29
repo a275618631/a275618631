@@ -1,108 +1,57 @@
-# 技術能力作品集｜展示與驗證索引 (Showcase Hub)
+# 技術作品集｜AI Agent、製造業系統與工程實作
 
-歡迎瀏覽本技術作品集。本作品集旨在展示本人在 **AI Agent 架構、Multi-Agent 協作、企業系統整合、RAG 檢索增強、工具安全策略與驗證導向工程 (Verification-driven Engineering)** 的實際工程能力。
+我主要投入製造業資訊系統、AI Agent 與自動化工具的設計和開發。
 
-所有展示內容均秉持**誠實工程原則**：明確區分「已實測通過」、「局部驗證 (PARTIAL)」、「環境受阻 (LIVE_BLOCKED)」與「尚未驗證 (NOT_VERIFIED)」，不把架構藍圖或 Mock 宣稱為正式生產驗收。私有開發倉庫保留獨立開發，本公開作品集一律採用經過資安去敏審查之合成資料與授權副本。
+這裡整理六個工程專案：從設備手冊檢索、企業營運平台，到文件審核流程、工具權限判斷與跨 AI 平台協作。每個專案都從具體問題出發，保留程式碼、設計說明與可查閱的測試結果。想看某一項技術，可以直接進入對應專案。
 
----
+## 六個專案
 
-## 專案架構全景與狀態矩陣 (Status Matrix)
+### 1. [製程文件改版審查流程](./manufacturing-document-workflow/)
 
-| 子專案 | 核心技術領域 | 來源類型 | 驗證等級 / 現況標籤 | 核心展示價值與邊界 |
-|---|---|---|---|---|
-| **[1. 製程文件版本審核與 AI 輔助工作流](./manufacturing-document-workflow/)** | 文件治理 · Claude Skill · 審核閘門 | Public 倉庫 | **Claude Free 實測**<br>(T1 PASS / T2 FAIL / T3 PASS) | 包含新版流程、跨客戶越權攔截、沙盒 PoC；保留 Skill 載入截圖證據；明確宣告 SharePoint API 未連線。 |
-| **[2. 工廠設備知識庫與地端診斷 RAG](./factory-knowledge-grounded-rag/)** | RAG 檢索 · Citation · 衝突識別 | Private 倉庫 | **Local Benchmark PASS**<br>(離線可跑 · 預設唯讀) | 離線 Qdrant / BM25 檢索、證據引用、ABSTAIN 拒答保護；僅含合成設備手冊，**不散布 8 份真實 OEM 原檔**。 |
-| **[3. 企業營運平台垂直切片](./enterprise-operations-platform/)** | 系統架構 · RBAC · 工單防護 | Private 倉庫 | **PR #2 MERGED (UX-02)**<br>(合成資料小型切片) | 角色權限狀態機、401/403 攔截、工單重試與冪等防護；零連線字串、零真實員工/設備資料。 |
-| **[4. Agent 工具策略引擎](./agent-tool-policy-engine/)** | 安全架構 · 策略評估 · 決定論 | Private 倉庫 | **24 單元測試 PASS**<br>(0 外部相依 · Staging) | 結構化 side-effect 分類、TOML 策略比對、fail-closed 防護；明示為 staging preflight，非已部署 Gateway。 |
-| **[5. Codex × Antigravity 協作架構](./codex-antigravity-collaboration/)** | Multi-Agent · Runtime 邊界 · 協議 | Public 倉庫 | **LIVE_BLOCKED**<br>(Mock 通訊 PASS · 人工閘門) | Bounded Task/Result 規範、Local Bridge 檔案鎖定；保留受限標籤，不宣稱全自動背景雙向即時交接。 |
-| **[6. Codex Agent Skills 技能庫](./codex-agent-skills/)** | Skill 規範 · 自動化驗證 · 流程 | Public 倉庫 | **驗證腳本 PASS**<br>(單一標準規範源) | 結構化 Skill 定義、自動格式檢驗腳本 (`validate.ps1`)；與文件工作流共享規範，杜絕雙頭漂移。 |
+工廠文件一改版，製造、品保、文管與資訊單位就需要確認版本、適用範圍和核准責任。我用合成案例設計從文件接收、差異比對到審核發布的流程，並製作 Claude Skill，實際比較一般改版、跨客戶文件和資訊不足時的回答。除了成功案例，也保留原版不足之處與修正版測試。
 
----
+**重點：** 文件版本治理、授權流程、Claude Skill 設計與實測。
 
-## 六大能力維度對照
+### 2. [工廠設備知識庫與地端診斷助手](./factory-knowledge-grounded-rag/)
 
-```mermaid
-flowchart TD
-    subgraph S1["文件與技能治理"]
-        A["manufacturing-document-workflow<br>(文件版本審核與工作流)"]
-        F["codex-agent-skills<br>(共用技能規範與驗證器)"]
-    end
+設備故障時，只靠關鍵字很難從大量原廠手冊找到正確的型號、警報碼與處理說明。我把全文檢索、語意搜尋、重排序與來源查核組成一條本地檢索流程。系統會附上引用資訊；當文件不足或互相矛盾時，會要求補充資訊或停止給出不可靠的建議。
 
-    subgraph S2["知識檢索與推理邊界"]
-        B["factory-knowledge-grounded-rag<br>(地端離線檢索與 ABSTAIN 拒答)"]
-        D["agent-tool-policy-engine<br>(決定論工具動作風險分類)"]
-    end
+**重點：** Qdrant Local、SQLite FTS5、混合檢索、引用追蹤與確定性驗證。
 
-    subgraph S3["營運平台與多代理協作"]
-        C["enterprise-operations-platform<br>(RBAC 權限與工單冪等防護)"]
-        E["codex-antigravity-collaboration<br>(跨 Runtime 協作架構與 Bridge)"]
-    end
+### 3. [企業營運平台](./enterprise-operations-platform/)
 
-    A <--> F
-    B <--> D
-    C <--> E
-```
+以設備與工單管理為情境，實作 ASP.NET Core API、Vue 介面、JWT 角色權限與資料持久化。除了正常操作，也處理未登入、權限不足、欄位錯誤、重複資料及網路狀態不明時的回復方式。
 
-1. **可攜式 Skill 與流程自動化**：由 `manufacturing-document-workflow` 與 `codex-agent-skills` 示範如何在受限推理環境中，透過格式約束引導安全行為。
-2. **證據導向的檢索與防護**：由 `factory-knowledge-grounded-rag` 與 `agent-tool-policy-engine` 示範「無證據即拒答 (ABSTAIN)」與「不把 Prompt 當安全邊界 (Fail-closed)」。
-3. **平台可靠性與多代理分工**：由 `enterprise-operations-platform` 與 `codex-antigravity-collaboration` 示範在多角色與多 Runtime 環境下，如何保持狀態機一致與寫入隔離。
+**重點：** .NET、Vue、PostgreSQL、RBAC、API 錯誤處理與可重現驗收。
 
----
+### 4. [Agent 工具策略引擎](./agent-tool-policy-engine/)
 
-## 跨專案合成資料端到端演示 (Cross-Project Synthetic E2E Walkthrough)
+當 AI Agent 需要執行工具，不能只看它「想做什麼」，還要知道動作會影響哪些路徑、倉庫、分支與外部服務。這個 Python 策略核心會先讀取結構化請求，再判斷可以執行、限制範圍、需要核准或必須拒絕。
 
-> [!NOTE]
-> 本演示為**架構與驗證流程串連展示**。本流程全數採用合成假想情境與非機密資料，不強制要求建立單一巨型資料庫，亦不隱含對真實產線 PLC 或企業 SharePoint 之直接寫入。
+**重點：** 決定論權限決策、TOML 策略、操作範圍檢查、稽核事件與自動化測試。
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor OP as 現場人員 / 工程師
-    participant WF as 製程文件工作流 (Skill)
-    participant RAG as 地端 RAG 診斷核心
-    participant PE as 工具策略引擎 (Policy)
-    participant EOP as 企業營運平台 (RBAC)
-    actor Lead as 審核負責人 / Supervisor
+### 5. [Codex × Antigravity 協作架構](./codex-antigravity-collaboration/)
 
-    OP->>WF: 1. 提交新版冷軋維修處方 (DOC-Y52-MOD)
-    WF->>WF: 2. 來源身分與受控範圍預檢 (非授權即停止)
-    WF->>RAG: 3. 查詢歷史排除指引與原廠規格
-    alt 檢索證據充足且無衝突
-        RAG-->>WF: 回傳精確 Citation 來源與排除步驟
-    else 證據不足或發生衝突
-        RAG-->>WF: 觸發 ABSTAINED 拒答 (停止自動建議)
-    end
-    WF->>PE: 4. 嘗試調用工具建立維修工單
-    PE->>PE: 5. 決定論策略評估 (判定為 require_approval)
-    PE-->>EOP: 6. 轉發受保護請求至營運平台
-    EOP->>Lead: 7. 呈現遮蔽預覽與人工核准通知
-    Lead->>EOP: 8. 人工簽核批准發布
-    EOP->>EOP: 9. 執行冪等防護寫入工單與不可篡改 Audit
-    EOP-->>OP: 10. 完成可追溯之作業交付物
-```
+我用 Codex 與 Antigravity 研究跨 AI 開發環境的任務分工。重點是保留平台原生能力，利用共同的任務與結果格式、有限次委派、Git 分支和本地橋接，降低多個 Agent 同時工作時的交接與衝突成本。
 
-### 演示階段細節與驗證對照
+**重點：** Multi-Agent 分工、Task/Result 契約、MCP Bridge 與 Git 協作。
 
-1. **文件事件與存取閘門**（參閱 [`manufacturing-document-workflow`](./manufacturing-document-workflow/)）：
-   - 觸發：收到合成機台變更報告，先依身分邊界檢查租戶與文件 Owner 範圍。
-   - 安全邊界：如發生跨客戶或未授權存取要求，模型立即停止推論（重現 T2 越權攔截機制）。
-2. **地端離線檢索與嚴格引用**（參閱 [`factory-knowledge-grounded-rag`](./factory-knowledge-grounded-rag/)）：
-   - 檢索：完全離線執行 Qdrant / BM25 檢索，比對假想手冊 `DOC-Y52-ALARM-001.md`。
-   - 邊界防護：嚴格遵循「No unsupported actionable claim reaches the user」；若語料庫中無對應手冊支持，直接輸出 `ABSTAINED`，嚴禁虛構操作步驟。
-3. **工具動作決定論風險分類**（參閱 [`agent-tool-policy-engine`](./agent-tool-policy-engine/)）：
-   - 評估：評估核心接收 Tool-call 請求，正規化路徑與動作類型。
-   - 決策：偵測到對工作區外的寫入或涉及系統狀態變更，自動將決策降級為 `require_approval`，杜絕 Prompt Injection 繞過。
-4. **營運平台工單狀態機與防護**（參閱 [`enterprise-operations-platform`](./enterprise-operations-platform/)）：
-   - RBAC 控制：檢查操作者是否具備主管權限，非授權存取即時返回 403 Forbidden。
-   - 冪等防護：工單建立流程具備重試去重機制，防範網路抖動造成重複開單。
-5. **多代理交接與回歸審查**（參閱 [`codex-antigravity-collaboration`](./codex-antigravity-collaboration/) 與 [`codex-agent-skills`](./codex-agent-skills/)）：
-   - 協作模式：Antigravity 負責總控分析，Codex 負責獨立實作，雙方透過 Bounded Task/Result 交換驗證結果。
-   - 規範收斂：所有交付物格式依據 `output-contract` 規範輸出，並通過 `validate.ps1` 自動檢驗。
+### 6. [Codex Agent Skills 技能庫](./codex-agent-skills/)
 
----
+把重複使用的工程工作方式整理成 Skills，例如先診斷再修復、工作流自動化、PR 審查和標準交付。每項 Skill 有清楚的觸發條件、執行方式，並搭配目錄及格式驗證工具。
 
-## 交付與審查合約 (Delivery Contract)
+**重點：** Skills 設計、可攜式工作方法與 PowerShell 驗證器。
 
-- **無資料洩漏**：本倉庫絕不包含任何 API Token、真實連線字串、未授權原廠 PDF、本機絕對路徑或內部人員個資。
-- **無強制自動合併**：所有子專案與主倉庫更新一律透過 GitHub Draft PR 提交，並經由嚴格的人工審查 Gate (Human-in-the-loop) 進行驗收。
-- **分支與版本鎖定**：每個子專案均具備獨立之 `PROVENANCE.md`，清楚標示來源 Commit SHA 與同步依據。
+## 這些作品如何搭配
+
+例如處理一份新版設備維修文件，可以先由文件工作流確認版本與審核責任，再用 RAG 搜尋有出處的技術資料；如果流程需要建立工單，工具策略引擎先判斷是否需要人員核准，營運平台再依登入角色處理請求。協作專案與 Skills 則提供工程開發時的分工和交付方式。
+
+這是一個**跨專案應用情境示例**，方便理解各項能力如何互補；不是已部署的單一整合產品。各專案都可以獨立閱讀與使用。
+
+## 從哪裡開始
+
+- 想看**製造業 AI 實作**：先看 [工廠 RAG](./factory-knowledge-grounded-rag/) 與 [文件審核流程](./manufacturing-document-workflow/)。
+- 想看**全端系統整合**：從 [企業營運平台](./enterprise-operations-platform/) 的角色權限和工單流程開始。
+- 想看**AI Agent 工程**：閱讀 [工具策略引擎](./agent-tool-policy-engine/)、[協作架構](./codex-antigravity-collaboration/) 與 [Skills 技能庫](./codex-agent-skills/)。
+
+作品中的工廠、工單與文件範例使用合成資料。詳細的執行方式、測試紀錄與適用範圍都放在各專案內，讓讀者可以直接核對實作。
