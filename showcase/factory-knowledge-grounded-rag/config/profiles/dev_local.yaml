@@ -1,0 +1,10 @@
+profile: dev_local
+inherits: config/base.yaml
+vector_store:
+  provider: qdrant
+  mode: local
+  local_path: ./data/qdrant_storage
+llm:
+  provider: ollama
+  model_name: qwen2.5:7b
+  endpoint: http://127.0.0.1:11434

@@ -29,7 +29,7 @@ Codex、Antigravity 與本地模型各有不同強項。若把所有能力再包
 
 | 能力 | 狀態 |
 |---|---|
-| Codex ↔ Antigravity Bridge / smoke path | **限定 CLI 探測 PASS／桌面 MCP 與無人值守寫入仍 blocked**；2026-10-22 新 nonce 經 Antigravity CLI 成功往返，但不代表桌面 MCP mailbox 路徑已驗收，也不解除 T7 OS 隔離限制。詳見證據紀錄。 |
+| Codex ↔ Antigravity Bridge / smoke path | **本機探測部分通過／目前不宣稱可穩定自動交接**；10/20 實測成功一次，10/22 重測曾發生逾時。桌面 MCP 與無人看管寫入仍處於防護阻絕狀態，所有跨專案寫入需人工介入。 |
 | Task / Result 協作契約 | **已實作** |
 | One-hop / bounded external delegation | **已實作** |
 | Read-only、最多兩輪 Debate | **已實作** |
@@ -142,7 +142,7 @@ Queue / State / Lease / Heartbeat / Retry
 - Windows 驗證入口會在 `python` 不在 `PATH` 且 `py -3` 找不到 runtime 時，自動 fallback 到 Codex bundled Python。
 - 限定範圍的真實 Codex → Antigravity CLI → Codex 唯讀 nonce 接力：**PASS**（2026-10-22；同日先前一次探測曾逾時）。直接桌面 MCP mailbox 路徑尚未重新驗收；此結果不授權任務執行或寫入。請見[證據與本輪狀態](LIVE_HANDOFF_EVIDENCE_20261020.md)。
 - portable worktree 保持獨立，既有未提交檔案視為使用者資料，不清理、不搬移、不覆寫。
-- T7 OS 級跨專案寫入強制隔離仍為 **FAIL**；禁止無人值守或跨 Repo 寫入。
+- T7 安全防護說明：目前作業系統層級的跨專案寫入強制隔離尚未完備，因此嚴格禁止無人看管或跨專案自動寫入，所有跨專案修改必須經由人工 Review 與 Git PR 審查。
 
 本專案現在包含一個僅限本機使用的 Codex × Antigravity MCP bridge：
 

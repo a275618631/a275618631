@@ -1,0 +1,26 @@
+profile: benchmark
+inherits: config/base.yaml
+runs:
+- name: fts_only
+  dense_enabled: false
+  rerank_enabled: false
+- name: dense_only
+  fts_enabled: false
+  rerank_enabled: false
+- name: hybrid_rrf
+  dense_enabled: true
+  fts_enabled: true
+  rerank_enabled: false
+- name: hybrid_rrf_rerank
+  dense_enabled: true
+  fts_enabled: true
+  rerank_enabled: true
+evaluation:
+  golden_set_path: tests/golden_set.json
+  metrics:
+  - hit@3
+  - recall@5
+  - mrr@10
+  - ndcg@10
+  - abstention_accuracy
+  - conflict_accuracy
