@@ -60,10 +60,12 @@
 
 - **[製造業文件版本審核與 AI 工作流](showcase/manufacturing-document-workflow/)**：具備 Claude Free 實測（T1 PASS / T2 FAIL / T3 PASS）與 Skill 載入證據。
 - **[工廠設備知識庫與地端診斷 RAG](showcase/factory-knowledge-grounded-rag/)**：完全離線可跑、來源引用 (Citation)、版本衝突識別與 ABSTAIN 拒答保護。
-- **[企業營運平台垂直切片](showcase/enterprise-operations-platform/)**：RBAC 權限狀態機、401/403 攔截、工單冪等防護（UX-02 PR #2 MERGED）。
+- **[企業營運平台垂直切片](showcase/enterprise-operations-platform/)**：RBAC 權限狀態機、401/403 攔截、工單冪等防護（22/22 測試 PASS）。
 - **[Agent 工具策略引擎](showcase/agent-tool-policy-engine/)**：純 Python 零外部依賴、24 單元測試 PASS、決定論工具動作風險預檢。
 - **[Codex × Antigravity 協作架構](showcase/codex-antigravity-collaboration/)**：跨 Runtime 協議、Bounded Task/Result 與 LIVE_BLOCKED 安全聲明。
-- **[Codex Agent Skills 技能庫](showcase/codex-agent-skills/)**：標準技能目錄規範與自動化驗證器 (`validate.ps1`)。
+- **[Codex Agent Skills 技能庫](showcase/codex-agent-skills/)**：標準技能目錄規範與自動化驗證器 (alidate.ps1)。
+- **[Paperclip AI Chief 雲端自主 Agent 團隊](showcase/paperclip-ai-chief/)**：零額外月費之 Chief/Research/Reviewer 任務閉環、Codex CLI 心跳、ARM64 部署與 OCI 容量等待止損。
+- **[LINE Portable Core 可移植通訊核心](showcase/line-portable-core/)**：HMAC-SHA256 簽署驗證、webhookEventId 冪等防重放、16 單元測試 PASS 與真機 E2E 指引。
 
 → **[瀏覽作品集展示與驗證索引 (showcase/README.md)](showcase/)**
 

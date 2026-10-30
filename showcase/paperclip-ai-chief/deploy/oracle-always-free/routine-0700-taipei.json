@@ -1,0 +1,20 @@
+{
+  "name": "Chief 每日晨間巡查與任務彙整 (07:00 Asia/Taipei)",
+  "description": "每天早上 07:00 (台北時間) 自動喚醒 Chief，巡查所有 Agent 的任務進度，特別彙報 blocked, failed, in_progress, 待核准事項與今日優先事項。",
+  "schedule": {
+    "type": "cron",
+    "cron": "0 7 * * *",
+    "timezone": "Asia/Taipei"
+  },
+  "target": {
+    "agent": "Chief",
+    "action": "run_routine",
+    "prompt": "請進行每日例行晨間巡查：\n1. 檢視所有進行中 (in_progress) 與審查中 (in_review) 的任務。\n2. 檢查是否有任何遭阻擋 (blocked) 或失敗 (failed) 的工作項目，若有請標明阻礙根因。\n3. 彙整待核准項目（包含任何新 Agent 申請或權限變更）。\n4. 產出晨間摘要報告並記錄於最新任務動態中。"
+  },
+  "constraints": {
+    "max_retries": 1,
+    "timeout_seconds": 600,
+    "fail_mode": "fail-closed",
+    "allow_billable_api": false
+  }
+}
