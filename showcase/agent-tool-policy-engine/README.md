@@ -17,18 +17,23 @@ AI Agent 在調用本機終端、檔案讀寫或 MCP 工具時，最常見的安
 
 ---
 
-## 2. 5 行使用範例：輸入工具呼叫 → 判定安全等級
+## 2. 核心使用範例：輸入工具呼叫 → 判定安全等級
 
 ```python
-from policy_engine import evaluate_tool_call
+from agent_policy.evaluator import evaluate
+from agent_policy.model import Decision, ToolCall
+from agent_policy.policy_loader import load_policy
 
-# 1. 範例：Agent 試圖在受保護的 main 分支直推代碼
-decision = evaluate_tool_call(tool="git", args={"action": "push", "branch": "main"})
-print(decision.action)  # 輸出: 'require_approval' (阻截自動推送，要求主管核准)
+# 載入 TOML 安全政策
+policy = load_policy("policies/policy.toml")
 
-# 2. 範例：Agent 試圖寫入工作區以外的敏感目錄
-decision = evaluate_tool_call(tool="file_writer", args={"path": "/etc/passwd"})
-print(decision.action)  # 輸出: 'deny' (強制拒絕，觸發安全告警)
+# 1. 唯讀狀態檢查：直接放行 (ALLOW)
+res1 = evaluate(ToolCall("git", "git.status"), policy)
+print(res1.decision)  # Decision.ALLOW
+
+# 2. 嘗試寫入工作區外的敏感路徑：判定需人工審核 (REQUIRE_APPROVAL)
+res2 = evaluate(ToolCall("file_writer", "write", path="/etc/hosts"), policy)
+print(res2.decision)  # Decision.REQUIRE_APPROVAL
 ```
 
 ---
@@ -36,7 +41,7 @@ print(decision.action)  # 輸出: 'deny' (強制拒絕，觸發安全告警)
 ## 3. 核心功能與特性
 
 1. **路徑與目標正規化**：自動處理跨平台路徑（Windows 反斜線 / POSIX 斜線），解析真實相對位置，防止 `../` 目錄遍歷攻擊。
-2. **純決定論評估 (Deterministic Core)**：零 LLM 調用、零網路依賴、0.05 秒內完成毫秒級預檢。
+2. **純決定論評估 (Deterministic Core)**：零 LLM 調用、零網路依賴，執行時間小於 5 毫秒。
 3. **Fail-Closed 預設防護**：遇到未知副作用 (Unknown Side-Effect) 或未定義工具時，一律預設為拒絕 (`deny`) 或降級為需審查 (`require_approval`)。
 4. **脫敏稽核日誌 (Audit Log)**：輸出 JSONL 結構化稽核事件，對機敏參數進行雜湊指紋化，絕不留存明文金鑰。
 

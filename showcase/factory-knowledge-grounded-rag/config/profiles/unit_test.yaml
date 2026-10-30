@@ -1,0 +1,14 @@
+profile: unit_test
+inherits: config/base.yaml
+embedding:
+  provider: mock_tfidf
+  dimension: 128
+vector_store:
+  provider: in_memory_v3
+  mode: memory
+reranker:
+  provider: token_overlap_heuristic
+  calibrated_threshold: 0.3
+llm:
+  provider: deterministic_mock
+  deterministic_responses: true

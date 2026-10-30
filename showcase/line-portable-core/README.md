@@ -2,7 +2,7 @@
 
 > **專案定位**：解耦、輕量且可移植的 LINE Bot & LIFF Mini App 核心架構；具備嚴格的通訊協議驗證、冪等防重放與領域分層。  
 > **關鍵技術**：TypeScript、Hono、Vite、LIFF (@line/liff)、HMAC-SHA256 簽名驗證、Vitest。  
-> **狀態**：16 項單元測試全數通過；手機真機 E2E 處於 0/4 待驗證狀態（待真機連線配置）。
+> **狀態**：自動化測試 16 項全數通過；手機實機測試 4 項尚未執行（需待設定 LINE 官方帳號 webhook 與 Channel 憑證）。
 
 ---
 
@@ -79,14 +79,9 @@ Test Files  5 passed (5)
 
 ## 4. 誠實工程邊界與限制
 
-1. **手機實機 E2E 狀態 (0/4 待真機連線)**：
-   - 包含四項需要連線 LINE 官方 Console 與真機環境之驗證：
-     1. Mini App 打開與 LIFF 身分讀取
-     2. `shareTargetPicker` 手機好友選取轉發
-     3. `/ping` 訊息自動 Webhook 回覆
-     4. 行事曆加入與 ICS 匯入
-   - 目前維持在 `FINAL_STATE: READY_FOR_USER_ACTION`，誠實標明 **0/4 未於真機連線**，絕不將未驗證之項目宣稱為通過。
+1. **手機實機測試現狀**：
+   - 包含四項需要連線 LINE 官方後台與真機環境之驗證（Mini App 開啟、好友分享轉發、Webhook 自動回覆、行事曆匯入）。目前尚未執行真機測試（需待設定真實 LINE 官方帳號與憑證），誠實標明待測現狀，絕不把未上線項目宣稱為已通過。
 2. **儲存層限制**：
-   - 本展示版本使用內建 `MemoryStore`，僅適用於離線驗證與單元測試；正式高並發環境需掛載 Redis / Postgres 實作分散式冪等鎖。
-3. **資安規範 (SECRET_BLACK_BOX)**：
-   - 本倉庫絕不提交任何真實 `LINE_CHANNEL_SECRET`、`LINE_CHANNEL_ACCESS_TOKEN` 或真實使用者 ID。
+   - 本展示版本使用內建 `MemoryStore`，適用於離線驗證與單元測試；正式高並發環境需掛載 Redis / Postgres 實作分散式冪等鎖。
+3. **機敏資安邊界**：
+   - 本倉庫絕不提交任何真實之 `LINE_CHANNEL_SECRET` 或 `LINE_CHANNEL_ACCESS_TOKEN`，所有測試均使用合成資料與 Mock 密鑰。

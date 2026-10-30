@@ -1,0 +1,11 @@
+profile: portfolio
+inherits: config/base.yaml
+description: Production-grade demonstration profile with offline reproducibility fallback
+vector_store:
+  provider: qdrant
+  mode: server
+  host: localhost
+  port: 6333
+reranker:
+  provider: bge_m3_neural
+  calibrated_threshold: 0.3

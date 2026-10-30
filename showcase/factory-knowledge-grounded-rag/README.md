@@ -68,6 +68,14 @@ flowchart TD
 - **非事實建議輸出**：**0 次**
 - **無證據或衝突情境**：精確觸發 `ABSTAINED` 拒答，阻止危險操作建議輸出。
 - **本地重現指令**：
+
+  **1. 快速核心與安全合約測試（無需外部模型依賴，23 項全過，約 1.6 秒）**：
+  ```bash
+  # 驗證介面合約、配置 Profile、分塊演算法、RRF 融合與 5 道確定性防幻覺檢查閘門
+  pytest tests/test_v3_contracts.py tests/test_mvp0_core.py tests/test_sprint1_identity.py tests/test_sprint1_chunking.py tests/test_sprint2_rrf.py tests/test_sprint3_negative_safety.py -v
+  ```
+
+  **2. 全量模型與端到端評測（需安裝 torch、docling、fastembed 等選用依賴）**：
   ```bash
   pip install -r requirements.txt
   pytest tests/ -v

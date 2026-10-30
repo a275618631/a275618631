@@ -21,8 +21,8 @@
 - **展示邊界**：定位為 Skill 規範與沙盒 PoC 驗證，未連線企業 SharePoint API。
 
 ### 3. 企業營運平台垂直切片 ([`enterprise-operations-platform/`](./enterprise-operations-platform/))
-- **現場問題**：產線工單容易在網路不穩時重複提交，後台缺乏嚴格的角色權限狀態機。
-- **架構做法**：採用 ASP.NET Core 10 (.NET 10) 現代後端架構，實作 RBAC 權限狀態機與工單冪等防重試機制。
+- **現場問題**：產線工單容易因重複送出而產生衝突，後台缺乏嚴格的角色權限狀態機。
+- **架構做法**：採用 ASP.NET Core 10 (.NET 10) 現代後端架構，實作 RBAC 角色狀態機 (Viewer/Operator/Supervisor) 與設備重複檢查 (409 Conflict)。
 - **驗證數據**：22 項單元與整合測試全數通過 (1 Skip)，涵蓋 401/403 攔截與資料回滾驗證。
 - **展示邊界**：採用小型合成切片展示，排除真實員工資料與生產資料庫連線字串。
 
@@ -75,13 +75,13 @@ sequenceDiagram
   異質 Agent 跨 Runtime 邊界協議，採用 Bounded Task/Result 規範與 Local Bridge 檔案鎖。（現狀：架構協議確立；跨 Runtime 即時連線受限，採本地檔案橋接）。
 - **[LINE Portable Core 通訊核心](./line-portable-core/)**：
   Hexagonal 架構，實作 Webhook HMAC-SHA256 簽名驗證、`webhookEventId` 冪等防重放，以及 LIFF `shareTargetPicker` 容錯。（現狀：16 項單元測試全數通過；手機真機測試 4 項需待設定 LINE 官方帳號）。
-- **[Paperclip AI Chief 雲端自主團隊](./paperclip-ai-chief/)**：
-  以 NT$0 額外費用為目標，設計 Chief / Research / Reviewer 三角色任務閉環、Codex CLI 心跳巡查與 ARM64 Docker Compose 規格。（現狀：本機任務閉環驗證通過；Oracle 東京免費 ARM 主機額度已滿，雲端部署待資源釋出）。
-- **[可攜式 AI Agent 環境](../portable-ai-agent-environment/)**：
-  解決更換電腦無法直接複製憑證與絕對路徑之痛點；提供 Bash 暫存檔敏感資料掃描器與回歸測試。
-- **[製造業智慧排班系統設計](../workforce-scheduling-system/)**：
-  連續生產（四班二輪）排班規格設計案例，定義勞基法法規與工時顯式約束。
-- **[html2slides](../html2slides/)**：
+- **[Paperclip AI Chief 部署設計與本機驗證](./paperclip-ai-chief/)**：
+  以 NT$0 額外費用為目標，設計 Chief / Research / Reviewer 三角色任務閉環、Codex CLI 心跳巡查與 ARM64 Docker Compose 規格。（現狀：本機任務閉環驗證通過；Oracle 東京免費 ARM 主機額度已滿，已設定時輪詢腳本排隊等待）。
+- **[可攜式 AI Agent 環境](https://github.com/a275618631/portable-ai-agent-environment)**：
+  解決更換電腦無法直接複製憑證與絕對路徑之痛點；私有版在 Windows／macOS 使用，公開版提供 Bash 暫存檔敏感資料掃描器與回歸測試。
+- **[製造業智慧排班系統設計](https://github.com/a275618631/workforce-scheduling-system)**：
+  連續生產（四班二輪）排班規格設計案例；私有版具備約束求解器與自動化測試，公開版提供規格設計與法規約束模型案例研究。
+- **[html2slides](https://github.com/a275618631/html2slides)**：
   將 HTML 投影片轉換為可編輯 PowerPoint (.pptx) 與 Google Slides 的轉換工具。
-- **[Codex Agent Skills 技能庫](../codex-agent-skills/)**：
+- **[Codex Agent Skills 技能庫](https://github.com/a275618631/codex-agent-skills)**：
   結構化 Skill 定義規範，提供自動化檢驗腳本 (`validate.ps1`) 防止格式漂移。

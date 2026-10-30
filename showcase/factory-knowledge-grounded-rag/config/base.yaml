@@ -1,0 +1,56 @@
+version: 3.0.0
+system_name: factory-knowledge-grounded-rag
+core:
+  allow_unsupported_actionable_claim: false
+  default_language: zh-TW
+  require_numeric_grounding: true
+  claim_domains:
+  - CURRENT_STATE
+  - PROCEDURE
+  - SAFETY
+  - DESIGN_CONFIGURATION
+  - HISTORICAL_CASE
+  - FAILURE_MODE
+chunking:
+  default_strategy: structure_aware
+  fixed_window_size: 512
+  fixed_window_overlap: 64
+  preserve_table_rows: true
+  strategy: structure_aware
+  max_chunk_size: 768
+  min_chunk_size: 60
+  preserve_tables: true
+embedding:
+  provider: fastembed
+  model_name: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  batch_size: 32
+vector_store:
+  provider: qdrant
+  mode: server
+  url: http://127.0.0.1:6333
+  collection_name: factory_knowledge_v3_server
+  distance_metric: cosine
+retrieval:
+  exact_lookup_enabled: true
+  fts5_db_path: ':memory:'
+  fusion_strategy: rrf
+  rrf_k: 60
+  hybrid_top_k: 10
+reranker:
+  provider: bge_v2_m3
+  model_name: BAAI/bge-reranker-v2-m3
+  calibrated_threshold: 0.05
+  top_k: 5
+llm:
+  provider: ollama
+  endpoint: http://127.0.0.1:11434
+  model_name: qwen3:8b
+  temperature: 0.0
+  timeout_seconds: 120
+parser:
+  default: structured
+  pdf: docling
+  ocr_enabled: auto
+identity:
+  algorithm: sha256
+  include_chunker_version: true
