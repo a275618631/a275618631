@@ -1,228 +1,53 @@
 # Che-Yu Wu
 
-**AI Agent 架構 · Multi-Agent Systems（多 Agent 系統）· 系統整合 · 自動化**
+**製造系統整合｜AI 工作流程｜資料與權限治理**
 
-我專注於把模糊、複雜的實際需求，轉換成可維護、可測試、可驗證的 AI 輔助系統與 Agentic Systems（Agent 型系統）。
+我從製造現場的系統需求、介面整合與上線維運出發，延伸研究 AI 在文件處理、設備知識檢索與日常工作流程中的實際用法。
 
-目前主要關注：
+在工廠，系統能不能運作只是第一關。文件版本是否正確、資料能否追溯、誰有權修改、異常時如何回復，以及現場人員能否接手，往往更影響一個方案能不能長期使用。我把這些問題也帶進個人技術作品。
 
-- AI Agent 架構與 Multi-Agent Systems（多 Agent 系統）
-- Agent Runtime（Agent 執行環境）、Tool、Skill 與 MCP 整合
-- 跨平台系統整合與自動化
-- Human-in-the-loop（人工介入）與安全邊界
-- Requirements → Architecture → Implementation → Validation
-- Local / Cloud（本地／雲端）任務與隱私分流
-- Verification-driven Engineering（驗證導向工程）
+這裡有可直接查看的公開專案，也有從私人開發專案整理出的**部分公開程式碼與合成測試快照**。兩者會標明，不將設計或本機測試說成企業正式上線。
 
-我的設計原則是：**優先使用平台原生能力，避免沒有必要的 Framework 與基礎設施；架構複雜度必須由實際需求證明。**
+## 先看這幾個作品
 
-→ **[Codex × Antigravity 協作架構網站（繁體中文）](https://a275618631.github.io/codex-antigravity-collaboration/)**
+### [製程文件改版審查與 Claude Skill](https://github.com/a275618631/manufacturing-document-workflow)
 
----
+製造、品保、文管與資訊單位共用文件時，最麻煩的不是產生摘要，而是版本、責任與權限不清楚。
 
-## 主要能力方向
+我用虛構工廠案例設計審查流程，製作兩版 Claude Skill，並在 Claude Free 實際操作合成情境。原版跨客戶案例能拒絕越權，但替代方案不夠完整；修正版單次重測補足了文件 Owner 授權、最小權限、再次檢查 ACL 與人工核准。模型與提示也有差異，因此不把結果歸因為 Skill 修改的單一效果。**這不是已連接 SharePoint 的系統。**
 
-### AI Agent Architecture
-設計 Agent Runtime、角色分工、跨 Runtime 委派、工具與權限邊界，以及不同 AI 平台之間的協作方式。
+[看 Skill、測試與證據](https://github.com/a275618631/manufacturing-document-workflow/blob/main/docs/validation.md)
 
-### Multi-Agent Systems
-不是單純增加更多 Agent，而是處理：
+### [工廠設備知識庫與地端檢索](showcase/factory-knowledge-grounded-rag/)
 
-- 誰負責什麼工作
-- 哪些工作可以平行
-- 哪些寫入不能互相衝突
-- Agent 之間如何交接 Context（上下文）
-- 如何限制遞迴委派
-- 如何驗證彼此的結果
+設備手冊不只要能搜尋，答案還得對應正確的設備、版本與頁碼；查不到依據時，應清楚說明缺什麼，而不是補上一個看似合理的操作建議。
 
-### System Integration
-將 AI 能力整合進既有程式庫、工具、工作流程、瀏覽器、Google 生態與本地環境，而不是建立彼此孤立的 Demo。
+公開作品集提供部分 Python 程式碼、合成語料與測試快照，展示全文／向量檢索、來源引用及拒答機制。私人開發分支另有較新的本機 Web、文件匯入與回饋流程；**公開快照不等於最新完整產品，也未完成企業多使用者上線驗收**。
 
-### Safety & Verification
-關注：
+[看公開原始碼與版本邊界](showcase/factory-knowledge-grounded-rag/PROVENANCE.md)
 
-- 權限與 Approval（核准）邊界
-- Secret / PII（敏感資訊）保護
-- Human-in-the-loop
-- Regression Tests（回歸測試）
-- Evidence-based Validation（證據導向驗證）
-- 明確區分「已實作、部分完成、規劃中、探索中」
+### [AI 資料夾治理](https://github.com/a275618631/ai-folder-governance)
 
----
+同一個專案的文件可能散落在本機、雲端和 Git。不能因為檔名像「最新版」，就自動刪除或覆寫其他文件。
 
-# Featured Projects｜主要作品
+這套公開 Skill／Prompt 規則要求先盤點、辨認來源、提出變更預覽，再由人員核准並驗證結果。它是**治理方法與可重用規則**，不是已部署的企業檔案管理平台。
 
-## ★ [公開技術能力作品集 (Engineering Capabilities Showcase)](showcase/)
+### [企業營運平台：角色權限與工單流程](showcase/enterprise-operations-platform/)
 
-`Manufacturing AI · Grounded RAG · Agent Policy · Platform Architecture · Multi-Agent Runtime`
+用合成設備與工單資料，練習將需求轉成 API、角色權限、操作流程與測試。公開目錄包含部分 .NET 程式碼、測試及版本說明；私人專案仍是本機 MVP，不是企業產品驗收。
 
-將製造業流程治理、地端離線 RAG、決定論工具策略引擎、企業營運平台垂直切片、雙 Agent Runtime 協作架構與標準 Skill 庫，整合為經過資安審查、合成資料可重現驗證的技術能力作品集。
+## 其他公開專案
 
-- **[製造業文件版本審核與 AI 工作流](showcase/manufacturing-document-workflow/)**：具備 Claude Free 實測（T1 PASS / T2 FAIL / T3 PASS）與 Skill 載入證據。
-- **[工廠設備知識庫與地端診斷 RAG](showcase/factory-knowledge-grounded-rag/)**：完全離線可跑、來源引用 (Citation)、版本衝突識別與 ABSTAIN 拒答保護。
-- **[企業營運平台垂直切片](showcase/enterprise-operations-platform/)**：RBAC 權限狀態機、401/403 攔截、工單冪等防護（UX-02 PR #2 MERGED）。
-- **[Agent 工具策略引擎](showcase/agent-tool-policy-engine/)**：純 Python 零外部依賴、24 單元測試 PASS、決定論工具動作風險預檢。
-- **[Codex × Antigravity 協作架構](showcase/codex-antigravity-collaboration/)**：跨 Runtime 協議、Bounded Task/Result 與 LIVE_BLOCKED 安全聲明。
-- **[Codex Agent Skills 技能庫](showcase/codex-agent-skills/)**：標準技能目錄規範與自動化驗證器 (`validate.ps1`)。
+- [Codex Agent Skills](https://github.com/a275618631/codex-agent-skills)：可重用的診斷、審查、交付與人工核准流程。
+- [Codex × Antigravity Collaboration](https://github.com/a275618631/codex-antigravity-collaboration)：跨 Agent 執行環境協作的參考架構、本機 Bridge 與尚未排除的限制。
+- [Portable AI Agent Environment](https://github.com/a275618631/portable-ai-agent-environment)：跨電腦移轉時的設定分類、敏感資料排除與本機驗證。
+- [Workforce Scheduling System](https://github.com/a275618631/workforce-scheduling-system)：輪班規則、限制條件與例外狀態的系統設計案例；完整實作為私人版本。
+- [html2slides](https://github.com/a275618631/html2slides)：將 HTML 簡報轉換成可編輯 PowerPoint／Google Slides 的工具。
 
-→ **[瀏覽作品集展示與驗證索引 (showcase/README.md)](showcase/)**
+[完整作品與公開證據索引](showcase/README.md)
 
----
+## 我如何判斷方案是否做好
 
-## 1. [Codex × Antigravity Collaboration](https://github.com/a275618631/codex-antigravity-collaboration)
+我習慣先確認實際使用者要解決什麼問題，再決定資料來源、權限、介面與驗證方式。除了正常流程，也會檢查來源不足、版本衝突、權限不足、外部服務中斷以及失敗後的回復方法。
 
-`Agent Architecture · Multi-Agent · MCP · Skills · Privacy · Verification`
-
-一套以 **Codex 與 Antigravity 為實際案例**的 AI Agent 協作參考架構。
-
-核心問題不是「如何再做一套 Agent Framework」，而是：
-
-> **既然 Codex、Antigravity 本身已經具備 Agent Runtime 與 Multi-Agent 能力，要如何用最少額外基礎設施，讓不同 Runtime 分工、互相委派、共享能力並維持安全邊界？**
-
-目前架構涵蓋：
-
-- **Native Multi-Agent Runtime**  
-  優先使用 Codex、Antigravity 原生的 Agent / Subagent 能力，不重新製作 Agent Scheduler（排程器）。
-
-- **Cross-runtime Delegation（跨 Runtime 委派）**  
-  Codex 與 Antigravity 可以交換任務與結果，同時限制跨平台遞迴轉交。
-
-- **Capability-aware Routing（依能力分工）**  
-  根據工具、Runtime、資料敏感度與任務類型分配工作，而不是讓所有 Agent 重複做同一件事。
-
-- **Shared Skills（共用技能）**  
-  採用單一能力來源與薄平台 Adapter（轉接層），降低跨平台重複維護。
-
-- **Git-based Write Ownership（Git 寫入所有權）**  
-  使用 branch / worktree（分支／獨立工作區）、optimistic concurrency（樂觀式併發控制）與 PR / Review / Merge 管理平行修改，而不是自行建立分散式鎖服務。
-
-- **Privacy-aware Routing（隱私感知分流）**  
-  規劃本地模型、敏感資料分類、最小化與可逆假名化，讓不同資料依信任等級選擇 Local / Cloud 執行環境。
-
-- **Verification & Status Boundaries（驗證與狀態邊界）**  
-  清楚區分 Implemented、Partial、Planned、Exploratory，不把 Roadmap 當成已完成功能。
-
-這個專案主要展示的是：
-
-> **AI Agent 系統的架構取捨、Runtime 邊界、協作方式、安全設計與可維護性，而不是單純串接更多 AI 工具。**
-
-→ **[架構網站（繁體中文）](https://a275618631.github.io/codex-antigravity-collaboration/)**  
-→ [GitHub Repository](https://github.com/a275618631/codex-antigravity-collaboration)
-
----
-
-## 2. [Portable AI Agent Engineering Environment](https://github.com/a275618631/portable-ai-agent-environment)
-
-`AI Agents · System Architecture · Security · Cross-platform`
-
-解決「AI Agent 開發環境如何安全地跨電腦移轉」的問題。
-
-直接複製整個 Agent 環境，可能同時複製：
-
-- Session state（登入狀態）
-- Credentials（憑證）
-- Machine identity（機器識別資訊）
-- 私人設定與不應移轉的資料
-
-此專案建立：
-
-- 可攜與不可攜設定邊界
-- Multi-Agent 職責分離
-- Fail-closed Secret Scanning（失敗即拒絕的敏感資訊掃描）
-- 跨平台設定同步策略
-- Targeted Regression Tests（針對性回歸測試）
-
-已在 Windows 與 macOS 環境進行跨平台驗證。
-
-這個作品主要展示：
-
-> **AI Agent 環境的安全邊界、可攜性設計與驗證方法。**
-
-→ [Case Study](https://github.com/a275618631/portable-ai-agent-environment/blob/main/docs/case-study.md)
-
----
-
-## 3. [Constraint-Based Workforce Scheduling System](https://github.com/a275618631/workforce-scheduling-system)
-
-`System Analysis · Rule Engine · Scheduling · Validation`
-
-將複雜的輪班規則與實際營運限制，轉換成結構化的排班系統。
-
-涵蓋：
-
-- 人員與班組管理
-- 輪班規則
-- Locked / Manual Duty（鎖定／人工指定班次）
-- 違規與警告狀態
-- 行事曆與月份檢視
-- 規則迭代與驗證
-- 自動化測試
-
-私人實作版本目前累積 **56 個已驗證自動化測試案例**。
-
-此專案主要展示：
-
-> **如何把複雜、模糊的營運需求轉換成 Rule Model（規則模型）、系統架構與可驗證軟體。**
-
-原始案例來自輪班型公共部門情境；公開版本使用匿名化與合成資料。
-
-→ [Case Study](https://github.com/a275618631/workforce-scheduling-system/blob/main/docs/case-study.md)
-
----
-
-# Selected Engineering Work｜其他工程實作
-
-## Authenticated Desktop Media Workflow *(private implementation)*
-
-`Tauri · Rust · TypeScript · FFmpeg · Integration`
-
-macOS 桌面端媒體處理 Workflow，主要研究：
-
-- 安全保存登入 Session
-- macOS Keychain
-- yt-dlp 整合
-- HLS / fMP4 解析
-- FFmpeg 處理
-- Atomic File Move（原子式檔案搬移）
-- Authentication → Extraction → Download 的 End-to-End（端到端）驗證
-
-這項實作主要展示：
-
-> **桌面應用、第三方工具整合、登入狀態管理與可靠性設計。**
-
-僅設計用於使用者有權存取的媒體流程。
-
-→ [Case Study](projects/authenticated-desktop-media-workflow.md)
-
----
-
-# Prototype / Exploration｜原型與研究
-
-## Privacy-Aware Meeting Intelligence Workflow
-*Prototype / Partially Validated MVP*
-
-`AI Workflow · Privacy · Human-in-the-loop · Evidence`
-
-隱私導向的會議資訊處理 Pipeline：
-
-`逐字稿 → PII 遮蔽 → LLM 摘要 → 決策／行動項目 → 證據追蹤 → 人工 Review`
-
-目前已實作並在本地驗證：
-
-- Transcript processing（逐字稿處理）
-- PII masking（敏感資訊遮蔽）
-- Structured output（結構化輸出）
-- Evidence validation（證據驗證）
-
-尚未完整驗證：
-
-`真實 MP4 → STT → Speaker Diarization → External LLM`
-
-完整 End-to-End Pipeline 目前仍屬於設計階段，因此不宣稱已完成正式驗證。
-
----
-
-# Reusable Components｜可重複使用元件
-
-- **[codex-agent-skills](https://github.com/a275618631/codex-agent-skills)**  
-  雙語、Safety-first（安全優先）的 Agent Skill Library，涵蓋交付、自動化、驗證與 Review Workflow。
+公開文件會區分**已實作、已測試、私人環境驗證、設計中**；測試案例與數字只適用於其標明的範圍。工作中的製造系統與私人資料不放到公開倉庫。
