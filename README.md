@@ -54,21 +54,21 @@
 
 ## ★ [公開技術能力作品集 (Engineering Capabilities Showcase)](showcase/)
 
-`Manufacturing AI · Grounded RAG · Agent Policy · Platform Architecture · Multi-Agent Runtime`
+Manufacturing AI · Grounded RAG · Agent Policy · Enterprise Platform · Multi-Agent Runtime
 
-將製造業流程治理、地端離線 RAG、決定論工具策略引擎、企業營運平台垂直切片、雙 Agent Runtime 協作架構與標準 Skill 庫，整合為經過資安審查、合成資料可重現驗證的技術能力作品集。
+具備製造業現場經驗，專注將現場製程文件、設備手冊知識與營運工單流程，落地為高可靠、具備安全防護與可驗證的 AI Agent 與企業系統：
 
-> **工程展示理念：真實的研發軌跡與邊界處置，本身就是最好的作品。**  
-> 本作品集不要求所有模組必須 100% 全部完成才公開，而是真實呈現「已實裝交付」、「審查中切片 (In-Flight PR)」、「環境限制與止損決策 (OCI 容量等待 / 真機連線未跑)」及「Backlog 規劃中」之完整工程全貌。
+### 四大核心專案
+1. **[工廠設備知識庫與地端診斷 RAG](showcase/factory-knowledge-grounded-rag/)**：離線混合檢索 (Qdrant+BM25)、手冊 Citation 與「查無證據即拒答 (ABSTAIN)」5 道檢查閘門（25 題基準測試 100% 安全合規）。
+2. **[製程文件版本審核與 AI 工作流](showcase/manufacturing-document-workflow/)**：受限推理環境 (Claude Free) 之結構化 Skill 約束，實測成功阻絕跨客戶越權存取（T1/T3 PASS，T2 越權阻絕）。
+3. **[企業營運平台垂直切片](showcase/enterprise-operations-platform/)**：ASP.NET Core 10 (.NET 10) 後端架構，RBAC 權限狀態機與工單冪等防護（22/22 項測試 PASS）。
+4. **[Agent 工具策略引擎](showcase/agent-tool-policy-engine/)**：純 Python 零依賴，決定論工具調用風險預檢與 Fail-Closed 防護（24/24 項測試 PASS）。
 
-- **[製造業文件版本審核與 AI 工作流](showcase/manufacturing-document-workflow/)**：具備 Claude Free 實測（T1 PASS / T2 FAIL / T3 PASS）與 Skill 載入證據。
-- **[工廠設備知識庫與地端診斷 RAG](showcase/factory-knowledge-grounded-rag/)**：完全離線可跑、來源引用 (Citation)、版本衝突識別與 ABSTAIN 拒答保護。
-- **[企業營運平台垂直切片](showcase/enterprise-operations-platform/)**：RBAC 權限狀態機、401/403 攔截、工單冪等防護（22/22 測試 PASS）。
-- **[Agent 工具策略引擎](showcase/agent-tool-policy-engine/)**：純 Python 零外部依賴、24 單元測試 PASS、決定論工具動作風險預檢。
-- **[Codex × Antigravity 協作架構](showcase/codex-antigravity-collaboration/)**：跨 Runtime 協議、Bounded Task/Result 與 LIVE_BLOCKED 安全聲明。
-- **[Codex Agent Skills 技能庫](showcase/codex-agent-skills/)**：標準技能目錄規範與自動化驗證器 (alidate.ps1)。
-- **[Paperclip AI Chief 雲端自主 Agent 團隊](showcase/paperclip-ai-chief/)**：零額外月費之 Chief/Research/Reviewer 任務閉環、Codex CLI 心跳、ARM64 部署與 OCI 容量等待止損。
-- **[LINE Portable Core 可移植通訊核心](showcase/line-portable-core/)**：HMAC-SHA256 簽署驗證、webhookEventId 冪等防重放、16 單元測試 PASS 與真機 E2E 指引。
+### 延伸實作與架構
+- **[Codex × Antigravity 協作架構](showcase/codex-antigravity-collaboration/)**：異質 Agent 跨 Runtime 協議與 Local Bridge 檔案鎖。
+- **[LINE Portable Core 通訊核心](showcase/line-portable-core/)**：HMAC-SHA256 簽名驗證、Webhook 冪等去重與 LIFF 狀態容錯（16 項測試 PASS）。
+- **[Paperclip AI Chief 雲端自主團隊](showcase/paperclip-ai-chief/)**：NT 增額月費之 Chief/Research/Reviewer 任務閉環、Codex Heartbeat 巡查與 ARM64 部署規格。
+- **[可攜式 AI Agent 環境](portable-ai-agent-environment/)**｜**[製造業智慧排班設計](workforce-scheduling-system/)**｜**[html2slides](html2slides/)**｜**[Codex Agent Skills](codex-agent-skills/)**
 
 → **[瀏覽作品集展示與驗證索引 (showcase/README.md)](showcase/)**
 
