@@ -6,6 +6,42 @@
 
 ---
 
+## 📌 當前開發進度與真實工程狀態 (Development Progress & In-Flight Status)
+
+> [!NOTE]
+> **真實的工程演進與邊界處置，本身就是最具說服力的作品。**  
+> 本作品集**不要求專案必須 100% 全部完成才能展示**。我們公開呈現「已實裝交付 (Delivered)」、「本機已驗證 / 審查中 (In-Flight Draft PR)」、「環境受阻與止損決策 (Blocked & Trade-offs)」，以及「Backlog 規劃中 (Planned)」的完整生命週期與研發軌跡：
+
+### 1. 已實裝交付至主線 (Delivered to Main)
+- **製程文件工作流 (`manufacturing-document-workflow`)**：Claude Free 實測完成（T1/T3 PASS，T2 跨客戶越權阻絕），具備完整截圖與沙盒 PoC。
+- **工廠設備 RAG (`factory-knowledge-grounded-rag`)**：地端離線 Qdrant/BM25 檢索、手冊 Citation 與 ABSTAIN 拒答保護已通過 Local Benchmark。
+- **Agent 工具策略引擎 (`agent-tool-policy-engine`)**：24 項單元測試全數 PASS，零外部相依，決定論工具動作前置風險分類已確立。
+- **雙 Runtime 協作架構 (`codex-antigravity-collaboration`)**：跨 Runtime 協議、Bounded Task/Result 規範與 Local Bridge 檔案鎖機制。
+- **共通技能庫 (`codex-agent-skills`)**：標準 Skill 目錄結構與自動化格式檢驗器 (`validate.ps1` Exit 0)。
+
+### 2. 本輪工程修補與高價值切片 (In-Flight Draft PRs · 本地驗證全數通過)
+- **企業營運平台垂直切片 ([PR #8](https://github.com/a275618631/a275618631/pull/8))**：
+  - *進度*：補齊安全隔離之 `appsettings.Development.json` Mock 登入設定，執行 `dotnet test` 達到 **22/22 項測試全數 PASS (1 Skip)**。
+- **Paperclip AI Chief 雲端自主 Agent 團隊 ([PR #9](https://github.com/a275618631/a275618631/pull/9))**：
+  - *進度*：本地三角色 (Chief/Research/Reviewer) 原生任務閉環 (PAP-1/PAP-2) 驗證通過；Codex CLI Heartbeat Run (`a4bbe496`) 與 Gemini Adapter 通過。
+  - *當前邊界*：Oracle Cloud Always Free (Tokyo AD-1) 因 ARM64 免費額度高峰飽和，進入 `BLOCKED: OCI_CAPACITY_WAIT`，依資安止損原則安全暫停，不擅自升級為計費實例。
+- **LINE Portable Core 可移植核心 ([PR #9](https://github.com/a275618631/a275618631/pull/9))**：
+  - *進度*：Hexagonal 解耦架構、HMAC-SHA256 簽名校驗、Webhook 冪等去重與 LIFF `shareTargetPicker` 容錯，**16 項 Vitest 單元測試 PASS**。
+  - *當前邊界*：誠實記錄「手機真機 E2E 0/4 待驗證」，清楚區分自動化模擬測試與真機連線。
+
+### 3. 獨立展示倉庫文案繁中自然化 (In-Flight Draft PRs)
+- **`codex-agent-skills` ([PR #1](https://github.com/a275618631/codex-agent-skills/pull/1))**：繁中自然化 README、清理機敏絕對路徑，`validate.ps1` 通過。
+- **`portable-ai-agent-environment` ([PR #3](https://github.com/a275618631/portable-ai-agent-environment/pull/3))**：強調 Raw Staged-Blob 掃描防禦與跨機器環境可攜性。
+- **`workforce-scheduling-system` ([PR #3](https://github.com/a275618631/workforce-scheduling-system/pull/3))**：強調製造業 24 小時輪班約束求解架構與 56 項測試完整覆蓋。
+
+### 4. 規劃中與進行中模組 (Planned & Backlog)
+- **CareerOps Job Intelligence (`careerops-job-intelligence`)**：
+  - *目前進度*：私有研發庫已具備 147 項測試通過記錄；正在規劃抽取「官方職缺發現 (Official Careers Discovery)」、「去重演算法」與「資料採集管線」的匿名化獨立展示切片，預計切入「資料治理與可靠採集」視角。
+- **台灣股市籌碼雷達 (`tw-stock-chip-radar`)**：
+  - *目前進度*：具備 TWSE/TPEx 抓取與互動 Dashboard 原型；待上游開源授權與個人設定去敏進一步釐清後再行公開展示。
+
+---
+
 ## 專案架構全景與狀態矩陣 (Status Matrix)
 
 | 子專案 | 核心技術領域 | 來源類型 | 驗證等級 / 現況標籤 | 核心展示價值與邊界 |
