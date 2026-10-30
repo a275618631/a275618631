@@ -67,7 +67,7 @@ npm test
    - 驗證 ICS 行事曆時間戳記解析
  ✓ tests/unit/line.test.ts (4 tests)
    - 驗證合法 HMAC-SHA256 簽名驗證通過
-   - 驗證非法簽名即時拒絕 (HTTP 401/403)
+   - 驗證非法簽名即時拒絕 (HTTP 401 Unauthorized)
    - 驗證 webhookEventId 冪等性去重防止重覆處理
    - 驗證 Reply 失敗時的重送容許機制
 
