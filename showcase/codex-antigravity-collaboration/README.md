@@ -106,7 +106,7 @@ See [Architecture](docs/ARCHITECTURE.md).
 
 | Capability | Status | Notes |
 |---|---|---|
-| Codex ↔ Antigravity bridge / smoke path | **Bounded CLI probe PASS / desktop MCP and unattended writes remain blocked** | A fresh read-only nonce probe through the Antigravity CLI succeeded on 2026-10-22. This does not verify the desktop MCP mailbox path or clear T7 OS isolation. See the evidence note. |
+| Codex ↔ Antigravity bridge / smoke path | **Bounded CLI probe PASS / unattended live handoff not claimed** | Tested once on 10/20; retest on 10/22 experienced timeouts. Stable unattended live handoff is not claimed. Desktop MCP mailbox path and T7 OS isolation remain guarded. |
 | Task / Result collaboration packet | **Implemented** | Used as the common request/result contract. |
 | Bounded external delegation | **Implemented** | One-hop guard is part of the current collaboration protocol. |
 | Read-only bounded debate | **Implemented** | Maximum two rounds in the current reference workflow. |
@@ -210,7 +210,7 @@ Traditional Chinese overview: [README.zh-TW.md](README.zh-TW.md)
 - The Windows verification entry falls back to the Codex bundled Python runtime when `python` is absent from `PATH` and `py -3` has no registered runtime.
 - Bounded real Codex → Antigravity CLI → Codex read-only nonce handoff: **PASS** on 2026-10-22 after an earlier probe timed out. The direct desktop MCP mailbox path is not freshly verified, and this does not authorize task execution or writes. See [evidence](LIVE_HANDOFF_EVIDENCE_20261020.md).
 - Portable worktree: protected and not modified. Its pre-existing uncommitted files are not part of this branch.
-- T7 OS-level cross-project write enforcement remains **FAIL**; unattended cross-project writes are prohibited. Full unattended or cross-Repo live operation is not claimed.
+- T7 OS-level cross-project write enforcement: Operating system-level isolation between projects is not yet enforced; unattended or cross-repo writes are strictly prohibited, and full unattended autonomous live operation is not claimed.
 
 The canonical local entry is this README → `AGENTS.md` → `PROJECT.yaml` → `local_bridge/README.md`. This repository is a reference architecture and bounded local bridge, not a new orchestration framework.
 

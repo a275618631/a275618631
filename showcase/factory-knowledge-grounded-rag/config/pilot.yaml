@@ -1,0 +1,84 @@
+version: 3.1.0
+profile_name: factory-knowledge-real-document-pilot
+description: "Frozen Pilot Profile for Grounded Industrial Knowledge RAG"
+
+core:
+  allow_unsupported_actionable_claim: false
+  default_language: zh-TW
+  require_numeric_grounding: true
+  ot_execution_disabled: true
+  read_only_recommendation: true
+  fail_closed_mode: true
+  claim_domains:
+    - CURRENT_STATE
+    - PROCEDURE
+    - SAFETY
+    - DESIGN_CONFIGURATION
+    - HISTORICAL_CASE
+    - FAILURE_MODE
+
+chunking:
+  strategy: structure_aware
+  max_chunk_size: 768
+  min_chunk_size: 60
+  fixed_window_size: 512
+  fixed_window_overlap: 64
+  preserve_table_rows: true
+  preserve_tables: true
+
+embedding:
+  provider: fastembed
+  model_name: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  dimension: 384
+  distance_metric: cosine
+  batch_size: 32
+
+vector_store:
+  provider: qdrant
+  mode: local
+  storage_path: ./data/qdrant_storage
+  collection_name: factory_knowledge_v3_sprint2
+  server_fallback_url: http://127.0.0.1:6333
+  server_collection_name: factory_knowledge_v3_server
+
+retrieval:
+  exact_lookup_enabled: true
+  fts5_db_path: ":memory:"
+  dense_top_k: 10
+  fts_top_k: 10
+  fusion_strategy: rrf
+  rrf_k: 60
+  hybrid_top_k: 10
+
+reranker:
+  provider: bge_v2_m3
+  model_name: BAAI/bge-reranker-v2-m3
+  device: cpu
+  calibrated_threshold: 0.05
+  top_k: 5
+  context_augmentation: heading_parent
+
+authority:
+  enabled: true
+  default_policy: active_revision_only
+  superseded_action: quarantine_with_warning
+  audit_trace_enabled: true
+
+llm:
+  provider: ollama
+  endpoint: http://127.0.0.1:11434
+  model_name: qwen3:8b
+  temperature: 0.0
+  num_predict: 512
+  keep_alive: 24h
+  timeout_seconds: 120
+  warmup_on_startup: true
+
+parser:
+  default: structured
+  pdf: docling
+  ocr_enabled: auto
+
+identity:
+  algorithm: sha256
+  include_chunker_version: true

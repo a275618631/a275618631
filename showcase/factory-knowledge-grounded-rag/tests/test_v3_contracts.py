@@ -152,7 +152,7 @@ def test_bge_reranker_scoring_contract():
 
 
 def test_config_profiles_validity():
-    base_path = r'<LOCAL_WORKSPACE_PATH>'
+    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'config'))
     with open(os.path.join(base_path, 'base.yaml'), 'r', encoding='utf-8') as f:
         base_cfg = yaml.safe_load(f)
         assert base_cfg['version'] == '3.0.0'

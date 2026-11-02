@@ -1,0 +1,15 @@
+{
+  "destination": "U00000000000000000000000000000000",
+  "events": [
+    {
+      "type": "message",
+      "mode": "active",
+      "timestamp": 1727049600000,
+      "webhookEventId": "01HDEMO000000000000000001",
+      "deliveryContext": { "isRedelivery": false },
+      "source": { "type": "user", "userId": "Udemo" },
+      "replyToken": "reply-token-demo",
+      "message": { "type": "text", "id": "1", "quoteToken": "q", "text": "/ping" }
+    }
+  ]
+}

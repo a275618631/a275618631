@@ -1,0 +1,49 @@
+# ==============================================================================
+# Oracle Cloud Always Free (ARM64 Ampere A1) - Paperclip Docker Compose
+# 安全規範：authenticated + private 模式、禁止公網開放、嚴格資源限制
+# ==============================================================================
+services:
+  paperclip:
+    image: paperclip:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paperclip-core
+    restart: unless-stopped
+    pids_limit: 2048
+    stop_grace_period: 90s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 6144M
+        reservations:
+          cpus: '0.5'
+          memory: 1024M
+    # 僅綁定在本地環回介面，嚴禁直接暴露於公網 0.0.0.0
+    ports:
+      - "127.0.0.1:3100:3100"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3100"
+      PAPERCLIP_HOME: "/paperclip"
+      TZ: "Asia/Taipei"
+
+      # 部署安全模式
+      PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
+      PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
+      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:3100}"
+      PAPERCLIP_ALLOWED_HOSTNAMES: "${PAPERCLIP_ALLOWED_HOSTNAMES:-}"
+
+      # 認證密鑰（由初始化腳本自動隨機生成 64 位元 Hex）
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET}"
+
+      # 心跳與排程調度
+      HEARTBEAT_SCHEDULER_ENABLED: "true"
+      HEARTBEAT_SCHEDULER_INTERVAL_MS: "30000"
+
+    volumes:
+      # 資料持久化掛載區（資料庫、工作區狀態）
+      - "./data:/paperclip"
+      # 時區同步
+      - "/etc/localtime:/etc/localtime:ro"
