@@ -1,88 +1,46 @@
-# 工廠設備知識庫與地端診斷助手 (Factory Knowledge Grounded RAG)
+# 工廠設備知識庫與地端診斷助手
 
-> **核心安全性準則**：  
-> **No unsupported actionable claim reaches the user.**  
-> （沒有手冊來源支持的可執行操作建議，系統必須堅決拒答，嚴禁捏造。）
+設備警報發生時，工程師需要在大量手冊中查詢代碼、規格與處理方式。難點不只是「找得到」，還要確定**查到的是正確設備與版本，而且每項建議都有文件依據**。
 
-本專案是一個 **Local-First、完全可離線執行** 的工廠設備知識庫與診斷助手系統。專為高安全要求的製造業產線設計，結合語意檢索、全文搜尋與確定性檢查閘門，解決 LLM 在工廠維修場景中產生幻覺操作的嚴重隱患。
+我把 SQLite FTS5、Qdrant Local、語意檢索與重排序組成混合檢索流程，最後再檢查來源、數值、衝突與證據不足的情況。系統的原則很清楚：沒有可靠依據的操作建議，不應直接交給現場人員。
 
----
+## 系統怎麼處理查詢
 
-## 1. 核心痛點與設計架構
-
-在製造業產線設備維修中，一般通用 RAG 面臨兩大挑戰：
-1. **幻覺代價極高**：如果 AI 瞎掰了一個螺絲扭力值或氣壓參數，現場人員照做可能導致機台損毀或工安意外。
-2. **專有名詞比對失準**：一般向量檢索對於機台警報代碼（如 `ALM-Y52-04`）、感測器 Tag 缺乏精確命中能力。
-
-### 解決方案：混合檢索 + 5 道確定性防幻覺檢查閘門
-
-```mermaid
-flowchart TD
-    UserQuery["維修人員提問 (包含 Alarm 代碼)"] --> Retrieval
-
-    subgraph Retrieval["第一階段：雙路混合檢索 (Hybrid Retrieval)"]
-        FTS["SQLite FTS5 全文檢索<br>(精確匹配警報代碼與 Tag)"]
-        Dense["FastEmbed 密集向量嵌入<br>(384維度，理解語意描述)"]
-        RRF["RRF 倒數排名融合<br>(Reciprocal Rank Fusion, k=60)"]
-        FTS --> RRF
-        Dense --> RRF
-    end
-
-    subgraph Rerank["第二階段：神經重排序 (Neural Rerank)"]
-        Reranker["BGE-Reranker-v2-m3<br>(門檻值 0.05，剔除無關段落)"]
-    end
-
-    subgraph Gates["第三階段：5 道確定性檢查閘門 (Deterministic Verifier)"]
-        G1["1. 數值與參數精確比對"]
-        G2["2. Citation 引用來源實體校驗"]
-        G3["3. 衝突指引互斥阻絕"]
-        G4["4. 歷史維修案例隔離"]
-        G5["5. 無依據即拒答 (ABSTAIN)"]
-    end
-
-    RRF --> Rerank
-    Reranker --> Gates
-    Gates -->|檢驗通過| Output["輸出診斷建議 + 精確 Citation 頁碼"]
-    Gates -->|證據不足或衝突| Abstain["強制拒答 (ABSTAINED)"]
+```text
+輸入設備代碼或故障描述
+      ↓
+SQLite FTS5 精確搜尋 + Qdrant Local 語意搜尋
+      ↓
+RRF 融合檢索結果 + BGE Reranker
+      ↓
+比對手冊引用、數值與適用條件
+      ↓
+有依據：回傳可查證資訊
+證據不足或衝突：ABSTAIN
 ```
 
----
+## 實作重點
 
-## 2. 模組架構與技術選型
+- **精確搜尋與語意檢索一起使用**：設備 Alarm Code、Tag 適合全文搜尋；不同說法的故障描述則由向量檢索補足。
+- **引用可以回查**：結果附帶文件來源，讓使用者能核對原文。
+- **確定性驗證**：以 [core/verifier.py](core/verifier.py) 檢查數值、引用、衝突和不受支持的建議。
+- **本地執行設計**：資料檢索以本地元件運作，避免把實際設備資料當作一般聊天內容直接傳出。
 
-- **文件結構化解析**：Docling 解析器，支援技術手冊轉換為結構化 Markdown 表格與階層。
-- **雙路混合檢索**：
-  - 語意檢索：FastEmbed (`paraphrase-multilingual-MiniLM-L12-v2`) + Qdrant Local 本地向量庫。
-  - 全文檢索：SQLite FTS5，精確檢索警報代號與機台部位。
-  - 融合排序：RRF (Reciprocal Rank Fusion)。
-- **神經重排序**：`BAAI/bge-reranker-v2-m3`，針對候選段落精確打分。
-- **確定性檢查閘門**：`core/verifier.py`，純 Python 決定論規則引擎，不受 Prompt Injection 影響。
+## 測試與成果
 
----
+既有合成基準包含 **12 份自編設備手冊及 25 題故障診斷案例**。該組基準的安全規則檢查紀錄為 **25／25**，沒有觀察到未授權操作建議；這是該組資料和測試規則的結果，不代表所有設備情境的通用準確率。
 
-## 3. 評測基準與測試結果
+程式與測試可從 [檢索測試](tests/test_mvp1_retrieval.py)、[本地 Qdrant 測試](tests/test_sprint2_qdrant.py) 和 [驗證核心](core/verifier.py) 開始閱讀。
 
-在 12 份自編冷軋設備手冊合成語料庫與 25 題典型設備故障診斷題集下：
+## 如何查看公開版本
 
-- **安全合規率**：**25/25 (100%)**
-- **非事實建議輸出**：**0 次**
-- **無證據或衝突情境**：精確觸發 `ABSTAINED` 拒答，阻止危險操作建議輸出。
-- **本地重現指令**：
+這個目錄已包含 Python 原始碼、[套件設定](pyproject.toml)、[相依清單](requirements.txt)及合成測試。可以在 Python 3.11 以上的環境先安裝必要套件，再執行對應測試：
 
-  **1. 快速核心與安全合約測試（無需外部模型依賴，23 項全過，約 1.6 秒）**：
-  ```bash
-  # 驗證介面合約、配置 Profile、分塊演算法、RRF 融合與 5 道確定性防幻覺檢查閘門
-  pytest tests/test_v3_contracts.py tests/test_mvp0_core.py tests/test_sprint1_identity.py tests/test_sprint1_chunking.py tests/test_sprint2_rrf.py tests/test_sprint3_negative_safety.py -v
-  ```
+```bash
+python -m pip install -r requirements.txt
+python -m pytest -q tests/test_mvp1_retrieval.py tests/test_sprint2_qdrant.py
+```
 
-  **2. 全量模型與端到端評測（需安裝 torch、docling、fastembed 等選用依賴）**：
-  ```bash
-  pip install -r requirements.txt
-  pytest tests/ -v
-  ```
+部分模型或測試資料可能需要額外準備，實際結果以環境與測試程式為準。本次 README 修改沒有重新執行測試。
 
----
-
-## 4. 安全與邊界說明
-- 本展示切片全數使用自編合成設備手冊與開放語料，不公開或散布廠內 8 份真實 OEM 原廠 PDF。
-- 系統設計為唯讀診斷輔助，未直連產線 PLC / SCADA 網路。
+這份公開副本以合成文件與可公開程式為主，不附原廠手冊 PDF，也不會直接控制現場 PLC／SCADA。詳細設計與歷史驗證可接著閱讀專案內的 `docs/` 與 `reports/`。
