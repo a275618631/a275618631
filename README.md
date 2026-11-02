@@ -1,142 +1,47 @@
-# Che-Yu Wu
+# Che-Yu Wu｜製造業系統整合與 AI 工程作品集
 
-**製造業 × AI 系統整合與 Agent 架構 · Multi-Agent Systems · 企業營運與可驗證工程**
+**製造業資訊整合 · Python／C# .NET · AI Agent · RAG · 自動化**
 
-我專注於把模糊、複雜的實際需求，轉換成可維護、可測試、可驗證的 AI 輔助系統與 Agentic Systems（Agent 型系統）。
+我從製造現場的系統整合工作出發，習慣先釐清資料怎麼流動、哪些人需要操作系統，以及異常發生時如何繼續運作，再把需求做成可以測試、維護和交付的程式。
 
-目前主要關注：
+這裡收錄我在工廠設備知識檢索、企業營運系統、AI Agent 協作與工作流程自動化方面的作品。除了架構說明，也能找到實際的程式碼、合成案例或測試結果。
 
-- AI Agent 架構與 Multi-Agent Systems（多 Agent 系統）
-- Agent Runtime（Agent 執行環境）、Tool、Skill 與 MCP 整合
-- 跨平台系統整合與自動化
-- Human-in-the-loop（人工介入）與安全邊界
-- Requirements → Architecture → Implementation → Validation
-- Local / Cloud（本地／雲端）任務與隱私分流
-- Verification-driven Engineering（驗證導向工程）
+## 精選工程作品
 
-我的設計原則是：**優先使用平台原生能力，避免沒有必要的 Framework 與基礎設施；架構複雜度必須由實際需求證明。**
+| 專案 | 實際解決的問題與實作重點 |
+| --- | --- |
+| [工廠設備知識庫與地端診斷助手](showcase/factory-knowledge-grounded-rag/) | 用混合檢索找到設備警報與手冊段落，檢查引用與版本，遇到證據不足時停止推測 |
+| [企業營運平台](showcase/enterprise-operations-platform/) | 以 ASP.NET Core、JWT 權限和設備／工單流程，處理角色操作、錯誤狀態與資料衝突 |
+| [製程文件改版審查流程](showcase/manufacturing-document-workflow/) | 將文件版本、存取範圍、審核責任與 Claude Skill 組成可檢查的流程 |
+| [Agent 工具策略引擎](showcase/agent-tool-policy-engine/) | 用 Python 規則判斷工具操作是允許、限縮範圍、需要核准或應該拒絕 |
+| [LINE Portable Core](showcase/line-portable-core/) | 以 TypeScript 實作 Webhook HMAC 驗證、事件冪等、LIFF Mini App 與訊息處理 |
+| [Paperclip AI Chief](showcase/paperclip-ai-chief/) | 組合 Paperclip 與 Codex，讓 Chief、Research、Reviewer 分工、回報並完成本機任務閉環 |
 
-→ **[Codex × Antigravity 協作架構網站（繁體中文）](https://a275618631.github.io/codex-antigravity-collaboration/)**
+**[進入完整技術作品集](showcase/)**
 
----
+## AI Agent 開發工具與工程方法
 
-## 主要能力方向
+### [Codex × Antigravity 協作架構](https://github.com/a275618631/codex-antigravity-collaboration)
 
-### AI Agent Architecture
-設計 Agent Runtime、角色分工、跨 Runtime 委派、工具與權限邊界，以及不同 AI 平台之間的協作方式。
+研究兩套 AI 開發環境如何清楚分工、共享 Task／Result 格式、透過本地 MCP Bridge 交換資訊，並用 Git 工作區管理修改。專案包含實際橋接測試、受限的跨 Runtime 測試及可追蹤的功能狀態。
 
-### Multi-Agent Systems
-不是單純增加更多 Agent，而是處理：
+### [Codex Agent Skills](https://github.com/a275618631/codex-agent-skills)
 
-- 誰負責什麼工作
-- 哪些工作可以平行
-- 哪些寫入不能互相衝突
-- Agent 之間如何交接 Context（上下文）
-- 如何限制遞迴委派
-- 如何驗證彼此的結果
+將問題排查、流程自動化、PR 審查與交付整理成五個可攜式 Skills，讓不同專案不必每次重寫同一套工作方法。
 
-### System Integration
-將 AI 能力整合進既有程式庫、工具、工作流程、瀏覽器、Google 生態與本地環境，而不是建立彼此孤立的 Demo。
+### [可攜式 AI Agent 開發環境](https://github.com/a275618631/portable-ai-agent-environment)
 
-### Safety & Verification
-關注：
+處理跨電腦使用 Agent 工具時，哪些設定能共用、哪些憑證與登入狀態必須留在原電腦。公開作品包含設定分類、Git 暫存內容掃描與合成回歸測試。
 
-- 權限與 Approval（核准）邊界
-- Secret / PII（敏感資訊）保護
-- Human-in-the-loop
-- Regression Tests（回歸測試）
-- Evidence-based Validation（證據導向驗證）
-- 明確區分「已實作、部分完成、規劃中、探索中」
+## 其他工程作品
 
----
+- [規則式人力排班系統](https://github.com/a275618631/workforce-scheduling-system)：將輪班資格、休息時間、人工指定及人力需求轉成可檢查的規則模型。
+- [html2slides](https://github.com/a275618631/html2slides)：利用 Chromium 解析 HTML 排版，輸出文字、形狀、圖片可編輯的 PowerPoint。
+- [AI Folder Governance](https://github.com/a275618631/ai-folder-governance)：先理解檔案的來源、用途與版本關係，再決定如何整理。
+- [登入式桌面媒體處理流程](projects/authenticated-desktop-media-workflow.md)：Tauri、Rust、macOS Keychain、yt-dlp 與 FFmpeg 的桌面工作流整合。
 
-# Featured Projects｜主要作品
+## 我在意的工程問題
 
-## ★ [公開技術能力作品集 (Engineering Capabilities Showcase)](showcase/)
+做系統時，我特別在意**可追溯的資料來源、合理的操作權限、異常情境與復原能力**。遇到 AI 工具，我也會先看能不能沿用現有平台，再針對確實需要控制的部分寫程式。
 
-Manufacturing AI · Grounded RAG · Agent Policy · Enterprise Platform · Multi-Agent Runtime
-
-具備製造業現場經驗，專注將現場製程文件、設備手冊知識與營運工單流程，落地為高可靠、具備安全防護與可驗證的 AI Agent 與企業系統：
-
-### 四大核心專案
-1. **[工廠設備知識庫與地端診斷 RAG](showcase/factory-knowledge-grounded-rag/)**：離線混合檢索 (Qdrant+BM25)、手冊 Citation 與「查無證據即拒答 (ABSTAIN)」5 道檢查閘門（25 題基準測試 100% 安全合規）。
-2. **[製程文件版本審核與 AI 工作流](showcase/manufacturing-document-workflow/)**：受限推理環境 (Claude Free) 之結構化 Skill 約束，實測成功阻絕跨客戶越權存取（T1 格式通過；T2 原版完整性不足，修正後重測通過；T3 依賴查核通過）。
-3. **[企業營運平台垂直切片](showcase/enterprise-operations-platform/)**：ASP.NET Core 10 (.NET 10) 後端架構，RBAC 權限狀態機與工單冪等防護（22/22 項測試 PASS）。
-4. **[Agent 工具策略引擎](showcase/agent-tool-policy-engine/)**：純 Python 零依賴，決定論工具調用風險預檢與 Fail-Closed 防護（24/24 項測試 PASS）。
-
-### 延伸實作與架構
-- **[Codex × Antigravity 協作架構](showcase/codex-antigravity-collaboration/)**：異質 Agent 跨 Runtime 協議與 Local Bridge 檔案鎖。
-- **[LINE Portable Core 通訊核心](showcase/line-portable-core/)**：HMAC-SHA256 簽名驗證、Webhook 冪等去重與 LIFF 狀態容錯（16 項測試 PASS）。
-- **[Paperclip AI Chief 部署設計與本機驗證](showcase/paperclip-ai-chief/)**：以 NT 增額月費為目標之任務閉環、Codex Heartbeat 巡查與 ARM64 部署規格。
-- **[可攜式 AI Agent 環境](https://github.com/a275618631/portable-ai-agent-environment)**｜**[製造業智慧排班設計](https://github.com/a275618631/workforce-scheduling-system)**｜**[html2slides](https://github.com/a275618631/html2slides)**｜**[Codex Agent Skills](https://github.com/a275618631/codex-agent-skills)**
-
-→ **[瀏覽作品集展示與驗證索引 (showcase/README.md)](showcase/)**
-
----
-
-## 其他獨立開源專案 (Related Repositories)
-
-- **[Codex × Antigravity 協作架構](https://github.com/a275618631/codex-antigravity-collaboration)**：以 Codex 與 Antigravity 為實際案例的 AI Agent 跨 Runtime 邊界協作參考架構。
-- **[可攜式 AI Agent 環境](https://github.com/a275618631/portable-ai-agent-environment)**：私有版在 Windows／macOS 使用；公開版提供 Bash 暫存檔敏感資料掃描器與回歸測試。
-- **[製造業智慧排班系統設計](https://github.com/a275618631/workforce-scheduling-system)**：私有版累積 56 項約束求解器自動化測試；公開版提供輪班規格設計與法規約束模型案例研究。
-- **[html2slides 投影片轉換工具](https://github.com/a275618631/html2slides)**：將 HTML 投影片轉換為可編輯 PowerPoint (.pptx) 與 Google Slides 的轉換工具。
-- **[Codex Agent Skills 技能庫](https://github.com/a275618631/codex-agent-skills)**：雙語、Safety-first 的 Agent Skill 定義規範與格式防護驗證腳本。
-
----
-
-# Selected Engineering Work｜其他工程實作
-
-## Authenticated Desktop Media Workflow *(private implementation)*
-
-`Tauri · Rust · TypeScript · FFmpeg · Integration`
-
-macOS 桌面端媒體處理 Workflow，主要研究：
-
-- 安全保存登入 Session
-- macOS Keychain
-- yt-dlp 整合
-- HLS / fMP4 解析
-- FFmpeg 處理
-- Atomic File Move（原子式檔案搬移）
-- Authentication → Extraction → Download 的 End-to-End（端到端）驗證
-
-這項實作主要展示：
-
-> **桌面應用、第三方工具整合、登入狀態管理與可靠性設計。**
-
-僅設計用於使用者有權存取的媒體流程。
-
-→ [Case Study](projects/authenticated-desktop-media-workflow.md)
-
----
-
-# Prototype / Exploration｜原型與研究
-
-## Privacy-Aware Meeting Intelligence Workflow
-*Prototype / Partially Validated MVP*
-
-`AI Workflow · Privacy · Human-in-the-loop · Evidence`
-
-隱私導向的會議資訊處理 Pipeline：
-
-`逐字稿 → PII 遮蔽 → LLM 摘要 → 決策／行動項目 → 證據追蹤 → 人工 Review`
-
-目前已實作並在本地驗證：
-
-- Transcript processing（逐字稿處理）
-- PII masking（敏感資訊遮蔽）
-- Structured output（結構化輸出）
-- Evidence validation（證據驗證）
-
-尚未完整驗證：
-
-`真實 MP4 → STT → Speaker Diarization → External LLM`
-
-完整 End-to-End Pipeline 目前仍屬於設計階段，因此不宣稱已完成正式驗證。
-
----
-
-# Reusable Components｜可重複使用元件
-
-- **[codex-agent-skills](https://github.com/a275618631/codex-agent-skills)**  
-  雙語、Safety-first（安全優先）的 Agent Skill Library，涵蓋交付、自動化、驗證與 Review Workflow。
+作品中部分是獨立公開專案，部分是從私人開發版本整理出的可公開程式與合成測試。每個頁面會標明可查看的內容和測試範圍，方便從實作本身判斷能力。
