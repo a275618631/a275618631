@@ -1,87 +1,41 @@
-# LINE Portable Core｜可移植 LINE Webhook & Mini App 核心
+# LINE Portable Core｜可移植的 Webhook 與 Mini App 核心
 
-> **專案定位**：解耦、輕量且可移植的 LINE Bot & LIFF Mini App 核心架構；具備嚴格的通訊協議驗證、冪等防重放與領域分層。  
-> **關鍵技術**：TypeScript、Hono、Vite、LIFF (@line/liff)、HMAC-SHA256 簽名驗證、Vitest。  
-> **狀態**：自動化測試 16 項全數通過；手機實機測試 4 項尚未執行（需待設定 LINE 官方帳號 webhook 與 Channel 憑證）。
+LINE Bot 收到訊息後，不能只做到「有回覆」。Webhook 可能重送、簽章必須正確驗證，Mini App 分享也需要區分成功、取消與失敗。
 
----
+我用 TypeScript、Hono 和 LIFF 將 LINE 通訊流程拆成獨立的核心、Adapter 與 Webhook Gateway，讓業務功能不必和 LINE SDK 或特定資料庫緊密綁在一起。
 
-## 1. 核心痛點與設計理念
+## 核心功能
 
-在開發 LINE 企業服務或社群互動應用時，常見以下架構挑戰：
-1. **強綁定特定平台或龐大框架**：許多開源範例綁定特定後端雲服務或老舊 SDK，缺乏架構分層，難以移植到微服務或邊緣運算環境。
-2. **Webhook 重放與重複扣款/回覆風險**：網路瞬態波動時，LINE 伺服器會重送 Webhook 事件；若未實作基於 `webhookEventId` 的嚴格冪等機制，容易造成重複處理。
-3. **缺少離線單元測試與協議校驗**：多數 LINE Bot 開發仰賴推送到雲端後用手機手動測試，缺乏本地脫機的簽名驗證與 Flex 結構自動化測試。
+- **Webhook HMAC 驗證**：用原始請求內容與 HMAC-SHA256 驗證 LINE 簽章。
+- **事件冪等**：以 `webhookEventId` 辨識重送，避免同一事件被重複處理；回覆失敗時保留重試機會。
+- **LIFF 分享狀態**：明確區分成功、取消、不可用及錯誤，不把未回傳結果誤判成成功。
+- **訊息與排程輔助**：Flex Message、Google Calendar URL 與 ICS 產生。
+- **可移植架構**：核心邏輯、LINE 協議、Gateway 與儲存 Adapter 分離。
 
-### 本架構之解法 (Hexagonal Architecture)
-- **埠與適配器架構 (Ports & Adapters)**：核心領域邏輯 (`packages/core`) 完全獨立，不依賴任何外部資料庫或 HTTP 框架；透過介面與 `adapters/` 對接。
-- **嚴謹的通訊安全防護**：
-  - **HMAC-SHA256 簽名驗證**：精確比對 `x-line-signature`，阻絕未授權的偽造請求。
-  - **Webhook 冪等性防護**：以 `webhookEventId` 為鍵，確保僅在回覆成功後標記已處理；若發送中斷則允許重傳重試。
-- **嚴格的 Mini App 狀態判斷**：針對 `@line/liff` 的 `shareTargetPicker()` 進行嚴格校驗，只有明確回傳 `{ status: "success" }` 才判定分享成功，修正將 `undefined` 誤判為成功的常見陷阱。
+## 程式架構
 
----
-
-## 2. 模組架構與目錄職責
-
-```
-line-portable-core/
-├── packages/
-│   ├── core/           # 核心領域：Ports 介面定義、配額策略 (Quota Policy)、領域錯誤
-│   ├── line/           # LINE 專用協議：HMAC 簽名驗證、Webhook 冪等、Messaging API、Flex 校驗
-│   └── calendar/       # 整合輔助：Google Calendar URL 產製與 ICS 檔案轉換
-├── adapters/
-│   ├── memory/         # 本地記憶體適配器 (Bounded MemoryStore，供離線測試與原型驗證)
-│   ├── benefit-contract/     # 企業福利領域合約介面
-│   └── production-contract/  # 生產排程領域合約介面
-├── apps/
-│   ├── gateway/        # 輕量 Webhook 路由伺服器 (Hono / Node.js 22+)
-│   └── miniapp/        # LIFF Mini App 前端介面 (Vite + Vanilla TypeScript)
-└── tests/              # 自動化單元測試與測試 Fixtures (16 Tests PASS)
+```text
+LINE Webhook／LIFF
+       ↓
+packages/line：簽章、事件與訊息格式
+       ↓
+packages/core：介面、配額與錯誤規則
+       ↓
+apps/gateway、apps/miniapp
+       ↓
+adapters：記憶體與其他業務系統介面
 ```
 
----
+## 如何測試
 
-## 3. 自動化驗證與測試留痕
-
-本專案具備完整的本地脫機測試套件，使用 Vitest 驅動：
+這份展示保留 [package.json](package.json)、核心程式和合成測試，可在 Node.js 22 以上執行：
 
 ```bash
 npm install
-npm test
+npm run check
+npm run build:miniapp
 ```
 
-### 單元測試結果 (全數 16 項 PASS)
-```text
- ✓ tests/unit/core.test.ts (4 tests)
-   - 驗證配額扣減與超額攔截 (QuotaPolicy)
-   - 驗證領域錯誤封裝與邊界條件
- ✓ tests/unit/miniapp.test.ts (2 tests)
-   - 驗證 LIFF 初始化防禦
-   - 驗證多語系環境相容
- ✓ tests/unit/share.test.ts (4 tests)
-   - 驗證 shareTargetPicker 成功狀態判斷 ({ status: "success" })
-   - 驗證使用者取消 (cancel)、功能不可用與例外的容錯處理
- ✓ tests/unit/flex-calendar.test.ts (2 tests)
-   - 驗證 Flex Message 結構與樣式合法性校驗
-   - 驗證 ICS 行事曆時間戳記解析
- ✓ tests/unit/line.test.ts (4 tests)
-   - 驗證合法 HMAC-SHA256 簽名驗證通過
-   - 驗證非法簽名即時拒絕 (HTTP 401 Unauthorized)
-   - 驗證 webhookEventId 冪等性去重防止重覆處理
-   - 驗證 Reply 失敗時的重送容許機制
+既有自動化測試紀錄為 **16 項通過**，涵蓋簽章、重送、回覆與 LIFF 狀態等情境。手機端的四項人工 E2E 尚未完成，不能把離線測試當作正式 LINE 帳號上線驗收。
 
-Test Files  5 passed (5)
-     Tests  16 passed (16)
-```
-
----
-
-## 4. 誠實工程邊界與限制
-
-1. **手機實機測試現狀**：
-   - 包含四項需要連線 LINE 官方後台與真機環境之驗證（Mini App 開啟、好友分享轉發、Webhook 自動回覆、行事曆匯入）。目前尚未執行真機測試（需待設定真實 LINE 官方帳號與憑證），誠實標明待測現狀，絕不把未上線項目宣稱為已通過。
-2. **儲存層限制**：
-   - 本展示版本使用內建 `MemoryStore`，適用於離線驗證與單元測試；正式高並發環境需掛載 Redis / Postgres 實作分散式冪等鎖。
-3. **機敏資安邊界**：
-   - 本倉庫絕不提交任何真實之 `LINE_CHANNEL_SECRET` 或 `LINE_CHANNEL_ACCESS_TOKEN`，所有測試均使用合成資料與 Mock 密鑰。
+本專案不包含真實 LINE Channel Secret、Access Token 或私人使用者資料。

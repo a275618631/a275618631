@@ -1,87 +1,52 @@
-# 技術能力作品集 (Engineering Capabilities Showcase)
+# 技術作品集｜製造業 AI、企業系統與 Agent 工程
 
-具備製造業現場經驗，專注將現場製程文件、設備手冊知識與營運工單流程，落地為高可靠、具備安全防護與可驗證的 AI Agent 與企業系統。
+從設備手冊查詢、工單操作，到 Agent 工具使用與跨平台協作，我把幾種實際工程問題整理成可以閱讀程式、追查設計和查看測試的專案。
 
-所有展示均區分已完成測試、局部驗證與環境邊界；私有來源倉庫保留獨立開發，本公開作品集採用經資安審查之合成資料與授權副本。
+這個目錄收錄可公開的程式碼與合成案例。四個主要專案展示製造業與 AI 整合，其他作品則補上 LINE 通訊、Agent 團隊協作和可重用的工程工具。
 
----
+## 四個主要作品
 
-## 核心展示專案 (Featured Projects)
+### [工廠設備知識庫與地端診斷助手](factory-knowledge-grounded-rag/)
 
-### 1. 工廠設備知識庫與地端診斷 RAG ([`factory-knowledge-grounded-rag/`](./factory-knowledge-grounded-rag/))
-- **現場問題**：維修人員詢問設備警報處理時，一般 LLM 容易產生幻覺，捏造未授權的操作步驟。
-- **架構做法**：離線混合檢索 (Qdrant + BM25)、強制手冊 Citation 來源標記，並設計 5 道確定性檢查閘門，落實「查無證據即拒答 (ABSTAIN)」。
-- **驗證數據**：25 題基準測試 100% 安全合規，0 次捏造操作建議。
-- **展示邊界**：使用自編冷軋設備手冊測試，不外洩真實工廠 OEM 原廠手冊。
+維修人員查詢設備警報或規格時，系統不只要找到相似文字，還要對應正確的設備、版本與來源。我使用 SQLite FTS5、Qdrant Local、檢索融合與重排序，再由確定性驗證檢查引用、數值及證據不足的情況。
 
-### 2. 製程文件版本審核與 AI 工作流 ([`manufacturing-document-workflow/`](./manufacturing-document-workflow/))
-- **現場問題**：產線處方修改責任不清，跨客戶資料容易因 Prompt 缺陷產生越權洩漏。
-- **架構做法**：在受限推理環境 (Claude Free) 下設計結構化 Skill 約束模型行為，建立跨客戶隔離與審查流程。
-- **驗證數據**：實測成功攔截跨客戶越權存取（T1 格式通過；T2 原版完整性不足，修正後重測通過；T3 依賴查核通過）。
-- **展示邊界**：定位為 Skill 規範與沙盒 PoC 驗證，未連線企業 SharePoint API。
+**看點：** Python、Hybrid Retrieval、引用追蹤、ABSTAIN 與合成設備診斷測試。
 
-### 3. 企業營運平台垂直切片 ([`enterprise-operations-platform/`](./enterprise-operations-platform/))
-- **現場問題**：產線工單容易因重複送出而產生衝突，後台缺乏嚴格的角色權限狀態機。
-- **架構做法**：採用 ASP.NET Core 10 (.NET 10) 現代後端架構，實作 RBAC 角色狀態機 (Viewer/Operator/Supervisor) 與設備重複檢查 (409 Conflict)。
-- **驗證數據**：22 項單元與整合測試全數通過 (1 Skip)，涵蓋 401/403 攔截與資料回滾驗證。
-- **展示邊界**：採用小型合成切片展示，排除真實員工資料與生產資料庫連線字串。
+### [製程文件改版審查流程](manufacturing-document-workflow/)
 
-### 4. Agent 工具策略引擎 ([`agent-tool-policy-engine/`](./agent-tool-policy-engine/))
-- **現場問題**：AI Agent 自主調用本機或雲端工具時，容易被 Prompt Injection 誘騙而寫入非預期目錄或執行危險指令。
-- **架構做法**：純 Python 零外部依賴，以決定論策略在工具調用前預檢副作用風險，預設採 Fail-Closed 防護。
-- **驗證數據**：24 項單元測試全數通過，跨 Windows / Linux / macOS 跨平台 CI 通過。
-- **展示邊界**：定位為工具調用前置檢驗核心 (Preflight)，非已上線之獨立 Gateway。
+新版作業文件會影響製造、品保、文管及資訊單位。我將版本差異、文件 Owner、權限檢查與人工審核整理成 Claude Skill，並比較一般改版、跨客戶資料及資訊不足時的實際模型回覆。
 
----
+**看點：** 工作流、版本治理、Claude Skill 與實測案例。
 
-## 跨專案端到端情境走查 (Cross-Project E2E Walkthrough)
+### [企業營運平台](enterprise-operations-platform/)
 
-以冷軋機 Y52 設備異常維修為情境，串連各專案的防護機制：
+用設備與維修工單管理情境，實作 ASP.NET Core 10、JWT 角色權限、資料模型與狀態驗證。除了正常操作，也測試未登入、權限不足、資料重複和工單流程。
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor OP as 現場維修工程師
-    participant WF as 製程文件工作流 (Skill)
-    participant RAG as 地端 RAG 診斷核心
-    participant PE as 工具策略引擎 (Policy)
-    participant EOP as 企業營運平台 (RBAC)
-    actor Lead as 審核負責主管
+**看點：** C#／.NET、REST API、RBAC、工單狀態與自動化測試。
 
-    OP->>WF: 1. 提交新版冷軋維修處方 (DOC-Y52-MOD)
-    WF->>WF: 2. 來源身分與客戶邊界預檢 (非授權即停止)
-    WF->>RAG: 3. 查詢歷史排除指引與設備規格
-    alt 檢索證據充足且無衝突
-        RAG-->>WF: 回傳精確 Citation 來源與排除步驟
-    else 證據不足或發生衝突
-        RAG-->>WF: 觸發 ABSTAIN 拒答 (停止自動建議)
-    end
-    WF->>PE: 4. 嘗試調用工具建立維修工單
-    PE->>PE: 5. 決定論策略評估 (判定需主管核准)
-    PE-->>EOP: 6. 轉發受保護請求至營運平台
-    EOP->>Lead: 7. 呈現遮蔽預覽與人工核准通知
-    Lead->>EOP: 8. 人工簽核批准發布
-    EOP->>EOP: 9. 執行冪等防護寫入工單與不可篡改 Audit
-    EOP-->>OP: 10. 完成可追溯之作業交付物
-```
+### [Agent 工具策略引擎](agent-tool-policy-engine/)
 
----
+AI Agent 要讀寫檔案或執行工具時，先由程式規則判斷路徑、分支、動作類型和風險，再回傳允許、限縮範圍、需要核准或拒絕。
 
-## 延伸實作與架構探索 (Additional Projects)
+**看點：** Python、TOML 策略、決定論決策與跨平台測試。
 
-除核心專案外，亦包含以下延伸探索與實用工具：
+## 其他值得看的專案
 
-- **[Codex × Antigravity 協作架構](./codex-antigravity-collaboration/)**：
-  異質 Agent 跨 Runtime 邊界協議，採用 Bounded Task/Result 規範與 Local Bridge 檔案鎖。（現狀：架構協議確立；跨 Runtime 即時連線受限，採本地檔案橋接）。
-- **[LINE Portable Core 通訊核心](./line-portable-core/)**：
-  Hexagonal 架構，實作 Webhook HMAC-SHA256 簽名驗證、`webhookEventId` 冪等防重放，以及 LIFF `shareTargetPicker` 容錯。（現狀：16 項單元測試全數通過；手機真機測試 4 項需待設定 LINE 官方帳號）。
-- **[Paperclip AI Chief 部署設計與本機驗證](./paperclip-ai-chief/)**：
-  以 NT$0 額外費用為目標，設計 Chief / Research / Reviewer 三角色任務閉環、Codex CLI 心跳巡查與 ARM64 Docker Compose 規格。（現狀：本機任務閉環驗證通過；Oracle 東京免費 ARM 主機額度已滿，已設定時輪詢腳本排隊等待）。
-- **[可攜式 AI Agent 環境](https://github.com/a275618631/portable-ai-agent-environment)**：
-  解決更換電腦無法直接複製憑證與絕對路徑之痛點；私有版在 Windows／macOS 使用，公開版提供 Bash 暫存檔敏感資料掃描器與回歸測試。
-- **[製造業智慧排班系統設計](https://github.com/a275618631/workforce-scheduling-system)**：
-  連續生產（四班二輪）排班規格設計案例；私有版具備約束求解器與自動化測試，公開版提供規格設計與法規約束模型案例研究。
-- **[html2slides](https://github.com/a275618631/html2slides)**：
-  將 HTML 投影片轉換為可編輯 PowerPoint (.pptx) 與 Google Slides 的轉換工具。
-- **[Codex Agent Skills 技能庫](https://github.com/a275618631/codex-agent-skills)**：
-  結構化 Skill 定義規範，提供自動化檢驗腳本 (`validate.ps1`) 防止格式漂移。
+| 專案 | 主要內容 |
+| --- | --- |
+| [LINE Portable Core](line-portable-core/) | HMAC Webhook 驗證、事件冪等、LIFF 分享與 Calendar 介接 |
+| [Paperclip AI Chief](paperclip-ai-chief/) | Chief／Research／Reviewer 本地任務閉環、Codex Heartbeat 與 Oracle 部署規劃 |
+| [Codex × Antigravity](codex-antigravity-collaboration/) | Task／Result 契約、本地 MCP Bridge、跨 Agent 分工與 Git 協作 |
+| [Codex Agent Skills](codex-agent-skills/) | 五個可重用工程 Skills、規格與格式驗證 |
+
+更多獨立公開作品：[可攜式 AI Agent 開發環境](https://github.com/a275618631/portable-ai-agent-environment)、[排班系統設計](https://github.com/a275618631/workforce-scheduling-system)、[AI 資料夾治理](https://github.com/a275618631/ai-folder-governance)、[html2slides](https://github.com/a275618631/html2slides)。
+
+## 這些能力如何搭配
+
+以新版設備維修文件為例：先確認文件權限、版本與審核責任，再讓 RAG 在有來源的文件中查找相關設備資訊；如果需要建立工單，工具策略引擎先評估操作，營運平台再處理角色權限與資料寫入。
+
+這是一個**跨專案應用情境示例**，用來說明各項設計如何互補，而不是已經部署的單一整合系統。
+
+## 閱讀與操作
+
+每個專案都有自己的 README、程式或設計文件。可以先從上方的情境進入，再查看架構、測試與操作指令。部分展示使用從私人原始專案整理出的合成資料副本；其版本與可重現範圍以該專案文件為準。
