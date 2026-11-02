@@ -1,65 +1,36 @@
-# Agent 工具策略引擎 (Thin Agent Tool Policy Engine)
+# Agent 工具策略引擎｜在執行工具之前先判斷權限
 
-> **核心設計原則**：  
-> **不把 Prompt 當作安全邊界，模型宣稱安全不代表能放寬執行權限。**  
-> 純 Python、零執行期外部依賴的決定論 (Deterministic) 安全策略核心，專門防範 AI Agent 自主調用工具時的越權寫入與危險指令。
+AI Agent 可以讀檔、修改程式和呼叫 API，但不能因為模型認為「這樣做沒問題」，就讓它取得所有工具權限。
 
----
+我用 **Python 標準函式庫**實作一個工具呼叫前的策略判斷核心：把操作類型、檔案路徑、Repository、分支與外部目標整理成資料，套用 TOML 規則，再回傳明確決策。
 
-## 1. 核心痛點與防禦概念
+## 四種決策
 
-AI Agent 在調用本機終端、檔案讀寫或 MCP 工具時，最常見的安全風險是 **Prompt Injection**：攻擊者透過 Prompt 誘導模型「忽略先前的指令，改為讀取/覆寫系統檔案」。
+| 決策 | 意義 |
+| --- | --- |
+| `allow` | 允許執行 |
+| `allow_scoped` | 只在指定範圍內執行 |
+| `require_approval` | 需要人工核准 |
+| `deny` | 拒絕操作 |
 
-若將安全防護寄託於模型「聽不聽話」，在工程上是不可靠的。本專案採用**決定論安全架構**：
-- 在工具真正執行前，強制進行靜態 Preflight 檢查。
-- 根據工具名稱、動作類型、路徑正規化結果與受保護分支規則進行風險評估。
-- 評估結果僅有 4 種確定性狀態：`allow`、`allow_scoped`、`require_approval`、`deny`。
+例如讀取 Git 狀態可以允許，但修改工作區以外的檔案應先經過範圍與風險檢查；涉及受保護路徑或無法判斷副作用的工具，也不能直接放行。
 
----
+## 怎麼實作
 
-## 2. 核心使用範例：輸入工具呼叫 → 判定安全等級
+- **規則獨立管理**：使用 [TOML 政策](policies/policy.toml) 定義預設動作與受保護資源。
+- **標準化輸入**：處理跨平台路徑、Git 分支與工具參數。
+- **決策可重現**：相同的結構化操作，會依相同規則得到結果。
+- **保留判斷紀錄**：以結構化事件記錄預檢結果，避免將敏感參數原樣寫入日誌。
+- **方便接入工具流程**：可由 CLI 或 MCP Adapter 在實際操作前先呼叫策略核心。
 
-```python
-from agent_policy.evaluator import evaluate
-from agent_policy.model import Decision, ToolCall
-from agent_policy.policy_loader import load_policy
+## 程式與驗證
 
-# 載入 TOML 安全政策
-policy = load_policy("policies/policy.toml")
+從 [策略評估程式](src/agent_policy/evaluator.py) 和 [測試](tests/test_policy.py) 可以了解各種操作如何分類。
 
-# 1. 唯讀狀態檢查：直接放行 (ALLOW)
-res1 = evaluate(ToolCall("git", "git.status"), policy)
-print(res1.decision)  # Decision.ALLOW
-
-# 2. 嘗試寫入工作區外的敏感路徑：判定需人工審核 (REQUIRE_APPROVAL)
-res2 = evaluate(ToolCall("file_writer", "write", path="/etc/hosts"), policy)
-print(res2.decision)  # Decision.REQUIRE_APPROVAL
-```
-
----
-
-## 3. 核心功能與特性
-
-1. **路徑與目標正規化**：自動處理跨平台路徑（Windows 反斜線 / POSIX 斜線），解析真實相對位置，防止 `../` 目錄遍歷攻擊。
-2. **純決定論評估 (Deterministic Core)**：零 LLM 調用、零網路依賴，執行時間小於 5 毫秒。
-3. **Fail-Closed 預設防護**：遇到未知副作用 (Unknown Side-Effect) 或未定義工具時，一律預設為拒絕 (`deny`) 或降級為需審查 (`require_approval`)。
-4. **脫敏稽核日誌 (Audit Log)**：輸出 JSONL 結構化稽核事件，對機敏參數進行雜湊指紋化，絕不留存明文金鑰。
-
----
-
-## 4. 本地重現與跨平台 CI 驗證
+既有工程紀錄為 **24 項單元測試通過**，並有 Windows、macOS、Ubuntu 上 Python 3.11／3.12 的 CI 驗證。安裝 Python 3.11 以上後可執行：
 
 ```bash
-# 執行 24 項單元測試 (零外部套件，標準庫即可跑)
 PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-### 跨平台矩陣驗證 (6/6 全數 PASS)
-- **Ubuntu** (Python 3.11 / 3.12)：PASS
-- **macOS** (Python 3.11 / 3.12)：PASS
-- **Windows** (Python 3.11 / 3.12)：PASS
-
----
-
-## 5. 展示邊界說明
-- 本專案定位為「工具調用前置決策核心 (Preflight Policy Engine)」，非全域攔截的作業系統沙盒 (Sandbox) 或獨立 Gateway 服務。
+這是提供給工具入口使用的**執行前策略核心**，不是作業系統沙盒，也不會自動接管所有 Agent 平台的工具。核心價值是把權限判斷從提示詞變成可測試的程式。
