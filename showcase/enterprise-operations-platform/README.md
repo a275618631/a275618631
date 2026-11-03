@@ -17,9 +17,9 @@
 
 可從 [API 入口](src/EnterpriseOperationsPlatform.Api/Program.cs)、[架構設計](docs/ARCHITECTURE.md) 與 [測試說明](docs/QA_ACCEPTANCE.md) 閱讀；使用 .NET 10 SDK 可執行：
 
-\`\`\`bash
+```bash
 dotnet test EnterpriseOperationsPlatform.slnx
-\`\`\`
+```
 
 ## 作品範圍
 
