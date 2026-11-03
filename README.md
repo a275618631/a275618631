@@ -1,47 +1,37 @@
-# Che-Yu Wu｜製造業系統整合與 AI 工程作品集
+# Che-Yu Wu｜製造系統整合與 AI 工程作品集
 
-**製造業資訊整合 · Python／C# .NET · AI Agent · RAG · 自動化**
+**製造業系統整合｜C#／.NET｜Python｜AI 工程與自動化**
 
-我從製造現場的系統整合工作出發，習慣先釐清資料怎麼流動、哪些人需要操作系統，以及異常發生時如何繼續運作，再把需求做成可以測試、維護和交付的程式。
+做製造系統時，我最在意的是資料能不能追溯、權限是否清楚，以及異常發生後能不能找到原因並恢復運作。這些考量也延伸到我整理的個人工程作品。
 
-這裡收錄我在工廠設備知識檢索、企業營運系統、AI Agent 協作與工作流程自動化方面的作品。除了架構說明，也能找到實際的程式碼、合成案例或測試結果。
+這裡收錄企業系統、設備文件檢索和 AI 工具治理等專案。每個作品都說明要處理的問題、採用的做法，以及目前開放的程式或驗證內容。
 
-## 精選工程作品
+## 精選作品
 
-| 專案 | 實際解決的問題與實作重點 |
+| 專案 | 想解決的問題 |
 | --- | --- |
-| [工廠設備知識庫與地端診斷助手](showcase/factory-knowledge-grounded-rag/) | 用混合檢索找到設備警報與手冊段落，檢查引用與版本，遇到證據不足時停止推測 |
-| [企業營運平台](showcase/enterprise-operations-platform/) | 以 ASP.NET Core、JWT 權限和設備／工單流程，處理角色操作、錯誤狀態與資料衝突 |
-| [製程文件改版審查流程](showcase/manufacturing-document-workflow/) | 將文件版本、存取範圍、審核責任與 Claude Skill 組成可檢查的流程 |
-| [Agent 工具策略引擎](showcase/agent-tool-policy-engine/) | 用 Python 規則判斷工具操作是允許、限縮範圍、需要核准或應該拒絕 |
-| [LINE Portable Core](showcase/line-portable-core/) | 以 TypeScript 實作 Webhook HMAC 驗證、事件冪等、LIFF Mini App 與訊息處理 |
-| [Paperclip AI Chief](showcase/paperclip-ai-chief/) | 組合 Paperclip 與 Codex，讓 Chief、Research、Reviewer 分工、回報並完成本機任務閉環 |
+| [工廠設備知識庫與地端診斷助手](showcase/factory-knowledge-grounded-rag/) | 從設備文件找到可追溯的警報資訊；版本或證據不足時，不勉強提供操作建議 |
+| [企業營運平台](showcase/enterprise-operations-platform/) | 以設備與維修工單為例，實作 API、角色權限、狀態檢查與錯誤處理 |
+| [製程文件改版審查流程](showcase/manufacturing-document-workflow/) | 把文件版本、存取權限與人工核准放進可追查的審查流程 |
+| [Agent 工具策略引擎](showcase/agent-tool-policy-engine/) | 在 AI Agent 使用工具前，依操作範圍與風險決定是否放行 |
 
-**[進入完整技術作品集](showcase/)**
+**[查看完整工程作品集](showcase/)**
 
-## AI Agent 開發工具與工程方法
+## AI 開發與協作工具
 
-### [Codex × Antigravity 協作架構](https://github.com/a275618631/codex-antigravity-collaboration)
-
-研究兩套 AI 開發環境如何清楚分工、共享 Task／Result 格式、透過本地 MCP Bridge 交換資訊，並用 Git 工作區管理修改。專案包含實際橋接測試、受限的跨 Runtime 測試及可追蹤的功能狀態。
-
-### [Codex Agent Skills](https://github.com/a275618631/codex-agent-skills)
-
-將問題排查、流程自動化、PR 審查與交付整理成五個可攜式 Skills，讓不同專案不必每次重寫同一套工作方法。
-
-### [可攜式 AI Agent 開發環境](https://github.com/a275618631/portable-ai-agent-environment)
-
-處理跨電腦使用 Agent 工具時，哪些設定能共用、哪些憑證與登入狀態必須留在原電腦。公開作品包含設定分類、Git 暫存內容掃描與合成回歸測試。
+- [Codex × Antigravity 協作架構](https://github.com/a275618631/codex-antigravity-collaboration)：研究兩套開發工具如何交接任務、共用結果格式並管理 Git 修改。
+- [Codex Agent Skills](https://github.com/a275618631/codex-agent-skills)：整理可重用的排錯、審查與交付方法，減少跨專案重複設定。
+- [可攜式 AI Agent 開發環境](https://github.com/a275618631/portable-ai-agent-environment)：區分能跨電腦同步的設定，與必須留在本機的登入、憑證及執行狀態。
 
 ## 其他工程作品
 
-- [規則式人力排班系統](https://github.com/a275618631/workforce-scheduling-system)：將輪班資格、休息時間、人工指定及人力需求轉成可檢查的規則模型。
-- [html2slides](https://github.com/a275618631/html2slides)：利用 Chromium 解析 HTML 排版，輸出文字、形狀、圖片可編輯的 PowerPoint。
-- [AI Folder Governance](https://github.com/a275618631/ai-folder-governance)：先理解檔案的來源、用途與版本關係，再決定如何整理。
-- [登入式桌面媒體處理流程](projects/authenticated-desktop-media-workflow.md)：Tauri、Rust、macOS Keychain、yt-dlp 與 FFmpeg 的桌面工作流整合。
+- [LINE Portable Core](showcase/line-portable-core/)：Webhook 驗證、重複事件處理及 LIFF 前端整合。
+- [Paperclip AI Chief](showcase/paperclip-ai-chief/)：多 Agent 任務分工與結果回報的工程探索。
+- [規則式人力排班系統](https://github.com/a275618631/workforce-scheduling-system)：以排班資格、休息間隔與人力需求建立可檢查的規則。
+- [html2slides](https://github.com/a275618631/html2slides)：將 HTML 版面轉成可編輯的 PowerPoint 元件。
+- [AI Folder Governance](https://github.com/a275618631/ai-folder-governance)：根據來源、用途與版本關係整理檔案。
+- [登入式桌面媒體處理流程](projects/authenticated-desktop-media-workflow.md)：桌面工具與本機媒體處理流程的整合。
 
-## 我在意的工程問題
+## 關於作品範圍
 
-做系統時，我特別在意**可追溯的資料來源、合理的操作權限、異常情境與復原能力**。遇到 AI 工具，我也會先看能不能沿用現有平台，再針對確實需要控制的部分寫程式。
-
-作品中部分是獨立公開專案，部分是從私人開發版本整理出的可公開程式與合成測試。每個頁面會標明可查看的內容和測試範圍，方便從實作本身判斷能力。
+這些作品是個人公開工程練習與研究，使用合成資料或可公開的程式片段，不代表任職公司的正式系統或部署成果。部分作品已有可執行程式與測試，部分以流程設計或原型為主；各專案頁面會分別說明。

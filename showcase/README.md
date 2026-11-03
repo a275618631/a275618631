@@ -1,52 +1,44 @@
-# 技術作品集｜製造業 AI、企業系統與 Agent 工程
+# 工程作品集｜製造系統、AI 與工作流程
 
-從設備手冊查詢、工單操作，到 Agent 工具使用與跨平台協作，我把幾種實際工程問題整理成可以閱讀程式、追查設計和查看測試的專案。
+這裡整理四個與製造現場、企業系統及 AI 工具相關的公開作品。閱讀方式很簡單：先了解**遇到什麼問題**，再看**如何設計與驗證**；想深入時，才往下查看原始碼。
 
-這個目錄收錄可公開的程式碼與合成案例。四個主要專案展示製造業與 AI 整合，其他作品則補上 LINE 通訊、Agent 團隊協作和可重用的工程工具。
-
-## 四個主要作品
+## 精選作品
 
 ### [工廠設備知識庫與地端診斷助手](factory-knowledge-grounded-rag/)
 
-維修人員查詢設備警報或規格時，系統不只要找到相似文字，還要對應正確的設備、版本與來源。我使用 SQLite FTS5、Qdrant Local、檢索融合與重排序，再由確定性驗證檢查引用、數值及證據不足的情況。
+設備發出警報時，找到相似的手冊文字還不夠，必須核對設備型號、文件版本及引用來源。這個作品將精確搜尋與語意檢索結合，並檢查證據是否足以支持回答。
 
-**看點：** Python、Hybrid Retrieval、引用追蹤、ABSTAIN 與合成設備診斷測試。
-
-### [製程文件改版審查流程](manufacturing-document-workflow/)
-
-新版作業文件會影響製造、品保、文管及資訊單位。我將版本差異、文件 Owner、權限檢查與人工審核整理成 Claude Skill，並比較一般改版、跨客戶資料及資訊不足時的實際模型回覆。
-
-**看點：** 工作流、版本治理、Claude Skill 與實測案例。
+**主要內容：** Python、混合檢索、來源驗證、證據不足時停止回答。
 
 ### [企業營運平台](enterprise-operations-platform/)
 
-用設備與維修工單管理情境，實作 ASP.NET Core 10、JWT 角色權限、資料模型與狀態驗證。除了正常操作，也測試未登入、權限不足、資料重複和工單流程。
+以設備和維修工單為例，展示後端系統如何管理角色權限、工單狀態及錯誤回應。重點不是畫面，而是同一個 API 在不同身分與操作條件下，是否仍能維持一致規則。
 
-**看點：** C#／.NET、REST API、RBAC、工單狀態與自動化測試。
+**主要內容：** C#／ASP.NET Core、REST API、JWT 權限、自動化測試。
+
+### [製程文件改版審查流程](manufacturing-document-workflow/)
+
+文件改版涉及來源、版本、存取範圍與人工審核。這個案例整理出一套受控的工作流程，並觀察 AI Skill 在正常改版、跨權限請求及資訊不足時的回應。
+
+**主要內容：** 文件治理、Claude Skill、人工核准、合成情境驗證。
 
 ### [Agent 工具策略引擎](agent-tool-policy-engine/)
 
-AI Agent 要讀寫檔案或執行工具時，先由程式規則判斷路徑、分支、動作類型和風險，再回傳允許、限縮範圍、需要核准或拒絕。
+AI Agent 能讀寫檔案與呼叫工具，但執行前仍需要清楚的規則。這個 Python 原型根據操作類型、路徑與風險，決定允許、限縮、等待核准或拒絕。
 
-**看點：** Python、TOML 策略、決定論決策與跨平台測試。
+**主要內容：** Python、TOML 規則、操作前檢查、測試案例。
 
-## 其他值得看的專案
+## 其他作品
 
-| 專案 | 主要內容 |
+| 專案 | 內容 |
 | --- | --- |
-| [LINE Portable Core](line-portable-core/) | HMAC Webhook 驗證、事件冪等、LIFF 分享與 Calendar 介接 |
-| [Paperclip AI Chief](paperclip-ai-chief/) | Chief／Research／Reviewer 本地任務閉環、Codex Heartbeat 與 Oracle 部署規劃 |
-| [Codex × Antigravity](codex-antigravity-collaboration/) | Task／Result 契約、本地 MCP Bridge、跨 Agent 分工與 Git 協作 |
-| [Codex Agent Skills](codex-agent-skills/) | 五個可重用工程 Skills、規格與格式驗證 |
+| [LINE Portable Core](line-portable-core/) | Webhook 驗證、重複事件處理及 LIFF 整合 |
+| [Paperclip AI Chief](paperclip-ai-chief/) | 多 Agent 分工與任務回報 |
+| [Codex × Antigravity](codex-antigravity-collaboration/) | 開發工具之間的任務交接與 Git 協作 |
+| [Codex Agent Skills](codex-agent-skills/) | 可重用的工程流程與指令 |
 
-更多獨立公開作品：[可攜式 AI Agent 開發環境](https://github.com/a275618631/portable-ai-agent-environment)、[排班系統設計](https://github.com/a275618631/workforce-scheduling-system)、[AI 資料夾治理](https://github.com/a275618631/ai-folder-governance)、[html2slides](https://github.com/a275618631/html2slides)。
+更多公開專案：[可攜式 AI Agent 開發環境](https://github.com/a275618631/portable-ai-agent-environment)、[規則式排班系統](https://github.com/a275618631/workforce-scheduling-system)、[AI 資料夾治理](https://github.com/a275618631/ai-folder-governance)、[html2slides](https://github.com/a275618631/html2slides)。
 
-## 這些能力如何搭配
+## 展示範圍
 
-以新版設備維修文件為例：先確認文件權限、版本與審核責任，再讓 RAG 在有來源的文件中查找相關設備資訊；如果需要建立工單，工具策略引擎先評估操作，營運平台再處理角色權限與資料寫入。
-
-這是一個**跨專案應用情境示例**，用來說明各項設計如何互補，而不是已經部署的單一整合系統。
-
-## 閱讀與操作
-
-每個專案都有自己的 README、程式或設計文件。可以先從上方的情境進入，再查看架構、測試與操作指令。部分展示使用從私人原始專案整理出的合成資料副本；其版本與可重現範圍以該專案文件為準。
+所有製造情境使用合成資料或可公開的工程片段，不包含任職公司的內部資料。各專案有不同的完成程度：**可執行原型、程式切片、流程設計**並不等於已上線的企業產品。程式、測試及限制會在各專案頁面分別註明。
