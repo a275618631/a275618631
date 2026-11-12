@@ -1,0 +1,11 @@
+{
+  "rules": [
+    {
+      "id": "synthetic-company-sentinel",
+      "values": [
+        "SYNTHETIC_COMPANY_A_INC",
+        "SYNTHETIC_CLIENT_B_LTD"
+      ]
+    }
+  ]
+}

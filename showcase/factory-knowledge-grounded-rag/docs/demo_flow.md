@@ -45,7 +45,7 @@ python app/demo.py --profile portfolio
        │
        ▼
 [展示案例 3：超出工廠手冊範圍主動棄權 (Out-of-scope Abstention)]
-  ├─ 題目：台積電 2 奈米廠 EUV 機台冷卻規格
+  ├─ 題目：公司 A 先進製程廠 EUV 機台冷卻規格（合成情境）
   ├─ 行為：BGE-Reranker 分數過濾後，Evidence 集合為空
   └─ 成果：系統自動標記 ABSTAINED，絕不下發未授權操作，守住工業安全底線
 ```

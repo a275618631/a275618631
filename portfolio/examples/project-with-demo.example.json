@@ -1,0 +1,18 @@
+{
+  "project_id": "synthetic-demo",
+  "title": "合成作品接入範例",
+  "summary": "僅用來示範靜態 bundle 匯入與入口相容，不代表已部署的外部系統。",
+  "categories": ["自動化與治理"],
+  "tags": ["Static Demo", "Example"],
+  "featured": false,
+  "lifecycle": "active",
+  "capabilities": [
+    {"id":"feature-preview","title":"功能更新預覽","description":"示範以資料更新版本與功能狀態。","status":"partial"},
+    {"id":"future-export","title":"後續匯出","description":"合成的規劃中功能，不宣稱已實作。","status":"planned"}
+  ],
+  "snapshot": {"revision":"1.0.0","public_ref":null,"reviewed_at":"2026-11-12"},
+  "evidence": {"status":"unverified","scope":"本機合成接入樣例；不屬於來源產品測試。","reference_urls":[]},
+  "links": [
+    {"link_id":"static-demo","label":"開啟合成靜態 Demo","kind":"static_bundle","status":"unverified","path":"demos/synthetic-demo/1.0.0/index.html"}
+  ]
+}

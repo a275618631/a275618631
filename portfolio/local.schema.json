@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "portfolio-local-overlay-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bindings", "local_projects"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["project_id", "binding_id", "url"],
+        "properties": {
+          "project_id": {"$ref": "#/$defs/slug"},
+          "binding_id": {"$ref": "#/$defs/slug"},
+          "url": {"type": "string", "format": "uri"},
+          "source_path": {"type": "string", "maxLength": 1000}
+        }
+      }
+    },
+    "local_projects": {"type": "array", "items": {"$ref": "#/$defs/project"}}
+  },
+  "$defs": {
+    "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80},
+    "text": {"type": "string", "minLength": 1},
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "title", "summary", "categories", "tags", "featured", "lifecycle", "capabilities", "snapshot", "evidence", "links"],
+      "properties": {
+        "project_id": {"$ref": "#/$defs/slug"}, "title": {"$ref": "#/$defs/text"}, "summary": {"$ref": "#/$defs/text"},
+        "categories": {"type": "array", "items": {"$ref": "#/$defs/text"}, "uniqueItems": true},
+        "tags": {"type": "array", "items": {"$ref": "#/$defs/text"}, "uniqueItems": true},
+        "featured": {"type": "boolean"}, "lifecycle": {"enum": ["active", "archived"]},
+        "capabilities": {"type": "array"}, "snapshot": {"type": "object"}, "evidence": {"type": "object"}, "links": {"type": "array"}, "extensions": {"type": "object"}
+      }
+    }
+  }
+}

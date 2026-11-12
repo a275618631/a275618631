@@ -1,0 +1,401 @@
+{
+  "schema_version": "1.0",
+  "projects": [
+    {
+      "project_id": "factory-knowledge-grounded-rag",
+      "title": "設備知識庫與地端診斷助手",
+      "summary": "以合成設備文件展示檢索、來源引用與證據不足時的拒答。",
+      "categories": [
+        "資料與 AI"
+      ],
+      "tags": [
+        "Python",
+        "RAG"
+      ],
+      "featured": true,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "知識檢索與來源引用",
+          "description": "查閱公開切片的合成文件、檢索流程與測試說明。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "308063538eaec8df533416b3972039551f04677d",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/factory-knowledge-grounded-rag"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/factory-knowledge-grounded-rag"
+        },
+        {
+          "link_id": "local-demo",
+          "label": "本機 Demo（自行啟動）",
+          "kind": "local_http",
+          "status": "manual",
+          "binding_id": "local-demo"
+        }
+      ]
+    },
+    {
+      "project_id": "manufacturing-document-workflow",
+      "title": "製程文件改版審查流程",
+      "summary": "以合成案例呈現文件版本、資料隔離與人工核准的工作流。",
+      "categories": [
+        "資料與 AI",
+        "自動化與治理"
+      ],
+      "tags": [
+        "Skill",
+        "文件治理"
+      ],
+      "featured": true,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "文件審查工作流",
+          "description": "提供規則、合成測試與模型輸出觀察；不是已連接外部系統的服務。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "308063538eaec8df533416b3972039551f04677d",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/manufacturing-document-workflow"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/manufacturing-document-workflow"
+        }
+      ]
+    },
+    {
+      "project_id": "enterprise-operations-platform",
+      "title": "企業營運平台",
+      "summary": "以公開垂直切片展示設備、工單、角色授權與錯誤處理。",
+      "categories": [
+        "系統整合"
+      ],
+      "tags": [
+        "C#",
+        ".NET",
+        "RBAC"
+      ],
+      "featured": true,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "設備與工單 API",
+          "description": "公開內容範圍及測試依該切片文件；本機未發布版本不在此自動提高狀態。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "308063538eaec8df533416b3972039551f04677d",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/enterprise-operations-platform"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/enterprise-operations-platform"
+        }
+      ]
+    },
+    {
+      "project_id": "agent-tool-policy-engine",
+      "title": "Agent 工具策略引擎",
+      "summary": "以確定性規則判斷工具動作範圍與核准需求。",
+      "categories": [
+        "自動化與治理"
+      ],
+      "tags": [
+        "Python",
+        "Policy"
+      ],
+      "featured": true,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "工具動作預檢",
+          "description": "展示獨立策略核心與合成案例；不代表已部署執行強制閘道。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "308063538eaec8df533416b3972039551f04677d",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/agent-tool-policy-engine"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/agent-tool-policy-engine"
+        }
+      ]
+    },
+    {
+      "project_id": "line-portable-core",
+      "title": "訊息事件可移植核心",
+      "summary": "展示 Webhook 簽章、事件冪等與可移植的應用介面。",
+      "categories": [
+        "系統整合"
+      ],
+      "tags": [
+        "TypeScript",
+        "Webhook"
+      ],
+      "featured": false,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "事件驗證與冪等",
+          "description": "自動化測試與手機實機驗收的範圍分開。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "308063538eaec8df533416b3972039551f04677d",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/line-portable-core"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/line-portable-core"
+        }
+      ]
+    },
+    {
+      "project_id": "paperclip-ai-chief",
+      "title": "AI 協作工作流",
+      "summary": "展示本機任務分工、審閱及 heartbeat 的設定與工程紀錄。",
+      "categories": [
+        "自動化與治理"
+      ],
+      "tags": [
+        "Agent",
+        "Workflow"
+      ],
+      "featured": false,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "本機協作設定",
+          "description": "本機證據與外部容量／部署狀態分開。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "308063538eaec8df533416b3972039551f04677d",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/paperclip-ai-chief"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/paperclip-ai-chief"
+        }
+      ]
+    },
+    {
+      "project_id": "codex-antigravity-collaboration",
+      "title": "Agent 協作架構",
+      "summary": "展示受限 Task／Result 契約、本機 Bridge 與跨 Runtime 協作方法。",
+      "categories": [
+        "自動化與治理"
+      ],
+      "tags": [
+        "MCP",
+        "Agent"
+      ],
+      "featured": false,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "受限任務契約",
+          "description": "參考架構、實作與尚未驗證的 Runtime 行為依公開文件區分。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "308063538eaec8df533416b3972039551f04677d",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/codex-antigravity-collaboration"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/codex-antigravity-collaboration"
+        }
+      ]
+    },
+    {
+      "project_id": "codex-agent-skills",
+      "title": "工程工作流程 Skills",
+      "summary": "將常見工程工作的輸入、步驟與驗收整理為可攜式 Skills。",
+      "categories": [
+        "自動化與治理"
+      ],
+      "tags": [
+        "Skill",
+        "PowerShell"
+      ],
+      "featured": false,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "可攜式工程流程",
+          "description": "提供公開規則與驗證器；執行能力依 host 平台而定。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "308063538eaec8df533416b3972039551f04677d",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/codex-agent-skills"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d/showcase/codex-agent-skills"
+        }
+      ]
+    },
+    {
+      "project_id": "ai-folder-governance",
+      "title": "AI 資料夾治理",
+      "summary": "以範圍、來源、版本與核准規則協助安全整理合成資料。",
+      "categories": [
+        "自動化與治理"
+      ],
+      "tags": [
+        "Skill",
+        "資料治理"
+      ],
+      "featured": false,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "core-demonstration",
+          "title": "資料夾分類與異動驗證",
+          "description": "使用既有獨立公開 repo；不是 showcase 子目錄。",
+          "status": "implemented"
+        }
+      ],
+      "snapshot": {
+        "revision": "existing-public-snapshot",
+        "public_ref": "f2c31de5495c2ade53d044d85785529d380c6173",
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "historical",
+        "scope": "依既有公開文件及本輪盤點；本輪未重跑來源產品測試。",
+        "reference_urls": [
+          "https://github.com/a275618631/ai-folder-governance/tree/f2c31de5495c2ade53d044d85785529d380c6173"
+        ]
+      },
+      "links": [
+        {
+          "link_id": "public-snapshot",
+          "label": "查看公開程式與說明",
+          "kind": "repo",
+          "status": "available",
+          "url": "https://github.com/a275618631/ai-folder-governance/tree/f2c31de5495c2ade53d044d85785529d380c6173"
+        }
+      ]
+    }
+  ]
+}

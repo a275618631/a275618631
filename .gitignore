@@ -60,6 +60,9 @@ local-settings.json
 *.pem
 *.token
 
+# Portfolio hub local configuration, generated output, and isolated tests
+.local/
+
 # .NET
 [Bb]in/
 [Oo]bj/

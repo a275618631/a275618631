@@ -1,0 +1,8 @@
+:root { color: #18332c; background: #f4f7f3; font: 1rem/1.6 "Segoe UI", sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { width: min(760px, calc(100% - 2rem)); margin: 3rem auto; }
+.eyebrow { color: #18634f; font-size: .8rem; font-weight: 700; letter-spacing: .08em; }
+.card { margin: 1.5rem 0; padding: 1.4rem; border: 1px solid #cadbd0; border-radius: .9rem; background: white; }
+button { padding: .7rem 1rem; border: 0; border-radius: .5rem; color: white; background: #176954; font: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid #9b4d05; outline-offset: 3px; }

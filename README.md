@@ -6,6 +6,18 @@
 
 這裡收錄我在工廠設備知識檢索、企業營運系統、AI Agent 協作與工作流程自動化方面的作品。除了架構說明，也能找到實際的程式碼、合成案例或測試結果。
 
+## 通用作品集入口
+
+可用統一入口瀏覽作品、功能範圍、版本證據、程式與 Demo：[作品集入口程式與使用說明](portfolio/README.md)。入口本機執行，不會啟動或代理各作品；各專案維持自己的 repo、啟動方式與開發節奏。
+
+需要 Python 3.12 以上。在此 repo 根目錄執行：
+
+```powershell
+python portfolio/hub.py serve --mode local --port 8765 --open
+```
+
+Windows 也可執行 `powershell -NoProfile -File .\portfolio\start.ps1`。本機入口預設只綁定 `127.0.0.1`。
+
 ## 精選工程作品
 
 | 專案 | 實際解決的問題與實作重點 |

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="可離線閱讀的通用工程作品集。">
+  <title>工程作品集</title>
+  <link rel="stylesheet" href="{{CSS_PATH}}">
+  <script defer src="{{JS_PATH}}"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要內容</a>
+  <header class="site-header">
+    <p class="eyebrow">ENGINEERING PORTFOLIO</p>
+    <h1>把系統整合、資料與自動化，做成可查證的工程成果。</h1>
+    <p class="intro">瀏覽實際作品、功能範圍、版本與證據。每項作品均可獨立開發；入口僅提供已審查的程式、文件與 Demo 連結。</p>
+  </header>
+  <main id="main">
+    <section class="controls" aria-label="作品搜尋與篩選">
+      <label for="search">搜尋作品、功能或標籤</label>
+      <input id="search" type="search" autocomplete="off" placeholder="輸入關鍵字">
+      <label for="category">作品分類</label>
+      <select id="category"><option value="">全部分類</option>{{CATEGORY_OPTIONS}}</select>
+      <label for="tag">作品標籤</label>
+      <select id="tag"><option value="">全部標籤</option></select>
+      <label class="checkbox"><input id="featured" type="checkbox"> 只看精選</label>
+      <p id="result-count" aria-live="polite">共 {{PROJECT_COUNT}} 件作品</p>
+      <p id="enhancement-status" class="visually-hidden" aria-live="polite"></p>
+    </section>
+    <section id="project-list" class="project-grid" aria-label="所有作品">{{STATIC_CARDS}}</section>
+    <section id="detail" class="detail" hidden aria-live="polite"></section>
+    <noscript><p class="noscript">JavaScript 已關閉；上方作品、功能與連結清單仍可閱讀。</p></noscript>
+  </main>
+  <footer><p>狀態依登錄的版本與證據標示；本機 Demo 不會由入口啟動或探測。</p></footer>
+</body>
+</html>
