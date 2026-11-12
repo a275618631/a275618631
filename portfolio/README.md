@@ -13,7 +13,7 @@ python portfolio/hub.py build --mode public
 python portfolio/hub.py serve --mode local --port 8765 --open
 ```
 
-Windows 可用 `powershell -NoProfile -File .\portfolio\start.ps1`；POSIX 可用 `sh portfolio/start.sh`。首頁只綁 `127.0.0.1`。若預設 port 忙碌，入口依序嘗試 8766–8775，再讓作業系統分配空 port；不會終止占用程序。
+Windows 可用 `powershell -NoProfile -File .\portfolio\start.ps1`；若本機 PowerShell execution policy 阻擋腳本，可加 `-ExecutionPolicy Bypass` 只對這個子程序放行，不會修改系統或使用者的永久設定。POSIX 可用 `sh portfolio/start.sh`。首頁只綁 `127.0.0.1`。若預設 port 忙碌，入口依序嘗試 8766–8775，再讓作業系統分配空 port；不會終止占用程序。
 
 ## 登錄與狀態
 

@@ -1,9 +1,9 @@
 [SUMMARY]
 - 主導：Codex；registry contract 與既有作品去名由兩位 Luna workers 各自獨立 write-set 執行。
-- 工單：PORT-LOCAL-20261111；P00–P08 實作中，最終驗收與交付準備階段。
-- 最後完成：Playwright Chromium 實際驗收通過；29 項單元測試通過（另補 A07／A14 覆蓋後待最終重跑）；全 repo 私有出版審計通過。
-- 目前停在：已完成 registry／CLI／build／UI／server／publication／文件；接受紀錄已更新，分支仍在 `codex/portfolio-local-hub-20261111`。
-- 卡點／下一步：此 checkout 的 ignored `.local/dist` 有不可讀且未辨識的既有輸出，禁止覆蓋；改在乾淨 staging checkout 驗證預設 build，之後提交並推 PR／更新既有 Issue #2。
+- 工單：PORT-LOCAL-20261111；本機範圍 `LOCAL_COMPLETE`，遠端推送與協調入口更新待完成。
+- 最後完成：提交 `67cb7f815350c3f499d7b709b6092efd1e8d12bd` 在乾淨 worktree 通過 31 tests、兩種 build、artifact/private audit、Chromium 與 Windows launcher。
+- 目前停在：P00–P08 與 A01–A20 已驗收；功能分支 `codex/portfolio-local-hub-20261111` 有三個本機提交，尚未推送。
+- 卡點／下一步：無程式阻塞；推送分支、開 draft PR，並把連結回寫既有 private Master Issue #2。
 
 [ACTIVE_TICKET_SPEC]
 - Target：`a275618631/a275618631`，remote `https://github.com/a275618631/a275618631.git`；只改 hub repo，不改來源專案 runtime。

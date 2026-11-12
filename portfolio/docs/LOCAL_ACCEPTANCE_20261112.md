@@ -3,7 +3,7 @@
 **Work order:** PORT-LOCAL-20261111
 **Base:** `308063538eaec8df533416b3972039551f04677d`
 **Branch:** `codex/portfolio-local-hub-20261111`
-**Status:** IN_PROGRESS — do not label `LOCAL_COMPLETE` until every required acceptance row has runtime or browser evidence.
+**Status:** LOCAL_COMPLETE — all P00–P08 deliverables and A01–A20 acceptance gates are verified on clean commit `67cb7f815350c3f499d7b709b6092efd1e8d12bd`.
 
 ## Required scenario ledger
 
@@ -26,7 +26,7 @@
 | A15 | Occupied default port uses reported fallback, never kills listener | `test_occupied_port_uses_fallback_without_terminating_listener` | PASS |
 | A16 | Keyboard, no-JS, 390/1440 widths, unknown route, F5 | Chromium acceptance; screenshots stored only in ignored `.local/evidence/` | PASS |
 | A17 | Repeated offline build has identical digest and no absolute paths | `test_public_build_is_deterministic_and_has_static_fallback`; projection tests ensure source paths are stripped | PASS |
-| A18 | Clean export builds without `.local` or source checkout imports | Fresh clean staging validation and build | PENDING |
+| A18 | Clean export builds without `.local` or source checkout imports | Fresh detached worktree initially contained only tracked files; doctor/validate/build passed without repository imports | PASS |
 | A19 | Local-only project is absent from all public files | `test_local_only_project_never_enters_public_output`; `test_public_projection_strips_local_http_links` | PASS |
 | A20 | Pinned snapshot remains unchanged when source branches move | `test_all_initial_repo_links_pin_full_sha` checks full immutable commit references | PASS |
 
@@ -38,11 +38,19 @@ Final commands are recorded after execution below with actual exit status and fu
 |---|---|
 | `python portfolio/hub.py doctor --json` | PASS, exit 0; Python 3.14.10, supported, required files present |
 | `python -m unittest discover -s portfolio/tests -p "test_*.py" -q` | PASS, 31 tests, 1 Windows symlink capability skip, exit 0 |
-| Public/local validate and build | Validate PASS / exit 0, 9 entries each. Build retry pending in clean staging because this worktree's ignored `.local/dist` has an inaccessible unrecognized prior output. |
-| Synthetic artifact audit / private all-scope audit | Private audit PASS, 322 paths scanned, no findings, nine exact path+SHA classified synthetic credential-redaction inputs; 14 baseline binary assets inventoried. Artifact audit against a populated clean build is pending with A18. |
-| Browser at 1440×1000 and 390×844 | Chromium PASS, exit 0; 1440×1000, 390×844, A05/A06/A09, no-JS, reload, unknown route, no external network. |
-| Clean staging public build | PENDING |
-| Git diff check and staged allowlist | `git diff --check` PASS, exit 0; precise staging audit pending. |
+| Public/local validate and build | PASS / exit 0; each mode validates 9 entries. Public digest `c8c8e0e65cc7c913a1eb7c8684e9f43571408d212d8bae211d2731d42e895d7c`; local digest `27ae04e062dfd5f1077ced016f596db9c98229101502b62877ff19a6c8057a17`. |
+| Synthetic artifact audit / private all-scope audit | Artifact PASS / exit 0, 5 files scanned. Private audit PASS / exit 0, 326 tracked/untracked files scanned, 0 findings, 9 exact path+SHA classified synthetic credential-redaction inputs; 14 baseline binary assets inventoried. |
+| Browser at 1440×1000 and 390×844 | Chromium PASS / exit 0; detail/reload/unknown route, A05/A06/A09, no-JS, root/nested static bundle, 1440×1000, 390×844, no external requests. Screenshots remain in ignored `.local/evidence/`. |
+| Clean staging public build | PASS / exit 0 on fresh detached worktree before `.local` existed; output manifest generated successfully. |
+| Windows launcher and live URL | `start.ps1` served the clean public build at `http://127.0.0.1:64826/`; HTTP GET returned 200 and the server was stopped. This host required process-scoped `-ExecutionPolicy Bypass`. |
+| Git diff check and staged allowlist | PASS / exit 0. Only reviewed source/docs/test files were staged; ignored private rules, runtime, outputs and screenshots were excluded. |
+
+## Final state
+
+- Local implementation commit: `430d3b46db425ebe43b3b9661eaf33ec0f475002`.
+- Runtime/ignore correction commit: `bbd26adce1001b279604a6d400d7ac955e2e9fe0`.
+- Clean-checkout acceptance commit: `67cb7f815350c3f499d7b709b6092efd1e8d12bd`.
+- GitHub PR and coordination Issue #2 links are recorded in the handoff after push; no merge or deploy is part of local completion.
 
 ## Security and content review
 
