@@ -92,6 +92,21 @@ class BuildTests(unittest.TestCase):
         self.assertIn("過期 Demo（已過期）", rendered)
         self.assertNotIn('href="https://example.invalid/demo"', rendered)
 
+    def test_nested_bundle_builds_repeatably_and_unknown_nested_output_is_preserved(self):
+        bundle = self.root / "portfolio" / "public" / "demos" / "sample" / "1.0.0"
+        bundle.mkdir(parents=True)
+        (bundle / "index.html").write_text("<h1>demo</h1>", encoding="utf-8")
+        first, digest_a = build_site(self.root)
+        second, digest_b = build_site(self.root)
+        self.assertEqual(first, second)
+        self.assertEqual(digest_a, digest_b)
+        self.assertTrue((second / "demos" / "sample" / "1.0.0" / "index.html").is_file())
+        unknown = second / "demos" / "sample" / "1.0.0" / "unknown.txt"
+        unknown.write_text("preserve", encoding="utf-8")
+        with self.assertRaises(BuildError):
+            build_site(self.root)
+        self.assertEqual(unknown.read_text(encoding="utf-8"), "preserve")
+
 
 if __name__ == "__main__":
     unittest.main()

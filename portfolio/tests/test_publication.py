@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 from portfolio.lib.publication import AuditError, asset_ledger, audit
+from portfolio.lib.build import canonical_json
 
 
 REPO = Path(__file__).resolve().parents[2]
@@ -27,11 +28,25 @@ class PublicationTests(unittest.TestCase):
     def test_artifact_audit_reports_rule_id_but_never_matched_content(self):
         public = self.root / ".local" / "dist" / "public"
         public.mkdir(parents=True)
-        (public / "index.html").write_text('<title>SENTINEL_CORP</title>', encoding="utf-8")
+        target = public / "index.html"
+        target.write_text('<title>SENTINEL_CORP</title>', encoding="utf-8")
+        entries = [{"path": "index.html", "sha256": hashlib.sha256(target.read_bytes()).hexdigest()}]
+        (public / "files.sha256.json").write_bytes(canonical_json({"files": entries, "digest": hashlib.sha256(canonical_json(entries)).hexdigest()}))
         report = audit(self.root, "artifact", self.rules)
         self.assertEqual(report["status"], "FAIL")
         self.assertEqual(report["findings"][0]["rule_id"], "synthetic-company")
         self.assertNotIn("SENTINEL_CORP", json.dumps(report))
+
+    def test_artifact_audit_fails_closed_for_missing_empty_or_tampered_output(self):
+        with self.assertRaises(AuditError):
+            audit(self.root, "artifact", self.rules)
+        public = self.root / ".local" / "dist" / "public"
+        public.mkdir(parents=True)
+        with self.assertRaises(AuditError):
+            audit(self.root, "artifact", self.rules)
+        (public / "files.sha256.json").write_text('{"files":[],"digest":"' + "0" * 64 + '"}', encoding="utf-8")
+        with self.assertRaises(AuditError):
+            audit(self.root, "artifact", self.rules)
 
     def test_all_scope_checks_untracked_public_text_but_skips_ignored_private_overlay(self):
         (self.root / "README.md").write_text("Company sentinel_corp is a synthetic fixture.", encoding="utf-8")

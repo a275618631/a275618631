@@ -114,7 +114,38 @@ def audit(root: Path, scope: str, rules_path: Path) -> dict[str, Any]:
     rules, exceptions = _load_rules(rules_path)
     if scope == "artifact":
         base = root / ".local" / "dist" / "public"
-        paths = [p for p in base.rglob("*") if p.is_file()] if base.is_dir() else []
+        manifest_path = base / "files.sha256.json"
+        if not base.is_dir() or base.is_symlink() or getattr(base, "is_junction", lambda: False)():
+            raise AuditError("public artifact directory is missing or unsafe")
+        if not manifest_path.is_file() or manifest_path.is_symlink():
+            raise AuditError("public artifact manifest is missing or unsafe")
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            entries = manifest["files"]
+            if not isinstance(entries, list) or not entries:
+                raise ValueError
+            if not re.fullmatch(r"[0-9a-f]{64}", manifest["digest"]):
+                raise ValueError
+            if hashlib.sha256(json.dumps(entries, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8") + b"\n").hexdigest() != manifest["digest"]:
+                raise ValueError
+            expected = {}
+            for entry in entries:
+                name, digest = entry["path"], entry["sha256"]
+                parts = Path(name).parts
+                if not isinstance(name, str) or Path(name).is_absolute() or ".." in parts or "\\" in name or name == "files.sha256.json" or not re.fullmatch(r"[0-9a-f]{64}", digest) or name in expected:
+                    raise ValueError
+                expected[name] = digest
+            paths = []
+            for path in base.rglob("*"):
+                if path.is_symlink() or getattr(path, "is_junction", lambda: False)():
+                    raise ValueError
+                if path.is_file() and path != manifest_path:
+                    paths.append(path)
+            actual = {p.relative_to(base).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
+            if actual != expected:
+                raise ValueError
+        except (OSError, ValueError, KeyError, TypeError, UnicodeError):
+            raise AuditError("public artifact manifest or contents are invalid") from None
         scan_root = base
     else:
         paths = _git_files(root)

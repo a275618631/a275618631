@@ -187,9 +187,10 @@ def validate_link(link: object, *, project_id: str = "", root: str | Path | None
     if kind == "repo":
         url = item.get("url")
         validate_url(url, kind, path="link.url")
-        path_parts = urlsplit(url).path.split("/")
-        if not any(SHA40_RE.fullmatch(part) for part in path_parts):
-            _fail("link.url", "repo snapshot links must include a full 40-character commit")
+        parsed = urlsplit(url)
+        parts = [part for part in parsed.path.split("/") if part]
+        if parsed.hostname != "github.com" or len(parts) < 4 or parts[2] not in {"tree", "blob", "commit"} or not SHA40_RE.fullmatch(parts[3]):
+            _fail("link.url", "repo snapshot link must use GitHub tree/blob/commit/<full-sha>")
     elif kind == "external_https":
         validate_url(item.get("url"), kind, path="link.url")
     elif kind == "static_bundle":
@@ -271,6 +272,13 @@ def validate_project(project: object, *, root: str | Path | None = None, mode: s
         validate_link(link, project_id=project_id, root=root, mode=mode)
         link_ids.append(link["link_id"])
     _check_unique(link_ids, "project.links.link_id")
+    repo_links = [link for link in links if link.get("kind") == "repo"]
+    if repo_links and public_ref is None:
+        _fail("project.links", "repo snapshot links require project.snapshot.public_ref")
+    for link in repo_links:
+        sha = [part for part in urlsplit(link["url"]).path.split("/") if part][3]
+        if sha != public_ref:
+            _fail("project.links", "repo snapshot SHA must match project.snapshot.public_ref")
     if "extensions" in item:
         extensions = _object(item["extensions"], "project.extensions")
         if len(json.dumps(extensions, ensure_ascii=False).encode("utf-8")) > 1024 * 1024:

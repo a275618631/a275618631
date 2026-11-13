@@ -40,6 +40,19 @@ class RegistryContractTests(unittest.TestCase):
                 if link["kind"] == "repo":
                     self.assertIn(project["snapshot"]["public_ref"], link["url"])
 
+    def test_repo_link_sha_must_match_snapshot_and_null_snapshot_cannot_have_repo_link(self):
+        from portfolio.lib.contracts import validate_project
+        project = copy.deepcopy(self.registry["projects"][0])
+        validate_project(project)
+        project["snapshot"]["public_ref"] = "0" * 40
+        with self.assertRaises(ValidationError):
+            validate_project(project)
+        project = copy.deepcopy(self.registry["projects"][0])
+        project["snapshot"]["public_ref"] = None
+        project["evidence"]["status"] = "partial"
+        with self.assertRaises(ValidationError):
+            validate_project(project)
+
     def test_duplicate_project_capability_and_link_ids_are_rejected(self):
         duplicate_project = copy.deepcopy(self.registry)
         duplicate_project["projects"].append(copy.deepcopy(duplicate_project["projects"][0]))

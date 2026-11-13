@@ -175,6 +175,8 @@ def run(browser_choice: str) -> dict:
             no_js = no_js_context.new_page()
             no_js.goto(base_url, wait_until="domcontentloaded", timeout=10000)
             assert no_js.locator(".project-card").count() == 10
+            assert no_js.locator('.project-card h2 a').count() == 0, "static fallback must not expose dead detail links"
+            assert no_js.locator('.project-card nav a').count() > 0, "static fallback must keep source links"
             no_js_context.close()
             result["checks"].append("static fallback with JavaScript disabled")
 

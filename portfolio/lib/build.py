@@ -95,7 +95,7 @@ def render_static_index(data: dict[str, Any], base_path: str = "") -> str:
         cards.append(
             f'<article class="project-card" data-project-id="{_esc(p["project_id"])}">'
             f'<p class="eyebrow">{_esc(" · ".join(p.get("categories", [])))}</p>'
-            f'<h2><a href="#projects/{_esc(p["project_id"])}">{_esc(p["title"])}</a></h2>'
+            f'<h2>{_esc(p["title"])}</h2>'
             f'<p>{_esc(p["summary"])}</p><ul class="feature-list">{features}</ul>'
             f'<p class="evidence">證據：{_esc(p.get("evidence", {}).get("status", "unverified"))} · '
             f'版本：{_esc(p.get("snapshot", {}).get("revision", "未發布"))}</p><nav>{links}</nav></article>'
@@ -146,7 +146,11 @@ def _existing_output_is_owned(target: Path) -> None:
         raise BuildError("existing output contains a symlink; preserving it")
     actual = {p.relative_to(target).as_posix() for p in entries if p.is_file()}
     expected_files = known | {"files.sha256.json"}
-    expected_dirs = {str(Path(name).parent).replace("\\", "/") for name in expected_files if "/" in name}
+    expected_dirs = set()
+    for name in expected_files:
+        parts = Path(name).parts[:-1]
+        for depth in range(1, len(parts) + 1):
+            expected_dirs.add(Path(*parts[:depth]).as_posix())
     actual_dirs = {p.relative_to(target).as_posix() for p in entries if p.is_dir()}
     if actual != expected_files or actual_dirs != expected_dirs:
         raise BuildError("existing output contains unknown files; preserving it")
