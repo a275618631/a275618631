@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="作品入口靜態 Demo 接入範例。">
+  <title>合成作品 Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">STATIC BUNDLE · SYNTHETIC EXAMPLE</p>
+    <h1>作品功能更新示範</h1>
+    <p>這是本機合成接入頁，用來示範版本文字、功能狀態與回到作品入口，不代表外部系統已部署。</p>
+    <section class="card" aria-labelledby="version-title">
+      <h2 id="version-title">展示版本 v1.0.0</h2>
+      <ul>
+        <li>功能卡片可獨立瀏覽</li>
+        <li>尚未完成的功能標示為規劃中</li>
+      </ul>
+      <p id="status" aria-live="polite">目前展示穩定版。</p>
+      <button id="preview-update" type="button">預覽功能更新</button>
+    </section>
+    <a href="../../../index.html">返回作品集首頁</a>
+  </main>
+</body>
+</html>

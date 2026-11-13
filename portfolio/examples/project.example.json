@@ -1,0 +1,13 @@
+{
+  "project_id": "sample-project",
+  "title": "範例資料處理工具",
+  "summary": "用來示範新增作品所需的資料欄位與公開版本註記。",
+  "categories": ["資料與 AI"],
+  "tags": ["Python", "Example"],
+  "featured": false,
+  "lifecycle": "active",
+  "capabilities": [{"id":"core-demonstration","title":"可重現資料流程","description":"展示可測試的合成資料處理流程。","status":"implemented"}],
+  "snapshot": {"revision":"example-public-snapshot","public_ref":"308063538eaec8df533416b3972039551f04677d","reviewed_at":"2026-11-11"},
+  "evidence": {"status":"historical","scope":"範例資料；請替換成實際公開版本與查核範圍。","reference_urls":["https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d"]},
+  "links": [{"link_id":"public-snapshot","label":"查看公開程式","kind":"repo","status":"available","url":"https://github.com/a275618631/a275618631/tree/308063538eaec8df533416b3972039551f04677d"}]
+}

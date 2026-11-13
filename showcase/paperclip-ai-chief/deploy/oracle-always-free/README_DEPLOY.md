@@ -26,7 +26,7 @@
 ### 步驟 2：執行初始化安裝
 透過 SSH 連線至主機後，執行自動化安裝腳本：
 ```bash
-curl -fsSL https://raw.githubusercontent.com/a275618631/a275618631/main/showcase/paperclip-ai-chief/deploy/oracle-always-free/install-oracle-vm.sh | bash
+curl -fsSL https://raw.githubusercontent.com/a275618631/a275618631/308063538eaec8df533416b3972039551f04677d/showcase/paperclip-ai-chief/deploy/oracle-always-free/install-oracle-vm.sh | bash
 ```
 
 ### 步驟 3：設定私網連線 (Tailscale)

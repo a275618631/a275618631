@@ -1,0 +1,20 @@
+{
+  "project_id": "synthetic-demo",
+  "revision": "1.0.0",
+  "source_dir": ".local/imports/synthetic-demo/1.0.0",
+  "entry": "index.html",
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "b0e354c698be903ff9ef19f6e4ccead2a38c609975d0836b5e6c56e27401a34b"
+    },
+    {
+      "path": "app.js",
+      "sha256": "00aaa34508c781ca009080b089432674283c697216b957769be82fab06fa301c"
+    },
+    {
+      "path": "styles.css",
+      "sha256": "751e8031c66507f2fda4f2364e9987a68be3f1cc03b0ff895ae23ebbfa76a001"
+    }
+  ]
+}

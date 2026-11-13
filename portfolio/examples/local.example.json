@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "bindings": [
+    {
+      "project_id": "factory-knowledge-grounded-rag",
+      "binding_id": "local-demo",
+      "url": "http://127.0.0.1:8766/demo",
+      "source_path": "C:/work/sample-project"
+    },
+    {
+      "project_id": "local-sample-project",
+      "binding_id": "local-demo",
+      "url": "http://127.0.0.1:8767/demo",
+      "source_path": "C:/work/sample-project"
+    }
+  ],
+  "local_projects": [
+    {
+      "project_id": "local-sample-project",
+      "title": "本機測試作品",
+      "summary": "只在本機展示的合成 Web Demo。",
+      "categories": [
+        "系統整合"
+      ],
+      "tags": [
+        "Local"
+      ],
+      "featured": false,
+      "lifecycle": "active",
+      "capabilities": [
+        {
+          "id": "local-demo",
+          "title": "本機 Demo",
+          "description": "需要使用者依來源專案說明自行啟動。",
+          "status": "partial"
+        }
+      ],
+      "snapshot": {
+        "revision": "local-unpublished",
+        "public_ref": null,
+        "reviewed_at": "2026-11-11"
+      },
+      "evidence": {
+        "status": "unverified",
+        "scope": "僅供本機開發驗證，尚無公開版本。",
+        "reference_urls": []
+      },
+      "links": [
+        {
+          "link_id": "local-demo",
+          "label": "開啟本機 Demo",
+          "kind": "local_http",
+          "status": "manual",
+          "binding_id": "local-demo"
+        }
+      ]
+    }
+  ]
+}

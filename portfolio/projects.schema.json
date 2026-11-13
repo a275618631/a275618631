@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "portfolio-projects-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "projects"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "projects": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/project"}
+    }
+  },
+  "$defs": {
+    "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80},
+    "text": {"type": "string", "minLength": 1},
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["link_id", "label", "kind", "status"],
+      "properties": {
+        "link_id": {"$ref": "#/$defs/slug"},
+        "label": {"$ref": "#/$defs/text", "maxLength": 160},
+        "kind": {"enum": ["repo", "static_bundle", "local_http", "external_https"]},
+        "status": {"enum": ["available", "manual", "unverified", "expired"]},
+        "url": {"type": "string", "format": "uri"},
+        "path": {"$ref": "#/$defs/text"},
+        "binding_id": {"$ref": "#/$defs/slug"},
+        "expires_at": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T"}
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "title", "summary", "categories", "tags", "featured", "lifecycle", "capabilities", "snapshot", "evidence", "links"],
+      "properties": {
+        "project_id": {"$ref": "#/$defs/slug"},
+        "title": {"$ref": "#/$defs/text", "maxLength": 100},
+        "summary": {"$ref": "#/$defs/text", "maxLength": 600},
+        "categories": {"type": "array", "items": {"$ref": "#/$defs/text"}, "uniqueItems": true},
+        "tags": {"type": "array", "items": {"$ref": "#/$defs/text"}, "uniqueItems": true},
+        "featured": {"type": "boolean"},
+        "lifecycle": {"enum": ["active", "archived"]},
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "title", "description", "status"],
+            "properties": {
+              "id": {"$ref": "#/$defs/slug"},
+              "title": {"$ref": "#/$defs/text"},
+              "description": {"$ref": "#/$defs/text"},
+              "status": {"enum": ["implemented", "partial", "planned"]}
+            }
+          }
+        },
+        "snapshot": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["revision", "public_ref", "reviewed_at"],
+          "properties": {
+            "revision": {"$ref": "#/$defs/text"},
+            "public_ref": {"anyOf": [{"$ref": "#/$defs/sha"}, {"type": "null"}]},
+            "reviewed_at": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"}
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "scope", "reference_urls"],
+          "properties": {
+            "status": {"enum": ["historical", "verified", "partial", "unverified"]},
+            "scope": {"$ref": "#/$defs/text"},
+            "reference_urls": {"type": "array", "items": {"type": "string", "format": "uri"}}
+          }
+        },
+        "links": {"type": "array", "items": {"$ref": "#/$defs/link"}},
+        "extensions": {"type": "object"}
+      }
+    }
+  }
+}
