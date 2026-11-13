@@ -1,8 +1,10 @@
 import http.client
 import socket
+import subprocess
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import urlopen
@@ -71,6 +73,29 @@ class ServerTests(unittest.TestCase):
             self.skipTest("directory symlink creation is unavailable")
         with self.assertRaises(SafeServerError):
             create_server(alias, 0)
+
+    def test_root_junction_is_rejected_when_supported(self):
+        target = self.root / "junction-target"
+        target.mkdir()
+        alias = self.root / "junction-alias"
+        try:
+            subprocess.run(["cmd", "/c", "mklink", "/J", str(alias), str(target)], check=True, capture_output=True)
+            if not alias.is_junction():
+                self.skipTest("directory junction creation is unavailable")
+        except (OSError, NotImplementedError, subprocess.CalledProcessError):
+            self.skipTest("directory junction creation is unavailable")
+        with self.assertRaises(SafeServerError):
+            create_server(alias, 0)
+
+    def test_path_symlink_guard_rejects_when_filesystem_creation_is_unavailable(self):
+        alias = self.root / "forced-symlink"
+        alias.mkdir()
+        original = Path.is_symlink
+        def pretend_symlink(path):
+            return True if path == alias else original(path)
+        with patch.object(Path, "is_symlink", pretend_symlink):
+            with self.assertRaises(SafeServerError):
+                create_server(alias, 0)
 
 
 if __name__ == "__main__":
